@@ -1,0 +1,605 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63042595A7AD006604A4 /* AppDelegate.swift */; };
+		FCCE63072595A7AD006604A4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63062595A7AD006604A4 /* ContentView.swift */; };
+		FCCE63092595A7AF006604A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63082595A7AF006604A4 /* Assets.xcassets */; };
+		FCCE630C2595A7AF006604A4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCCE630B2595A7AF006604A4 /* Preview Assets.xcassets */; };
+		FCCE630F2595A7AF006604A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCCE630D2595A7AF006604A4 /* Main.storyboard */; };
+		FCCE631B2595A7B0006604A4 /* Blackhole2020Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE631A2595A7B0006604A4 /* Blackhole2020Tests.swift */; };
+		FCCE63262595A7B0006604A4 /* Blackhole2020UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63252595A7B0006604A4 /* Blackhole2020UITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FCCE63172595A7B0006604A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FCCE62F92595A7AD006604A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FCCE63002595A7AD006604A4;
+			remoteInfo = Blackhole2020;
+		};
+		FCCE63222595A7B0006604A4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FCCE62F92595A7AD006604A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FCCE63002595A7AD006604A4;
+			remoteInfo = Blackhole2020;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FCCE63012595A7AD006604A4 /* Blackhole2020.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blackhole2020.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCCE63042595A7AD006604A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FCCE63062595A7AD006604A4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FCCE63082595A7AF006604A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FCCE630B2595A7AF006604A4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FCCE630E2595A7AF006604A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FCCE63102595A7AF006604A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCCE63112595A7AF006604A4 /* Blackhole2020.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Blackhole2020.entitlements; sourceTree = "<group>"; };
+		FCCE63162595A7B0006604A4 /* Blackhole2020Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blackhole2020Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCCE631A2595A7B0006604A4 /* Blackhole2020Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blackhole2020Tests.swift; sourceTree = "<group>"; };
+		FCCE631C2595A7B0006604A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCCE63212595A7B0006604A4 /* Blackhole2020UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blackhole2020UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCCE63252595A7B0006604A4 /* Blackhole2020UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blackhole2020UITests.swift; sourceTree = "<group>"; };
+		FCCE63272595A7B0006604A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FCCE62FE2595A7AD006604A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCCE63132595A7B0006604A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCCE631E2595A7B0006604A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FCCE62F82595A7AD006604A4 = {
+			isa = PBXGroup;
+			children = (
+				FCCE63032595A7AD006604A4 /* Blackhole2020 */,
+				FCCE63192595A7B0006604A4 /* Blackhole2020Tests */,
+				FCCE63242595A7B0006604A4 /* Blackhole2020UITests */,
+				FCCE63022595A7AD006604A4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FCCE63022595A7AD006604A4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FCCE63012595A7AD006604A4 /* Blackhole2020.app */,
+				FCCE63162595A7B0006604A4 /* Blackhole2020Tests.xctest */,
+				FCCE63212595A7B0006604A4 /* Blackhole2020UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FCCE63032595A7AD006604A4 /* Blackhole2020 */ = {
+			isa = PBXGroup;
+			children = (
+				FCCE63042595A7AD006604A4 /* AppDelegate.swift */,
+				FCCE63062595A7AD006604A4 /* ContentView.swift */,
+				FCCE63082595A7AF006604A4 /* Assets.xcassets */,
+				FCCE630D2595A7AF006604A4 /* Main.storyboard */,
+				FCCE63102595A7AF006604A4 /* Info.plist */,
+				FCCE63112595A7AF006604A4 /* Blackhole2020.entitlements */,
+				FCCE630A2595A7AF006604A4 /* Preview Content */,
+			);
+			path = Blackhole2020;
+			sourceTree = "<group>";
+		};
+		FCCE630A2595A7AF006604A4 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FCCE630B2595A7AF006604A4 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FCCE63192595A7B0006604A4 /* Blackhole2020Tests */ = {
+			isa = PBXGroup;
+			children = (
+				FCCE631A2595A7B0006604A4 /* Blackhole2020Tests.swift */,
+				FCCE631C2595A7B0006604A4 /* Info.plist */,
+			);
+			path = Blackhole2020Tests;
+			sourceTree = "<group>";
+		};
+		FCCE63242595A7B0006604A4 /* Blackhole2020UITests */ = {
+			isa = PBXGroup;
+			children = (
+				FCCE63252595A7B0006604A4 /* Blackhole2020UITests.swift */,
+				FCCE63272595A7B0006604A4 /* Info.plist */,
+			);
+			path = Blackhole2020UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FCCE63002595A7AD006604A4 /* Blackhole2020 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCCE632A2595A7B0006604A4 /* Build configuration list for PBXNativeTarget "Blackhole2020" */;
+			buildPhases = (
+				FCCE62FD2595A7AD006604A4 /* Sources */,
+				FCCE62FE2595A7AD006604A4 /* Frameworks */,
+				FCCE62FF2595A7AD006604A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Blackhole2020;
+			productName = Blackhole2020;
+			productReference = FCCE63012595A7AD006604A4 /* Blackhole2020.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FCCE63152595A7B0006604A4 /* Blackhole2020Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCCE632D2595A7B0006604A4 /* Build configuration list for PBXNativeTarget "Blackhole2020Tests" */;
+			buildPhases = (
+				FCCE63122595A7B0006604A4 /* Sources */,
+				FCCE63132595A7B0006604A4 /* Frameworks */,
+				FCCE63142595A7B0006604A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FCCE63182595A7B0006604A4 /* PBXTargetDependency */,
+			);
+			name = Blackhole2020Tests;
+			productName = Blackhole2020Tests;
+			productReference = FCCE63162595A7B0006604A4 /* Blackhole2020Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FCCE63202595A7B0006604A4 /* Blackhole2020UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCCE63302595A7B0006604A4 /* Build configuration list for PBXNativeTarget "Blackhole2020UITests" */;
+			buildPhases = (
+				FCCE631D2595A7B0006604A4 /* Sources */,
+				FCCE631E2595A7B0006604A4 /* Frameworks */,
+				FCCE631F2595A7B0006604A4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FCCE63232595A7B0006604A4 /* PBXTargetDependency */,
+			);
+			name = Blackhole2020UITests;
+			productName = Blackhole2020UITests;
+			productReference = FCCE63212595A7B0006604A4 /* Blackhole2020UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FCCE62F92595A7AD006604A4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1200;
+				LastUpgradeCheck = 1200;
+				TargetAttributes = {
+					FCCE63002595A7AD006604A4 = {
+						CreatedOnToolsVersion = 12.0;
+					};
+					FCCE63152595A7B0006604A4 = {
+						CreatedOnToolsVersion = 12.0;
+						TestTargetID = FCCE63002595A7AD006604A4;
+					};
+					FCCE63202595A7B0006604A4 = {
+						CreatedOnToolsVersion = 12.0;
+						TestTargetID = FCCE63002595A7AD006604A4;
+					};
+				};
+			};
+			buildConfigurationList = FCCE62FC2595A7AD006604A4 /* Build configuration list for PBXProject "Blackhole2020" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FCCE62F82595A7AD006604A4;
+			productRefGroup = FCCE63022595A7AD006604A4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FCCE63002595A7AD006604A4 /* Blackhole2020 */,
+				FCCE63152595A7B0006604A4 /* Blackhole2020Tests */,
+				FCCE63202595A7B0006604A4 /* Blackhole2020UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FCCE62FF2595A7AD006604A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCCE630F2595A7AF006604A4 /* Main.storyboard in Resources */,
+				FCCE630C2595A7AF006604A4 /* Preview Assets.xcassets in Resources */,
+				FCCE63092595A7AF006604A4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCCE63142595A7B0006604A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCCE631F2595A7B0006604A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FCCE62FD2595A7AD006604A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCCE63072595A7AD006604A4 /* ContentView.swift in Sources */,
+				FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCCE63122595A7B0006604A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCCE631B2595A7B0006604A4 /* Blackhole2020Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FCCE631D2595A7B0006604A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCCE63262595A7B0006604A4 /* Blackhole2020UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FCCE63182595A7B0006604A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FCCE63002595A7AD006604A4 /* Blackhole2020 */;
+			targetProxy = FCCE63172595A7B0006604A4 /* PBXContainerItemProxy */;
+		};
+		FCCE63232595A7B0006604A4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FCCE63002595A7AD006604A4 /* Blackhole2020 */;
+			targetProxy = FCCE63222595A7B0006604A4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FCCE630D2595A7AF006604A4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FCCE630E2595A7AF006604A4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FCCE63282595A7B0006604A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FCCE63292595A7B0006604A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		FCCE632B2595A7B0006604A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Blackhole2020/Blackhole2020.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Blackhole2020/Preview Content\"";
+				DEVELOPMENT_TEAM = VQJ7V35E7S;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Blackhole2020/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FCCE632C2595A7B0006604A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Blackhole2020/Blackhole2020.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Blackhole2020/Preview Content\"";
+				DEVELOPMENT_TEAM = VQJ7V35E7S;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Blackhole2020/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		FCCE632E2595A7B0006604A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = VQJ7V35E7S;
+				INFOPLIST_FILE = Blackhole2020Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blackhole2020.app/Contents/MacOS/Blackhole2020";
+			};
+			name = Debug;
+		};
+		FCCE632F2595A7B0006604A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = VQJ7V35E7S;
+				INFOPLIST_FILE = Blackhole2020Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Blackhole2020.app/Contents/MacOS/Blackhole2020";
+			};
+			name = Release;
+		};
+		FCCE63312595A7B0006604A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = VQJ7V35E7S;
+				INFOPLIST_FILE = Blackhole2020UITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Blackhole2020;
+			};
+			name = Debug;
+		};
+		FCCE63322595A7B0006604A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = VQJ7V35E7S;
+				INFOPLIST_FILE = Blackhole2020UITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = Blackhole2020;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FCCE62FC2595A7AD006604A4 /* Build configuration list for PBXProject "Blackhole2020" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCCE63282595A7B0006604A4 /* Debug */,
+				FCCE63292595A7B0006604A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCCE632A2595A7B0006604A4 /* Build configuration list for PBXNativeTarget "Blackhole2020" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCCE632B2595A7B0006604A4 /* Debug */,
+				FCCE632C2595A7B0006604A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCCE632D2595A7B0006604A4 /* Build configuration list for PBXNativeTarget "Blackhole2020Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCCE632E2595A7B0006604A4 /* Debug */,
+				FCCE632F2595A7B0006604A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCCE63302595A7B0006604A4 /* Build configuration list for PBXNativeTarget "Blackhole2020UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCCE63312595A7B0006604A4 /* Debug */,
+				FCCE63322595A7B0006604A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FCCE62F92595A7AD006604A4 /* Project object */;
+}
