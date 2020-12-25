@@ -14,6 +14,15 @@
 		FCCE630F2595A7AF006604A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCCE630D2595A7AF006604A4 /* Main.storyboard */; };
 		FCCE631B2595A7B0006604A4 /* Blackhole2020Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE631A2595A7B0006604A4 /* Blackhole2020Tests.swift */; };
 		FCCE63262595A7B0006604A4 /* Blackhole2020UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63252595A7B0006604A4 /* Blackhole2020UITests.swift */; };
+		FCCE63432595A922006604A4 /* File_Disintegration_TopLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE633A2595A922006604A4 /* File_Disintegration_TopLeft.json */; };
+		FCCE63442595A922006604A4 /* StarField.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE633B2595A922006604A4 /* StarField.json */; };
+		FCCE63452595A922006604A4 /* File_Disintegration_BottomRight.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE633C2595A922006604A4 /* File_Disintegration_BottomRight.json */; };
+		FCCE63462595A922006604A4 /* BlackholeUpdate_Intro.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE633D2595A922006604A4 /* BlackholeUpdate_Intro.json */; };
+		FCCE63472595A922006604A4 /* File_Disintegration_MidRight.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE633E2595A922006604A4 /* File_Disintegration_MidRight.json */; };
+		FCCE63482595A922006604A4 /* File_Disintegration_TopRight.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE633F2595A922006604A4 /* File_Disintegration_TopRight.json */; };
+		FCCE63492595A922006604A4 /* BlackholeUpdate_Rotation.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63402595A922006604A4 /* BlackholeUpdate_Rotation.json */; };
+		FCCE634A2595A922006604A4 /* File_Disintegration_MidLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */; };
+		FCCE634B2595A922006604A4 /* File_Disintegration_BottomLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +57,15 @@
 		FCCE63212595A7B0006604A4 /* Blackhole2020UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Blackhole2020UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCCE63252595A7B0006604A4 /* Blackhole2020UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blackhole2020UITests.swift; sourceTree = "<group>"; };
 		FCCE63272595A7B0006604A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCCE633A2595A922006604A4 /* File_Disintegration_TopLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_TopLeft.json; sourceTree = "<group>"; };
+		FCCE633B2595A922006604A4 /* StarField.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = StarField.json; sourceTree = "<group>"; };
+		FCCE633C2595A922006604A4 /* File_Disintegration_BottomRight.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_BottomRight.json; sourceTree = "<group>"; };
+		FCCE633D2595A922006604A4 /* BlackholeUpdate_Intro.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BlackholeUpdate_Intro.json; sourceTree = "<group>"; };
+		FCCE633E2595A922006604A4 /* File_Disintegration_MidRight.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_MidRight.json; sourceTree = "<group>"; };
+		FCCE633F2595A922006604A4 /* File_Disintegration_TopRight.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_TopRight.json; sourceTree = "<group>"; };
+		FCCE63402595A922006604A4 /* BlackholeUpdate_Rotation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BlackholeUpdate_Rotation.json; sourceTree = "<group>"; };
+		FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_MidLeft.json; sourceTree = "<group>"; };
+		FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_BottomLeft.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +116,7 @@
 		FCCE63032595A7AD006604A4 /* Blackhole2020 */ = {
 			isa = PBXGroup;
 			children = (
+				FCCE63362595A82D006604A4 /* Lotties */,
 				FCCE63042595A7AD006604A4 /* AppDelegate.swift */,
 				FCCE63062595A7AD006604A4 /* ContentView.swift */,
 				FCCE63082595A7AF006604A4 /* Assets.xcassets */,
@@ -133,6 +152,22 @@
 				FCCE63272595A7B0006604A4 /* Info.plist */,
 			);
 			path = Blackhole2020UITests;
+			sourceTree = "<group>";
+		};
+		FCCE63362595A82D006604A4 /* Lotties */ = {
+			isa = PBXGroup;
+			children = (
+				FCCE633D2595A922006604A4 /* BlackholeUpdate_Intro.json */,
+				FCCE63402595A922006604A4 /* BlackholeUpdate_Rotation.json */,
+				FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */,
+				FCCE633C2595A922006604A4 /* File_Disintegration_BottomRight.json */,
+				FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */,
+				FCCE633E2595A922006604A4 /* File_Disintegration_MidRight.json */,
+				FCCE633A2595A922006604A4 /* File_Disintegration_TopLeft.json */,
+				FCCE633F2595A922006604A4 /* File_Disintegration_TopRight.json */,
+				FCCE633B2595A922006604A4 /* StarField.json */,
+			);
+			path = Lotties;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,9 +273,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCCE63432595A922006604A4 /* File_Disintegration_TopLeft.json in Resources */,
+				FCCE63472595A922006604A4 /* File_Disintegration_MidRight.json in Resources */,
+				FCCE63442595A922006604A4 /* StarField.json in Resources */,
 				FCCE630F2595A7AF006604A4 /* Main.storyboard in Resources */,
+				FCCE63452595A922006604A4 /* File_Disintegration_BottomRight.json in Resources */,
+				FCCE634B2595A922006604A4 /* File_Disintegration_BottomLeft.json in Resources */,
+				FCCE63482595A922006604A4 /* File_Disintegration_TopRight.json in Resources */,
 				FCCE630C2595A7AF006604A4 /* Preview Assets.xcassets in Resources */,
 				FCCE63092595A7AF006604A4 /* Assets.xcassets in Resources */,
+				FCCE63492595A922006604A4 /* BlackholeUpdate_Rotation.json in Resources */,
+				FCCE63462595A922006604A4 /* BlackholeUpdate_Intro.json in Resources */,
+				FCCE634A2595A922006604A4 /* File_Disintegration_MidLeft.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
