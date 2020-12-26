@@ -1,0 +1,6 @@
+framework module Pods_Blackhole2020 {
+  umbrella header "Pods-Blackhole2020-umbrella.h"
+
+  export *
+  module * { export * }
+}
