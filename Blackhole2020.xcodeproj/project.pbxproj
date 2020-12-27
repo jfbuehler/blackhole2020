@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,6 +26,7 @@
 		FCCE63492595A922006604A4 /* BlackholeUpdate_Rotation.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63402595A922006604A4 /* BlackholeUpdate_Rotation.json */; };
 		FCCE634A2595A922006604A4 /* File_Disintegration_MidLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */; };
 		FCCE634B2595A922006604A4 /* File_Disintegration_BottomLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */; };
+		FCCE63572597D924006604A4 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63562597D924006604A4 /* LottieView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		FCCE63402595A922006604A4 /* BlackholeUpdate_Rotation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = BlackholeUpdate_Rotation.json; sourceTree = "<group>"; };
 		FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_MidLeft.json; sourceTree = "<group>"; };
 		FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_BottomLeft.json; sourceTree = "<group>"; };
+		FCCE63562597D924006604A4 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		FFF8440979041A5696AC5B2C /* Pods-Blackhole2020.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,7 +120,6 @@
 				32A9143554495F366D76350A /* Pods-Blackhole2020Tests.debug.xcconfig */,
 				AD48376A8CCFA15F07DD5E4E /* Pods-Blackhole2020Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -160,6 +161,7 @@
 				FCCE63362595A82D006604A4 /* Lotties */,
 				FCCE63042595A7AD006604A4 /* AppDelegate.swift */,
 				FCCE63062595A7AD006604A4 /* ContentView.swift */,
+				FCCE63562597D924006604A4 /* LottieView.swift */,
 				FCCE63082595A7AF006604A4 /* Assets.xcassets */,
 				FCCE630D2595A7AF006604A4 /* Main.storyboard */,
 				FCCE63102595A7AF006604A4 /* Info.plist */,
@@ -460,6 +462,7 @@
 			files = (
 				FCCE63072595A7AD006604A4 /* ContentView.swift in Sources */,
 				FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */,
+				FCCE63572597D924006604A4 /* LottieView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
