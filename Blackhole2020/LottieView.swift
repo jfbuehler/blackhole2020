@@ -13,6 +13,7 @@ struct LottieView: NSViewRepresentable {
     var filename: String
     var autoplay: Bool = false
     var width: CGFloat = 0.0
+    var height: CGFloat = 0.0
     
     func makeNSView(context: NSViewRepresentableContext<LottieView>) -> NSView {
         let view = NSView(frame: .zero)
@@ -42,8 +43,19 @@ struct LottieView: NSViewRepresentable {
               animationView.widthAnchor.constraint(equalTo: view.widthAnchor),
             ])
         }
+        
+        if height > 0.0 {
+            NSLayoutConstraint.activate([
+                animationView.heightAnchor.constraint(equalToConstant: height),
+                ])
+        }
+        else {
+            NSLayoutConstraint.activate([
+                animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
+                ])
+        }
+        
         NSLayoutConstraint.activate([
-          animationView.heightAnchor.constraint(equalTo: view.heightAnchor),
           animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
           animationView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
