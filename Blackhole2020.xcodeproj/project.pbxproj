@@ -11,7 +11,7 @@
 		B746F8C29F6A45AE16DE2D16 /* Pods_Blackhole2020_Blackhole2020UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 733C6C4FA33ECF15B1B598E3 /* Pods_Blackhole2020_Blackhole2020UITests.framework */; };
 		F855BD06CB9450BDECB9E42E /* Pods_Blackhole2020.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711E3C9EBD3AF1E8C2CEB239 /* Pods_Blackhole2020.framework */; };
 		FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63042595A7AD006604A4 /* AppDelegate.swift */; };
-		FCCE63072595A7AD006604A4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63062595A7AD006604A4 /* ContentView.swift */; };
+		FCCE63072595A7AD006604A4 /* BlackHoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63062595A7AD006604A4 /* BlackHoleView.swift */; };
 		FCCE63092595A7AF006604A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63082595A7AF006604A4 /* Assets.xcassets */; };
 		FCCE630C2595A7AF006604A4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FCCE630B2595A7AF006604A4 /* Preview Assets.xcassets */; };
 		FCCE630F2595A7AF006604A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCCE630D2595A7AF006604A4 /* Main.storyboard */; };
@@ -27,6 +27,7 @@
 		FCCE634A2595A922006604A4 /* File_Disintegration_MidLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */; };
 		FCCE634B2595A922006604A4 /* File_Disintegration_BottomLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */; };
 		FCCE63572597D924006604A4 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63562597D924006604A4 /* LottieView.swift */; };
+		FCF0631725BCAFDF00912900 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF0631625BCAFDF00912900 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +58,7 @@
 		F94163FDCA1FCDD34612F05C /* Pods-Blackhole2020.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020.debug.xcconfig"; path = "Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020.debug.xcconfig"; sourceTree = "<group>"; };
 		FCCE63012595A7AD006604A4 /* Blackhole2020.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blackhole2020.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCCE63042595A7AD006604A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FCCE63062595A7AD006604A4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FCCE63062595A7AD006604A4 /* BlackHoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHoleView.swift; sourceTree = "<group>"; };
 		FCCE63082595A7AF006604A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FCCE630B2595A7AF006604A4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FCCE630E2595A7AF006604A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -79,6 +80,7 @@
 		FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_MidLeft.json; sourceTree = "<group>"; };
 		FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_BottomLeft.json; sourceTree = "<group>"; };
 		FCCE63562597D924006604A4 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		FCF0631625BCAFDF00912900 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FFF8440979041A5696AC5B2C /* Pods-Blackhole2020.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,8 +162,9 @@
 			children = (
 				FCCE63362595A82D006604A4 /* Lotties */,
 				FCCE63042595A7AD006604A4 /* AppDelegate.swift */,
-				FCCE63062595A7AD006604A4 /* ContentView.swift */,
+				FCCE63062595A7AD006604A4 /* BlackHoleView.swift */,
 				FCCE63562597D924006604A4 /* LottieView.swift */,
+				FCF0631625BCAFDF00912900 /* Extensions.swift */,
 				FCCE63082595A7AF006604A4 /* Assets.xcassets */,
 				FCCE630D2595A7AF006604A4 /* Main.storyboard */,
 				FCCE63102595A7AF006604A4 /* Info.plist */,
@@ -460,9 +463,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FCCE63072595A7AD006604A4 /* ContentView.swift in Sources */,
+				FCCE63072595A7AD006604A4 /* BlackHoleView.swift in Sources */,
 				FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */,
 				FCCE63572597D924006604A4 /* LottieView.swift in Sources */,
+				FCF0631725BCAFDF00912900 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
