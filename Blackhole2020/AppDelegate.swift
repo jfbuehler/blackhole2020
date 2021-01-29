@@ -7,6 +7,7 @@
 
 import Cocoa
 import SwiftUI
+import SDWebImageLottieCoder
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -28,6 +29,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
+        
+        // Add coder
+        let lottieCoder = SDImageLottieCoder.shared
+        SDImageCodersManager.shared.addCoder(lottieCoder)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

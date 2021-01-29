@@ -27,6 +27,9 @@
 		FCCE634A2595A922006604A4 /* File_Disintegration_MidLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */; };
 		FCCE634B2595A922006604A4 /* File_Disintegration_BottomLeft.json in Resources */ = {isa = PBXBuildFile; fileRef = FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */; };
 		FCCE63572597D924006604A4 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63562597D924006604A4 /* LottieView.swift */; };
+		FCDA4BDC25BFDA750032F4D1 /* black-hole.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = FCDA4BDB25BFDA750032F4D1 /* black-hole.mp4 */; };
+		FCDA4BE125BFDB800032F4D1 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDA4BE025BFDB800032F4D1 /* PlayerView.swift */; };
+		FCDA4BE925C08D630032F4D1 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDA4BE825C08D630032F4D1 /* VideoView.swift */; };
 		FCF0631725BCAFDF00912900 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF0631625BCAFDF00912900 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -80,6 +83,9 @@
 		FCCE63412595A922006604A4 /* File_Disintegration_MidLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_MidLeft.json; sourceTree = "<group>"; };
 		FCCE63422595A922006604A4 /* File_Disintegration_BottomLeft.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = File_Disintegration_BottomLeft.json; sourceTree = "<group>"; };
 		FCCE63562597D924006604A4 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		FCDA4BDB25BFDA750032F4D1 /* black-hole.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "black-hole.mp4"; sourceTree = "<group>"; };
+		FCDA4BE025BFDB800032F4D1 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		FCDA4BE825C08D630032F4D1 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		FCF0631625BCAFDF00912900 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FFF8440979041A5696AC5B2C /* Pods-Blackhole2020.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -164,7 +170,9 @@
 				FCCE63042595A7AD006604A4 /* AppDelegate.swift */,
 				FCCE63062595A7AD006604A4 /* BlackHoleView.swift */,
 				FCCE63562597D924006604A4 /* LottieView.swift */,
+				FCDA4BE025BFDB800032F4D1 /* PlayerView.swift */,
 				FCF0631625BCAFDF00912900 /* Extensions.swift */,
+				FCDA4BE825C08D630032F4D1 /* VideoView.swift */,
 				FCCE63082595A7AF006604A4 /* Assets.xcassets */,
 				FCCE630D2595A7AF006604A4 /* Main.storyboard */,
 				FCCE63102595A7AF006604A4 /* Info.plist */,
@@ -212,6 +220,7 @@
 				FCCE633A2595A922006604A4 /* File_Disintegration_TopLeft.json */,
 				FCCE633F2595A922006604A4 /* File_Disintegration_TopRight.json */,
 				FCCE633B2595A922006604A4 /* StarField.json */,
+				FCDA4BDB25BFDA750032F4D1 /* black-hole.mp4 */,
 			);
 			path = Lotties;
 			sourceTree = "<group>";
@@ -331,6 +340,7 @@
 				FCCE63452595A922006604A4 /* File_Disintegration_BottomRight.json in Resources */,
 				FCCE634B2595A922006604A4 /* File_Disintegration_BottomLeft.json in Resources */,
 				FCCE63482595A922006604A4 /* File_Disintegration_TopRight.json in Resources */,
+				FCDA4BDC25BFDA750032F4D1 /* black-hole.mp4 in Resources */,
 				FCCE630C2595A7AF006604A4 /* Preview Assets.xcassets in Resources */,
 				FCCE63092595A7AF006604A4 /* Assets.xcassets in Resources */,
 				FCCE63492595A922006604A4 /* BlackholeUpdate_Rotation.json in Resources */,
@@ -463,9 +473,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCDA4BE925C08D630032F4D1 /* VideoView.swift in Sources */,
 				FCCE63072595A7AD006604A4 /* BlackHoleView.swift in Sources */,
 				FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */,
 				FCCE63572597D924006604A4 /* LottieView.swift in Sources */,
+				FCDA4BE125BFDB800032F4D1 /* PlayerView.swift in Sources */,
 				FCF0631725BCAFDF00912900 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

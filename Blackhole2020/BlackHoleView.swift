@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 // The main black hole view for now
 struct BlackHoleView: View {
@@ -14,21 +15,41 @@ struct BlackHoleView: View {
     let file_height: CGFloat = 200
     
     var isErasing = false
+    var blackhole_url = Bundle.main.url(forResource: "black-hole", withExtension: "mp4")!
+    //var file_bottom_left_url = Bundle.main.url(forResource: "file-bottom-left", withExtension: "mp4")!
+    
+    @ObservedObject var videoItem: VideoItem = VideoItem()
     
     var body: some View {
         VStack {
-            ZStack(alignment: .top) {
-                LottieView(filename: "StarField", autoplay: true)
-                //LottieView(filename: "BlackholeUpdate_Rotation", autoplay: true)
+            ZStack(alignment: .center) {
+                // can't use Lottie to generate these its too CPU intensive
+                //LottieView(filename: "StarField", autoplay: true)
                 
-//                VStack {
+                // crap have to update to MacOS 11 finally... this VideoPlayer replaces the 3rd party github code below but requires OS 11
+                //VideoPlayer(player: AVPlayer(url:  Bundle.main.url(forResource: "video", withExtension: "mp4")!))
+                Video(url: blackhole_url)
+                    .loop(true)
+                    .frame(width: 1000, height: 700)
+                
+                VStack {
+                // TODO -- the files need transparency to work before I can use videos for them
+//                    Video(url: file_bottom_left_url)
+//                        .frame(width: 150, height: 100)
+//                    Video(url: file_bottom_left_url)
+//                        .frame(width: 150, height: 100)
+//                    Video(url: file_bottom_left_url)
+//                        .frame(width: 150, height: 100)
+//                    Video(url: file_bottom_left_url)
+//                        .frame(width: 150, height: 100)
+                    
+                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height, useRLottie: true)
+                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height, useRLottie: true)
+                    LottieView(filename: "File_Disintegration_TopLeft", autoplay: true, width: file_width, height: file_height)
+                    //LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
 //                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
 //                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
-//                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
-//                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
-//                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
-//                    LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
-//                }
+                }
                 
             }
             
