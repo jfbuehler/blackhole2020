@@ -9,6 +9,8 @@ import SwiftUI
 import AVKit
 //import SDWebImageSwiftUI
 
+let DEBUG_ERASE = false // enable to fake erasing (and save your real files)
+
 let MainViewHeight = CGFloat(700)
 
 // The main black hole view for now
@@ -36,7 +38,7 @@ struct BlackHoleView: View {
     // hex text
     @State var hex_text_opacity = 1.0
     @State var hex_text_x: CGFloat = 850
-    @State var hex_text_y: CGFloat = 100
+    @State var hex_text_y: CGFloat = 85
     @State var hex_scale: CGFloat = 1.0
     
     @ObservedObject var videoItem: VideoItem = VideoItem()
@@ -80,13 +82,13 @@ struct BlackHoleView: View {
                     
                 ZStack {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .frame(width: 200, height: 65, alignment: .center)
+                        .frame(width: 200, height: 90, alignment: .center)
                         .foregroundColor(Color.init(hex: 0x721FAE))
-                        .position(x: 850, y: 50)
-                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                        .frame(width: 195, height: 60, alignment: .center)
+                        .position(x: 850, y: 60)
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .frame(width: 195, height: 80, alignment: .center)
                         .foregroundColor(.black)
-                        .position(x: 850, y: 50)
+                        .position(x: 850, y: 60)
                     
                     Text("\(bytes_written)")
                         .font(.custom("VT323-Regular", size: 16))
@@ -271,15 +273,18 @@ struct BlackHoleView: View {
                     
                     if let file_size = resourceValues.fileSize {
                         secure_eraser(file: fileURL, size:  file_size)
-                        //try fm.removeItem(at: fileURL)
-                        //usleep(UInt32(1e6 * 0.1))  // 1/10 second delay
+                        if (!DEBUG_ERASE) {
+                            try fm.removeItem(at: fileURL)
+                        }
+                        usleep(UInt32(100))  // its critical to delay this intense CPU loop or even the Debugger can't terminate the process
                     }
                     
                 }
                 
                 // remove the dropped folder too
-                //try fm.removeItem(at: url)
-                
+                if (!DEBUG_ERASE) {
+                    try fm.removeItem(at: url)
+                }
                 print("blackholeAnimating = false, areFilesAnimating = false")
                 
             }
@@ -301,7 +306,7 @@ struct BlackHoleView: View {
     {
         // Swift 4.2 implemented SE-0202: Random Unification so this is a cryptographically secure randomizer that’s baked right into the core of the language! Cool huh!
         if let fileHandle = FileHandle(forWritingAtPath: file.path) {
-            
+                        
             current_filename = file.lastPathComponent
             
             var text_nums = ""
@@ -317,7 +322,9 @@ struct BlackHoleView: View {
                 //print(num)
                 let data = Data(bytes: &num, count: 4)
                 
-                //fileHandle.write(data)
+                if (!DEBUG_ERASE) {
+                    fileHandle.write(data)
+                }
                 text_nums = String(format: "0x%02x\n", num)
                 hex_text_overlay = text_nums
                 bytes_written += 4
@@ -325,9 +332,21 @@ struct BlackHoleView: View {
             
             hex_text_overlay = text_nums
             
-            // TODO -- this is even more secure if we can mess up the file descriptors dates
+            // this is even more secure if we can mess up the file descriptors dates
             // As an extra precaution I change the dates of the file so the
             // original dates are hidden if you try to recover the file.
+            
+            if (!DEBUG_ERASE) {
+                do {
+                    let date = Date()  // aka todays date
+                    let attributes = [FileAttributeKey.creationDate: date, FileAttributeKey.modificationDate: date]
+                    try FileManager.default.setAttributes(attributes, ofItemAtPath: file.path)
+                    //print("setting \(attributes) to \(date)")
+                }
+                catch {
+                    print("ERROR setting creation of file! \(error)")
+                }
+            }
 
 //            DateTime dt = new DateTime(2037, 1, 1, 0, 0, 0);
 //            File.SetCreationTime(filename, dt);

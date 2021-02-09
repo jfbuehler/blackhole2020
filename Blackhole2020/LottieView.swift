@@ -240,19 +240,17 @@ struct LottieView: NSViewRepresentable {
         
         if let animationView = uiView.subviews[0] as? AnimationView {
         
-            print("updateNSView() shouldPlay=\(shouldPlay), gracefulPause=\(shouldGracefulPause) isPlay=\(animationView.isAnimationPlaying) views=\(uiView.subviews.count)")
-            //print("animationView.isAnimationPlaying = \(animationView.isAnimationPlaying)")
+            //print("updateNSView() shouldPlay=\(shouldPlay), gracefulPause=\(shouldGracefulPause) isPlay=\(animationView.isAnimationPlaying) views=\(uiView.subviews.count)")
             
             if shouldPlay {
                 
-//                animationView.play { (complete) in
-                    print("animationView.play - shouldPlay = \(shouldPlay), isPlay=\(animationView.isAnimationPlaying)")
-//                }
+                //print("animationView.play - shouldPlay = \(shouldPlay), isPlay=\(animationView.isAnimationPlaying)")
+
                 if animationView.isAnimationPlaying == false {
                     //animationView.stop()
                     animationView.currentFrame = 0
                     animationView.play(fromProgress: 0, toProgress: 1, loopMode: .loop) { (complete) in
-                        print("lottie looped completion handler firing - shouldPlay = \(shouldPlay), complete=\(complete), isPlay=\(animationView.isAnimationPlaying)")
+                        //print("lottie looped completion handler firing - shouldPlay = \(shouldPlay), complete=\(complete), isPlay=\(animationView.isAnimationPlaying)")
                         
                         // this occurs when the pause() is set below..
                         // let's run it out to completion
