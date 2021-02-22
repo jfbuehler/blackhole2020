@@ -206,6 +206,7 @@ extension Video {
                 player?.pause()
                 player?.seek(to: .zero)
                 player?.play()
+                print("playerItemDidReachEnd")
             } else {
                 video.isPlaying.wrappedValue = false
             }

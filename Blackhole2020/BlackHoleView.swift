@@ -9,7 +9,7 @@ import SwiftUI
 import AVKit
 //import SDWebImageSwiftUI
 
-let DEBUG_ERASE = false // enable to fake erasing (and save your real files)
+let DEBUG_ERASE = true // enable to fake erasing (and save your real files)
 
 let MainViewHeight = CGFloat(700)
 
@@ -139,7 +139,7 @@ struct BlackHoleView: View {
                         //.id("text-overwrite-" + hex_text_overlay)
                         
                     
-                    Text("bytes erased")
+                    Text("bytes erasered")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
@@ -274,15 +274,24 @@ struct BlackHoleView: View {
                     if let file_size = resourceValues.fileSize {
                         secure_eraser(file: fileURL, size:  file_size)
                         if (!DEBUG_ERASE) {
+                            num_of_files += 1
                             try fm.removeItem(at: fileURL)
                         }
                         usleep(UInt32(100))  // its critical to delay this intense CPU loop or even the Debugger can't terminate the process
                     }
-                    
                 }
                 
                 // remove the dropped folder too
                 if (!DEBUG_ERASE) {
+                    
+                    if url.isFileURL {
+                        let resourceValues = try url.resourceValues(forKeys: Set(resourceKeys))
+                        if let file_size = resourceValues.fileSize {
+                            secure_eraser(file: url, size:  file_size)
+                        }
+                    }
+                    
+                    num_of_files += 1
                     try fm.removeItem(at: url)
                 }
                 print("blackholeAnimating = false, areFilesAnimating = false")
@@ -297,8 +306,6 @@ struct BlackHoleView: View {
             gracefulPauseFiles = true
             blackholeAnimating = false
         }
-        
-        
     }
     
     // Implement secure file erasing methods
@@ -312,25 +319,57 @@ struct BlackHoleView: View {
             var text_nums = ""
             fileHandle.seek(toFileOffset: 0)
             
-            // it's like we'll base the randomness on the size of the file
-            var result = Array(repeating: 0, count: size / 4)
+            print("size=\(size)")
+            let write_loops = 400
+            let sparse_size = size / write_loops
+            
+            // we'll base the randomness on the size of the file
+            let result = Array(repeating: 0, count: sparse_size)
+            
+            // this call takes a few seconds even for a 1 megabyte randomized pattern
             let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
             
-            //print("writing this randomized array of size=\(shuffledNumbers.count) to the file --")
+            // TODO -- still need to make this run faster...
             
-            for var num in shuffledNumbers {
-                //print(num)
-                let data = Data(bytes: &num, count: 4)
-                
-                if (!DEBUG_ERASE) {
-                    fileHandle.write(data)
+            print("writing sparse_array=\(sparse_size) randomized array of size=\(shuffledNumbers.count) to the file --")
+                        
+            //let write_loops = size/1024/1024
+            let data = Data(bytes: shuffledNumbers, count: shuffledNumbers.count)
+            print("Writing \(data) \(write_loops) times")
+            
+            // try writing size loops to the file
+            if (!DEBUG_ERASE) {
+                do {
+                    for i in 1...write_loops {
+                        
+                        let offset = UInt64(i * data.count)
+                        fileHandle.write(data)
+                        fileHandle.seek(toFileOffset: offset)
+                        
+                        text_nums = String(format: "0x%02x\n", offset)
+                        hex_text_overlay = text_nums
+                        bytes_written += Int(data.count)
+                        print("seeking to \(offset)")
+                    }
                 }
-                text_nums = String(format: "0x%02x\n", num)
-                hex_text_overlay = text_nums
-                bytes_written += 4
+                catch { print("ERROR seeking / writing \(error)") }
             }
+//            if (!DEBUG_ERASE) {
+//                fileHandle.write(data)
+//            }
             
-            hex_text_overlay = text_nums
+            // this takes too long too, it loops forever across the files
+//            for var num in shuffledNumbers {
+//                //print(num)
+//                let data = Data(bytes: &num, count: 4)
+//
+//                if (!DEBUG_ERASE) {
+//                    fileHandle.write(data)
+//                }
+//                text_nums = String(format: "0x%02x\n", num)
+//                hex_text_overlay = text_nums
+//                bytes_written += 4
+//            }
             
             // this is even more secure if we can mess up the file descriptors dates
             // As an extra precaution I change the dates of the file so the
@@ -355,8 +394,6 @@ struct BlackHoleView: View {
             
             //let array = shuffledNumbers as! NSArray
             fileHandle.closeFile()
-            
-            num_of_files += 1
         }
     }
     
