@@ -66,6 +66,8 @@ struct FileView: View {
         LottieView(filename: filename, width: file_width, height: file_height, shouldPlay: $shouldPlay, shouldGracefulPause: $shouldGracefulPause)
             .frame(width: file_width, height: file_height, alignment: .center)
             .offset(x: x, y: y)
+            //.animation(Animation.spring(response: 1, dampingFraction: 1, blendDuration: 1))
+            .animation(.linear)
 //            .onReceive([self.$shouldPlay].publisher, perform: { _ in
 //                print("does this actually fire on changes?? x=\(x) y=\(y) shouldPlay=\(shouldPlay)")
 //

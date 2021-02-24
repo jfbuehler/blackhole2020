@@ -19,7 +19,7 @@ struct BlackHoleView: View {
     let file_width: CGFloat = 200
     let file_height: CGFloat = 150
     
-    var isErasing = false
+    @State var isFileAnimationThreadRunning = false
     var blackhole_url = Bundle.main.url(forResource: "black-hole", withExtension: "mp4")!
     
     @State var animationTime = 5.0
@@ -40,6 +40,10 @@ struct BlackHoleView: View {
     @State var hex_text_x: CGFloat = 850
     @State var hex_text_y: CGFloat = 85
     @State var hex_scale: CGFloat = 1.0
+    
+    // try manually building the file animations here
+    @State var file1_x: CGFloat = -100
+    @State var file1_y: CGFloat = 100
     
     @ObservedObject var videoItem: VideoItem = VideoItem()
     
@@ -176,15 +180,16 @@ struct BlackHoleView: View {
                 // TODO -- the real elegant way to do this here is use the ForEach loops and run the radius / offset calculation here
                 
                 ZStack {
-                    FileView(x: -200, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: -100, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: -100, y: -100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: 0, y: 0, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: 50, y: 50, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: 100, y: 100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: 100, y: 200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: 200, y: 200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: 150, y: 220, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+//                    FileView(x: -200, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+//                    FileView(x: -100, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+//                    FileView(x: -100, y: -100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+                    FileView(x: file1_x, y: file1_y, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+                        //.position(x: file1_x, y: file1_y)
+//                    FileView(x: 50, y: 50, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+//                    FileView(x: 100, y: 100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+//                    FileView(x: 100, y: 200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+//                    FileView(x: 200, y: 200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+//                    FileView(x: 150, y: 220, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
                 }
                 
                 // for now...can't get these SwiftUI extensions to work. They don't appear for unknown reasons
@@ -236,14 +241,9 @@ struct BlackHoleView: View {
             return false }
     }
     
-    // try to erase the files?
+    // Implement the secure erasing function
     func eraser_gun(url: URL)
     {
-//        print("about to erase")
-//        sleep(5)
-//        print("done fake erasing")
-//        return  // disable the actual erasing for now
-//
         let fm = FileManager.default
         num_of_files = 0
         
@@ -252,6 +252,16 @@ struct BlackHoleView: View {
             
             areFilesAnimating = true
             blackholeAnimating = true
+            toggle_erasing_animation()
+            
+            print("about to erase")
+            sleep(15)
+            print("done fake erasing")
+            
+            areFilesAnimating = false
+            gracefulPauseFiles = true
+            blackholeAnimating = false
+            return  // disable the actual erasing for now
             
             do {
                 toggle_erasing_animation()
@@ -400,24 +410,31 @@ struct BlackHoleView: View {
     // allow the animation loop to run
     func toggle_erasing_animation()
     {
-        if (isErasing)
+        if (isFileAnimationThreadRunning == false)
         {
             // spin up the files getting sucked into the blackhole...
+//            DispatchQueue.main.async {
+//
+//            }
             
-            // copy from windows
-            
-            // ideally we do not re-create the animations so we'll need to be crafty about writing this piece
-            // the idea is pretty simple but elegant
-            // first we setup the views outside of this loop (done here)
-            // then we just iterate and play on them with slight delay here
-            
-            // TODO -- how do we dynamically adjust where the views are? Need to do this anyway so we can move them around using position animations
-            
-            // lookup for swifty UIs
-             
-            
-            // then we just need to loop them in/out of playing / not playing
-            // Maybe just start by rolling with 10 of them
+            DispatchQueue.global(qos: .background).async {
+                
+                isFileAnimationThreadRunning = true
+                
+                // try modifying state variables from the BG!
+                while areFilesAnimating
+                {
+                    file1_x -= 1.0
+                    file1_y += 1.0
+                    
+                    usleep(UInt32(1e5)) // check for exit
+                    //sleep(1)
+                    //print("file moving thread running")
+                }
+                
+                print("file moving thread exiting")
+                isFileAnimationThreadRunning = false
+            }
             
             
         }
