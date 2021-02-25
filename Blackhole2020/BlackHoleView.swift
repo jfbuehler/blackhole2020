@@ -7,11 +7,24 @@
 
 import SwiftUI
 import AVKit
-//import SDWebImageSwiftUI
+import Lottie
 
-let DEBUG_ERASE = true // enable to fake erasing (and save your real files)
+let DEBUG_ERASE = false // enable to fake erasing (and save your real files)
 
 let MainViewHeight = CGFloat(700)
+
+struct AnimatedFileState : Identifiable
+{
+    let id = UUID()
+    var popIn = false
+    var pause = false
+    var erase = false
+    var reset = false
+    var isErased = false
+    var animating = false
+    var x: CGFloat = 0
+    var y: CGFloat = 0
+}
 
 // The main black hole view for now
 struct BlackHoleView: View {
@@ -25,9 +38,11 @@ struct BlackHoleView: View {
     @State var animationTime = 5.0
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
-    // this may not be enough on its own to look nice
-    @State private var showFileAnimations = false
-    @State var areFilesAnimating = false
+    // the elegant initializer to create an array
+    @State var files = [AnimatedFileState](repeating: AnimatedFileState.init(), count: 10)
+    
+    @State var eraseFiles = false
+    @State var popIn = false
     @State var gracefulPauseFiles = false
     @State var blackholeAnimating = false
     @State var num_of_files = 0
@@ -41,11 +56,23 @@ struct BlackHoleView: View {
     @State var hex_text_y: CGFloat = 85
     @State var hex_scale: CGFloat = 1.0
     
-    // try manually building the file animations here
-    @State var file1_x: CGFloat = -100
-    @State var file1_y: CGFloat = 100
+    // pre-allocate all the JSONs
+    var file_animations = [Lottie.Animation]()
     
     @ObservedObject var videoItem: VideoItem = VideoItem()
+    
+    init()
+    {
+        //print("blackhole init running")
+        
+        file_animations.append(Animation.named("File_Disintegration_TopLeft")!)
+        file_animations.append(Animation.named("File_Disintegration_BottomLeft")!)
+        file_animations.append(Animation.named("File_Disintegration_MidLeft")!)
+        file_animations.append(Animation.named("File_Disintegration_TopRight")!)
+        file_animations.append(Animation.named("File_Disintegration_BottomRight")!)
+        file_animations.append(Animation.named("File_Disintegration_MidRight")!)
+        //print("file_animations=\(file_animations.count)")
+    }
     
     var body: some View {
         VStack {
@@ -180,10 +207,15 @@ struct BlackHoleView: View {
                 // TODO -- the real elegant way to do this here is use the ForEach loops and run the radius / offset calculation here
                 
                 ZStack {
+                    
+                    // funny looking but this is the SwiftUI syntax to iterately declare arrays of views
+                    ForEach(0..<files.count, id: \.self) { i in
+                        FileView(x: files[i].x, y: files[i].y, popInAnimation: $files[i].popIn, eraseAnimation: $files[i].erase, gracefulPause: $files[i].pause, reset: $files[i].reset, file_jsons: file_animations)
+                    }
 //                    FileView(x: -200, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
 //                    FileView(x: -100, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
 //                    FileView(x: -100, y: -100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    FileView(x: file1_x, y: file1_y, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
+                    //FileView(x: files[0].x, y: files[0].y, popInAnimation: $files[0].popIn, eraseAnimation: $eraseFiles, gracefulPause: $gracefulPauseFiles)
                         //.position(x: file1_x, y: file1_y)
 //                    FileView(x: 50, y: 50, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
 //                    FileView(x: 100, y: 100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
@@ -250,20 +282,23 @@ struct BlackHoleView: View {
         // at this point let's see if we can help the energy impacts by using lower priority threads
         DispatchQueue.global(qos: .utility).async {
             
-            areFilesAnimating = true
-            blackholeAnimating = true
-            toggle_erasing_animation()
-            
-            print("about to erase")
-            sleep(15)
-            print("done fake erasing")
-            
-            areFilesAnimating = false
-            gracefulPauseFiles = true
-            blackholeAnimating = false
-            return  // disable the actual erasing for now
+            // use this block to unit test
+//            popIn = true
+//            blackholeAnimating = true
+//            toggle_erasing_animation()
+//
+//            print("about to erase")
+//            sleep(5)
+//            print("done fake erasing")
+//
+//            popIn = false
+//            gracefulPauseFiles = true
+//            blackholeAnimating = false
+//            return  // disable the actual erasing for now
             
             do {
+                popIn = true
+                blackholeAnimating = true
                 toggle_erasing_animation()
                 
                 print("Try to read -- \(url.path)")
@@ -312,7 +347,7 @@ struct BlackHoleView: View {
                 print("ERROR getting contents of folder! \(error)")
             }
             
-            areFilesAnimating = false
+            popIn = false
             gracefulPauseFiles = true
             blackholeAnimating = false
         }
@@ -329,9 +364,10 @@ struct BlackHoleView: View {
             var text_nums = ""
             fileHandle.seek(toFileOffset: 0)
             
-            print("size=\(size)")
+            //print("secure_eraser size=\(size)")
             let write_loops = 400
             let sparse_size = size / write_loops
+            var test_bytes_written = 0
             
             // we'll base the randomness on the size of the file
             let result = Array(repeating: 0, count: sparse_size)
@@ -341,11 +377,11 @@ struct BlackHoleView: View {
             
             // TODO -- still need to make this run faster...
             
-            print("writing sparse_array=\(sparse_size) randomized array of size=\(shuffledNumbers.count) to the file --")
+            //print("secure_eraser writing sparse_array=\(sparse_size) randomized array of size=\(shuffledNumbers.count) to the file --")
                         
             //let write_loops = size/1024/1024
             let data = Data(bytes: shuffledNumbers, count: shuffledNumbers.count)
-            print("Writing \(data) \(write_loops) times")
+            
             
             // try writing size loops to the file
             if (!DEBUG_ERASE) {
@@ -359,11 +395,22 @@ struct BlackHoleView: View {
                         text_nums = String(format: "0x%02x\n", offset)
                         hex_text_overlay = text_nums
                         bytes_written += Int(data.count)
-                        print("seeking to \(offset)")
+                        test_bytes_written += Int(data.count)
+                        //print("seeking to \(offset)")
                     }
+                    
+                    // write the leftovers
+                    let remainder = size - (write_loops * sparse_size)
+                    let ending_data = Data(bytes: shuffledNumbers, count: remainder)
+                    fileHandle.write(ending_data)
+                    bytes_written += Int(ending_data.count)
+                    //print("writing remainder=\(remainder)")
                 }
                 catch { print("ERROR seeking / writing \(error)") }
             }
+            
+            //print("secure_eraser Writing \(data) \(write_loops) times test_bytes_written=\(test_bytes_written)")
+            
 //            if (!DEBUG_ERASE) {
 //                fileHandle.write(data)
 //            }
@@ -410,38 +457,94 @@ struct BlackHoleView: View {
     // allow the animation loop to run
     func toggle_erasing_animation()
     {
+        let radius_px = 300.0
+        let event_horizon_px: CGFloat = 200.0
+        
         if (isFileAnimationThreadRunning == false)
         {
-            // spin up the files getting sucked into the blackhole...
-//            DispatchQueue.main.async {
-//
-//            }
             
             DispatchQueue.global(qos: .background).async {
                 
+                var speed_factor = CGFloat(0)
                 isFileAnimationThreadRunning = true
                 
-                // try modifying state variables from the BG!
-                while areFilesAnimating
+                // keep the animation thread alive while actively working
+                while blackholeAnimating
                 {
-                    file1_x -= 1.0
-                    file1_y += 1.0
+                    // eventually we'll iterate the state of each file
+                    for var i in 0...files.count - 1 {
+                        
+                        if files[i].animating == false {
+                            let angle = Double.random(in: 0.0...1.0) * Double.pi * 2
+                            let x = cos(angle) * radius_px
+                            let y = sin(angle) * radius_px
+                            //print("\(i) generating random angle = \(angle / Double.pi * 180), \(atan2(y,x)  / Double.pi * 180), \(x),\(y) dist=\(CGPointDistance(from: CGPoint(x: x, y: y), to: CGPoint.zero))")
+                            files[i].x = CGFloat(x)
+                            files[i].y = CGFloat(y)
+                            files[i].animating = true
+                            files[i].popIn = true
+                            files[i].erase = false
+                            files[i].pause = false
+                            files[i].isErased = false
+                            
+                            speed_factor = CGFloat.random(in: 1.0...5)
+                        }
+                        
+                        //print("\(i) dist=\(CGPointDistance(from: CGPoint(x: files[i].x, y: files[i].y), to: CGPoint.zero))")
+                        
+                        if files[i].isErased == false {
+                            if CGPointDistance(from: CGPoint(x: files[i].x, y: files[i].y), to: CGPoint.zero) < event_horizon_px {
+                                
+                                files[i].erase = true
+                                files[i].isErased = true
+                            }
+                        }
+                        
+                        if files[i].reset {
+                            //print("\(i) detecting reset")
+                            files[i].reset = false
+                            files[i].animating = false
+                        }
+                        
+                        // try to bring the x/y values to zero (the center of nothingness)
+                        // future work -- could make this more complex to draw a more interesting looking path
+                        if files[i].x > 0 {
+                            files[i].x -= speed_factor
+                        }
+                        else {
+                            files[i].x += speed_factor
+                        }
+                        if files[i].y > 0 {
+                            files[i].y -= speed_factor
+                        }
+                        else {
+                            files[i].y += speed_factor
+                        }
+                    }
                     
-                    usleep(UInt32(1e5)) // check for exit
-                    //sleep(1)
-                    //print("file moving thread running")
+                    
+                    usleep(UInt32(1e5)) // animation update throttle
+                }
+                
+                // Reset animation state when the erasing is done
+                for var i in 0...files.count - 1 {
+                    files[i].animating = false
+                    files[i].pause = true
                 }
                 
                 print("file moving thread exiting")
                 isFileAnimationThreadRunning = false
             }
-            
-            
         }
-        else
-        {
-            
-        }
+    }
+    
+    // thank you to the always amazing HackingWithSwift and the 3,000 year old Pythagoras
+    func CGPointDistanceSquared(from: CGPoint, to: CGPoint) -> CGFloat {
+        return (from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y)
+    }
+    // supposedly this square root is very slow, but it seems fine here
+    func CGPointDistance(from: CGPoint, to: CGPoint) -> CGFloat {
+        return sqrt(CGPointDistanceSquared(from: from, to: to))
     }
 }
 
