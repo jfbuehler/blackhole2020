@@ -8,8 +8,8 @@ target 'Blackhole2020' do
   # Pods for Blackhole2020
 
   pod 'lottie-ios'
-  pod 'SDWebImageLottieCoder'
-  pod 'SDWebImageSwiftUI'
+  #pod 'SDWebImageLottieCoder'
+  #pod 'SDWebImageSwiftUI'
 
   target 'Blackhole2020Tests' do
     inherit! :search_paths

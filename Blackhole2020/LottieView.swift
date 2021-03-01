@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Lottie
-import SDWebImageLottieCoder
+//import SDWebImageLottieCoder
 
 struct FileView: View {
     
@@ -103,7 +103,7 @@ struct LottieView: NSViewRepresentable {
     var useRLottie: Bool = false
     
     // Lottie json loading
-    let rlottie = SDAnimatedImageView()
+    //let rlottie = SDAnimatedImageView()
     var loopmode = LottieLoopMode.playOnce
     
     let animation_time = 5.0
@@ -143,76 +143,48 @@ struct LottieView: NSViewRepresentable {
         
         if (useRLottie) {
                         
-            rlottie.sd_setImage(with: lottieURL)
-            rlottie.autoPlayAnimatedImage = false
-            rlottie.resetFrameIndexWhenStopped = true  // bleh, seems broken
-            
-            //isPlaying = rlottie.player?.isPlaying
-            rlottie.player?.animationLoopHandler = { (loop) in
-                print("file has looped \(loop) times")
-            }
-            
-            // each File animation will spawn a thread to monitor itself
-//            DispatchQueue.global(qos: .background).async {
+//            rlottie.sd_setImage(with: lottieURL)
+//            rlottie.autoPlayAnimatedImage = false
+//            rlottie.resetFrameIndexWhenStopped = true  // bleh, seems broken
 //
-//                while(true) {
-//
-//                    if let player = rlottie.player {
-//                        if shouldPlay {
-//                            //print("file monitor thread shouldPlay = true")
-//                            player.startPlaying()
-//                        }
-//                        else {
-//
-//                            //
-//                            let curr_idx = player.currentFrameIndex
-//                            let total_idx = player.totalFrameCount
-//
-//                            if curr_idx >= total_idx - 10 {
-//                                player.stopPlaying()
-//                            }
-//                            //print("file monitor thread shouldPlay = false, frame=\(curr_idx!)")
-//                        }
-//                    }
-//
-//                    let sleep_time = UInt32(0.25 * 1e6)
-//                    usleep(sleep_time)
-//                }
+//            //isPlaying = rlottie.player?.isPlaying
+//            rlottie.player?.animationLoopHandler = { (loop) in
+//                print("file has looped \(loop) times")
 //            }
-            
-            rlottie.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(rlottie)
-            
-            // use a fixed width to override natural JSON value
-            if width > 0.0 {
-                NSLayoutConstraint.activate([
-                    rlottie.widthAnchor.constraint(equalToConstant: width),
-                    ])
-            }
-            else {
-                NSLayoutConstraint.activate([
-                    rlottie.widthAnchor.constraint(equalTo: view.widthAnchor),
-                ])
-            }
-            
-            if height > 0.0 {
-                NSLayoutConstraint.activate([
-                    rlottie.heightAnchor.constraint(equalToConstant: height),
-                    ])
-            }
-            else {
-                NSLayoutConstraint.activate([
-                    rlottie.heightAnchor.constraint(equalTo: view.heightAnchor),
-                    ])
-            }
-            
-            NSLayoutConstraint.activate([
-                rlottie.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                rlottie.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            ])
-            
-            
-            print("setting rlottie url -- \(lottieURL) w/ frame_cnt=\(rlottie.player?.totalFrameCount)")
+//
+//            rlottie.translatesAutoresizingMaskIntoConstraints = false
+//            view.addSubview(rlottie)
+//
+//            // use a fixed width to override natural JSON value
+//            if width > 0.0 {
+//                NSLayoutConstraint.activate([
+//                    rlottie.widthAnchor.constraint(equalToConstant: width),
+//                    ])
+//            }
+//            else {
+//                NSLayoutConstraint.activate([
+//                    rlottie.widthAnchor.constraint(equalTo: view.widthAnchor),
+//                ])
+//            }
+//
+//            if height > 0.0 {
+//                NSLayoutConstraint.activate([
+//                    rlottie.heightAnchor.constraint(equalToConstant: height),
+//                    ])
+//            }
+//            else {
+//                NSLayoutConstraint.activate([
+//                    rlottie.heightAnchor.constraint(equalTo: view.heightAnchor),
+//                    ])
+//            }
+//
+//            NSLayoutConstraint.activate([
+//                rlottie.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//                rlottie.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+//            ])
+//
+//
+//            print("setting rlottie url -- \(lottieURL) w/ frame_cnt=\(rlottie.player?.totalFrameCount)")
             return view
         }
         else {
@@ -258,24 +230,7 @@ struct LottieView: NSViewRepresentable {
             ])
             
             print("makeNSView() setting lottie_ios url -- \(lottieURL)")
-            
-            // Setup a monitor thread to turn the animations on/off
-//            DispatchQueue.main.async {
-//
-//                while(true) {
-//
-//                    if shouldPlay {
-//
-//                        animationView.play()
-//                    }
-//                    else {
-//                        animationView.stop()
-//                    }
-//
-//                    let sleep_time = UInt32(0.25 * 1e6)
-//                    usleep(sleep_time)
-//                }
-//            }
+                        
             return view
         }
     }
