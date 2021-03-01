@@ -10,6 +10,8 @@
 		A615CED571EA29F4E2750F34 /* Pods_Blackhole2020Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5224F67E69F154DD7327CEAB /* Pods_Blackhole2020Tests.framework */; };
 		B746F8C29F6A45AE16DE2D16 /* Pods_Blackhole2020_Blackhole2020UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 733C6C4FA33ECF15B1B598E3 /* Pods_Blackhole2020_Blackhole2020UITests.framework */; };
 		F855BD06CB9450BDECB9E42E /* Pods_Blackhole2020.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711E3C9EBD3AF1E8C2CEB239 /* Pods_Blackhole2020.framework */; };
+		FC10773125EAE58800A9A392 /* JonsMusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC10773025EAE58800A9A392 /* JonsMusicPlayer.swift */; };
+		FC10773D25EAE79B00A9A392 /* space_synth in Resources */ = {isa = PBXBuildFile; fileRef = FC10773C25EAE79B00A9A392 /* space_synth */; };
 		FC9B32C125CD07050061ED59 /* VT323-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FC9B32C025CD07050061ED59 /* VT323-Regular.ttf */; };
 		FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63042595A7AD006604A4 /* AppDelegate.swift */; };
 		FCCE63072595A7AD006604A4 /* BlackHoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCE63062595A7AD006604A4 /* BlackHoleView.swift */; };
@@ -60,6 +62,8 @@
 		A34F86E75FEE7D1B700CE8F0 /* Pods-Blackhole2020-Blackhole2020UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020-Blackhole2020UITests.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020-Blackhole2020UITests/Pods-Blackhole2020-Blackhole2020UITests.release.xcconfig"; sourceTree = "<group>"; };
 		AD48376A8CCFA15F07DD5E4E /* Pods-Blackhole2020Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020Tests.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020Tests/Pods-Blackhole2020Tests.release.xcconfig"; sourceTree = "<group>"; };
 		F94163FDCA1FCDD34612F05C /* Pods-Blackhole2020.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020.debug.xcconfig"; path = "Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020.debug.xcconfig"; sourceTree = "<group>"; };
+		FC10773025EAE58800A9A392 /* JonsMusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JonsMusicPlayer.swift; sourceTree = "<group>"; };
+		FC10773C25EAE79B00A9A392 /* space_synth */ = {isa = PBXFileReference; lastKnownFileType = folder; path = space_synth; sourceTree = "<group>"; };
 		FC9B32C025CD07050061ED59 /* VT323-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "VT323-Regular.ttf"; sourceTree = "<group>"; };
 		FCCE63012595A7AD006604A4 /* Blackhole2020.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Blackhole2020.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCCE63042595A7AD006604A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -143,6 +147,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FC10772E25EAE57200A9A392 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				FC10772F25EAE57900A9A392 /* Music */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		FC10772F25EAE57900A9A392 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				FC10773C25EAE79B00A9A392 /* space_synth */,
+				FC10773025EAE58800A9A392 /* JonsMusicPlayer.swift */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
 		FCCE62F82595A7AD006604A4 = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +189,7 @@
 		FCCE63032595A7AD006604A4 /* Blackhole2020 */ = {
 			isa = PBXGroup;
 			children = (
+				FC10772E25EAE57200A9A392 /* Modules */,
 				FCCE63362595A82D006604A4 /* Lotties */,
 				FCCE63042595A7AD006604A4 /* AppDelegate.swift */,
 				FCCE63062595A7AD006604A4 /* BlackHoleView.swift */,
@@ -336,6 +358,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC10773D25EAE79B00A9A392 /* space_synth in Resources */,
 				FCCE63432595A922006604A4 /* File_Disintegration_TopLeft.json in Resources */,
 				FCCE63472595A922006604A4 /* File_Disintegration_MidRight.json in Resources */,
 				FCCE63442595A922006604A4 /* StarField.json in Resources */,
@@ -477,6 +500,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC10773125EAE58800A9A392 /* JonsMusicPlayer.swift in Sources */,
 				FCDA4BE925C08D630032F4D1 /* VideoView.swift in Sources */,
 				FCCE63072595A7AD006604A4 /* BlackHoleView.swift in Sources */,
 				FCCE63052595A7AD006604A4 /* AppDelegate.swift in Sources */,

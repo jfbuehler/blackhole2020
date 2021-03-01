@@ -72,6 +72,8 @@ struct BlackHoleView: View {
         file_animations.append(Animation.named("File_Disintegration_BottomRight")!)
         file_animations.append(Animation.named("File_Disintegration_MidRight")!)
         //print("file_animations=\(file_animations.count)")
+        
+        JonsMusicPlayer.sharedInstance.change_category(cat: .space_synth)
     }
     
     var body: some View {
