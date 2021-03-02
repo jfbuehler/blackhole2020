@@ -8,6 +8,7 @@
 import SwiftUI
 import AVKit
 import Lottie
+import AppCenterAnalytics
 
 let DEBUG_ERASE = false // enable to fake erasing (and save your real files)
 
@@ -262,6 +263,7 @@ struct BlackHoleView: View {
                             print("onDrop with files = \(urll.absoluteString)")
                             
                             // set to true while we attempt to erase, disable when complete
+                            Analytics.trackEvent("Files Erased", withProperties: ["url_count" : "\(items.count)"])
                             
                             eraser_gun(url: urll)
                             
@@ -352,6 +354,8 @@ struct BlackHoleView: View {
             popIn = false
             gracefulPauseFiles = true
             blackholeAnimating = false
+            
+            Analytics.trackEvent("Files Erased Completed", withProperties: ["files_erased" : "\(num_of_files)"])
         }
     }
     
