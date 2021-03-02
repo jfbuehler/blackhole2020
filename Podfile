@@ -8,6 +8,7 @@ target 'Blackhole2020' do
   # Pods for Blackhole2020
 
   pod 'lottie-ios'
+  pod 'AppCenter'
   #pod 'SDWebImageLottieCoder'
   #pod 'SDWebImageSwiftUI'
 
