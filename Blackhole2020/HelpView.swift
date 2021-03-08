@@ -18,6 +18,7 @@ struct HelpView: View {
                     Welcome to the Secure File Eraser BlackHole 2020! \n
                     Please drag and drop files/folders on to the app to erase! \n
                     Press Space Bar to stop. \n
+                    Press ⌘+m to toggle music on/off. \n
                     Please contact blackhole2020app@gmail.com for any questions! \n
                     Happy erasure of your files =]
                     """)
