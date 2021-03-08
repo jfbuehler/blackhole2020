@@ -16,7 +16,7 @@ import AppCenterCrashes
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
-
+    var helpWindow: NSWindow!
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
@@ -32,6 +32,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
+        
+        //UserDefaults.standard.set(false, forKey: "didLaunchBefore")
+        if !UserDefaults.standard.bool(forKey: "didLaunchBefore") {
+            UserDefaults.standard.set(true, forKey: "didLaunchBefore")
+            
+            print("didLaunchBefore = false")
+            let helpView = HelpView()
+            helpWindow = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
+                styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+                backing: .buffered, defer: false)
+            helpWindow.center()
+            helpWindow.contentView = NSHostingView(rootView: helpView)
+            helpWindow.makeKeyAndOrderFront(nil)
+        }
+        else {
+            print("didLaunchBefore = true")
+        }
         
         // Add coder for rlottie support
         //let lottieCoder = SDImageLottieCoder.shared
@@ -55,6 +73,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         print("opening files...")
     }
-
+    
+    @IBAction func music_toggle(_ sender: Any) {
+        print("music toggle")
+        JonsMusicPlayer.sharedInstance.toggle_on_off()
+    }
+    
+    @IBAction func pause_toggle(_ sender: Any) {
+        
+        // notify file erasing to STOP -- maybe we support pausing in the future...
+        NotificationCenter.default.post(name: .init("pause_toggle"), object: nil)
+    }
+    
+    @IBAction func help_toggle(_ sender: Any) {
+        
+        let helpView = HelpView()
+        helpWindow = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            backing: .buffered, defer: false)
+        helpWindow.center()
+        helpWindow.contentView = NSHostingView(rootView: helpView)
+        helpWindow.makeKeyAndOrderFront(nil)
+    }
+    
 }
 

@@ -51,6 +51,9 @@ struct BlackHoleView: View {
     @State var hex_text_overlay = ""
     @State var current_filename = ""
     
+    // use this to pause / stop the file erasing
+    @State var shouldPause = false
+    
     // hex text
     @State var hex_text_opacity = 1.0
     @State var hex_text_x: CGFloat = 850
@@ -89,6 +92,30 @@ struct BlackHoleView: View {
                     .loop(true)
                     .isPlaying($blackholeAnimating)
                     .frame(width: 1000, height: 700)
+                
+                // TODO -- requires MacOS 11 :(
+                // a size zero button to disable/enable music?
+//                Button("Help") {
+//                    self.showingHelp.toggle()
+//                }
+//                .alert(isPresented: $showingHelp) {
+//                    Alert(title: Text("How To Use"),
+//                          message: Text("""
+//                                        Welcome to the Secure File Eraser BlackHole 2020! \n
+//                                        Please drag and drop files/folders on to the app to erase! \n
+//                                        Press Space Bar to stop. \n
+//                                        Please contact blackhole2020app@gmail.com for any questions!
+//                                        Happy erasure of your files =]
+//                                        """),
+//                          dismissButton: .default(Text("OK")) {
+//                        })
+//                }
+                
+//                .sheet(isPresented: $showingHelp) {
+//                    SecondView(name: "Help help help help")
+//                }
+//                .position(x: -10, y: -10)
+                //.keyboardShortcut("m")
                 
                 // TODO -- figure out how to draw the purple "file counters" in swiftui
                 
@@ -245,6 +272,12 @@ struct BlackHoleView: View {
                 handle_drop(items: items)
                 return true
             }
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("pause_toggle"))) { notification in
+//                if let tabTag = notification.object as? Int {
+//                    self.selection = tabTag
+//                }
+                shouldPause = true
+            }
         }
         .frame(width: 1000, height: 700)
         .background(Color.black)
@@ -282,6 +315,7 @@ struct BlackHoleView: View {
     {
         let fm = FileManager.default
         num_of_files = 0
+        bytes_written = 0
         
         // at this point let's see if we can help the energy impacts by using lower priority threads
         DispatchQueue.global(qos: .utility).async {
@@ -318,7 +352,9 @@ struct BlackHoleView: View {
                     let resourceValues = try fileURL.resourceValues(forKeys: Set(resourceKeys))
                     //print(fileURL.path, resourceValues.fileSize, resourceValues.creationDate!, resourceValues.isDirectory!)
                 
-                    // secure erase
+                    if shouldPause {
+                        break
+                    }
                     
                     if let file_size = resourceValues.fileSize {
                         secure_eraser(file: fileURL, size:  file_size)
@@ -331,7 +367,7 @@ struct BlackHoleView: View {
                 }
                 
                 // remove the dropped folder too
-                if (!DEBUG_ERASE) {
+                if (!DEBUG_ERASE && !shouldPause) {
                     
                     if url.isFileURL {
                         let resourceValues = try url.resourceValues(forKeys: Set(resourceKeys))
@@ -351,6 +387,9 @@ struct BlackHoleView: View {
                 print("ERROR getting contents of folder! \(error)")
             }
             
+            hex_text_overlay = ""
+            current_filename = ""
+            shouldPause = false
             popIn = false
             gracefulPauseFiles = true
             blackholeAnimating = false
@@ -562,3 +601,4 @@ struct ContentView_Previews: PreviewProvider {
         }
     }
 }
+

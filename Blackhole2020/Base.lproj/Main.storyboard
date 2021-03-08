@@ -54,6 +54,12 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="File" id="bib-Uj-vzu">
                                     <items>
+                                        <menuItem title="Pause Toggle" keyEquivalent=" " id="FO1-TN-6ZO">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="pause_toggle:" target="Voe-Tx-rLC" id="6jC-Os-wKQ"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
@@ -63,13 +69,26 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Music" id="9eu-Eq-qdt" userLabel="Music">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Music" id="njK-2q-3HF">
+                                    <items>
+                                        <menuItem title="Toggle On/Off" keyEquivalent="m" id="iS2-aq-JiU">
+                                            <connections>
+                                                <action selector="music_toggle:" target="Voe-Tx-rLC" id="F0d-ax-EPA"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Qvu-6B-EBw"/>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Help" id="wpr-3q-Mcd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                                     <items>
                                         <menuItem title="Blackhole2020 Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
-                                                <action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no"/>
+                                                <action selector="help_toggle:" target="Voe-Tx-rLC" id="E6Y-j9-PeA"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -86,6 +105,14 @@
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
+        </scene>
+        <!--Hosting Controller-->
+        <scene sceneID="6qJ-5w-adN">
+            <objects>
+                <hostingController id="vAE-85-OvJ" sceneMemberID="viewController"/>
+                <customObject id="sYM-Rq-fu7" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="83" y="325"/>
         </scene>
     </scenes>
 </document>

@@ -152,6 +152,16 @@ class JonsMusicPlayer : NSObject
         }
     }
     
+    func toggle_on_off()
+    {
+        if isPlaying {
+            stopPlaying()
+        }
+        else {
+            playCrossFadedSongs()
+        }
+    }
+    
     func shuffle_play(index: Int)
     {
         let curr_song = active_mps[index]
