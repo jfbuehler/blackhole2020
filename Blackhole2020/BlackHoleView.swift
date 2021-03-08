@@ -174,7 +174,7 @@ struct BlackHoleView: View {
                         //.background(Color.blue)
                         //.shadow(radius: 5 )
                         //.scaleEffect(hex_scale)
-                        //.animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
+                        //.animation(.easeIn)
                         .position(x: hex_text_x, y: hex_text_y)
                         //.animation(nil)
                         .opacity(Double(2 - hex_text_opacity))
