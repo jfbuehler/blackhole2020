@@ -10,6 +10,7 @@ import SwiftUI
 import AppCenter
 import AppCenterAnalytics
 import AppCenterCrashes
+import StoreKit
 //import SDWebImageLottieCoder // for the coder, if we want to bring it back
 
 @NSApplicationMain
@@ -17,6 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var window: NSWindow!
     var helpWindow: NSWindow!
+    var statsWindow: NSWindow!
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
@@ -59,6 +61,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
           Analytics.self,
           Crashes.self
         ])
+        
+        var runs = UserDefaults.standard.integer(forKey: UserDefaultsConstants.run_count)
+        runs += 1
+        UserDefaults.standard.set(runs, forKey: UserDefaultsConstants.run_count)
+        print("runs = \(runs)")
+        
+        Analytics.trackEvent("Run Count", withProperties: ["count" : "\(runs)"])
+        
+        #if !DEBUG
+        // ask for review past 10 runs
+        if runs > 10 {
+            
+            // burn all 3 reviews for now why the hell not
+            Analytics.trackEvent("Ask For Review", withProperties: [UserDefaultsConstants.run_count : "\(runs)"])
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+             
+                SKStoreReviewController.requestReview()
+            }
+        }
+        #endif        
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -93,9 +116,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false)
         helpWindow.center()
+        helpWindow.isReleasedWhenClosed = false
         helpWindow.contentView = NSHostingView(rootView: helpView)
         helpWindow.makeKeyAndOrderFront(nil)
     }
+    
+    @IBAction func stats_toggle(_ sender: Any) {
+        
+        var statsView = StatsView()
+        
+        // load data
+        statsView.files_destroyed = UserDefaults.standard.integer(forKey: UserDefaultsConstants.files_destroyed)
+        statsView.megabytes_destroyed = UserDefaults.standard.integer(forKey: UserDefaultsConstants.megabytes_destroyed)
+        statsView.visits = UserDefaults.standard.integer(forKey: UserDefaultsConstants.run_count)
+        
+        statsWindow = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
+            styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
+            backing: .buffered, defer: false)
+        statsWindow.center()
+        statsWindow.isReleasedWhenClosed = false
+        statsWindow.contentView = NSHostingView(rootView: statsView)
+        statsWindow.makeKeyAndOrderFront(nil)
+    }
+    
     
 }
 

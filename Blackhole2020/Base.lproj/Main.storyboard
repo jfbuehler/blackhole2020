@@ -82,6 +82,19 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="Stats" id="lT9-OA-Qcv" userLabel="Stats">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Stats" id="Vv4-mC-7kC">
+                                    <items>
+                                        <menuItem title="Fun Statistics" keyEquivalent="s" id="l39-le-glY">
+                                            <connections>
+                                                <action selector="stats_toggle:" target="Voe-Tx-rLC" id="cCf-mJ-RZy"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="C2c-nU-XLv"/>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="Help" id="wpr-3q-Mcd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">

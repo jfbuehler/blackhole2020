@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  BlackHoleView.swift
 //  Blackhole2020
 //
 //  Created by Jonathan Buehler on 12/24/20.
@@ -10,7 +10,8 @@ import AVKit
 import Lottie
 import AppCenterAnalytics
 
-let DEBUG_ERASE = false // enable to fake erasing (and save your real files)
+let DEBUG_ERASE = false  // enable to fake erasing (and save your real files)
+var SECURE_ERASE = false // enable to use crypto-secure erasing
 
 let MainViewHeight = CGFloat(700)
 
@@ -77,7 +78,8 @@ struct BlackHoleView: View {
         file_animations.append(Animation.named("File_Disintegration_MidRight")!)
         //print("file_animations=\(file_animations.count)")
         
-        JonsMusicPlayer.sharedInstance.change_category(cat: .space_synth)
+        // disable auto music playing on open (the App Store people dont like it booooo)
+        //JonsMusicPlayer.sharedInstance.change_category(cat: .space_synth)
     }
     
     var body: some View {
@@ -131,7 +133,7 @@ struct BlackHoleView: View {
                         .foregroundColor(.black)
                         .position(x: 150, y: 50)
                     
-                    Text("\(num_of_files) files erasered")
+                    Text("\(num_of_files) files destroyed")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
@@ -200,7 +202,7 @@ struct BlackHoleView: View {
                         //.id("text-overwrite-" + hex_text_overlay)
                         
                     
-                    Text("bytes erasered")
+                    Text("bytes destroyed")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
@@ -313,12 +315,15 @@ struct BlackHoleView: View {
     // Implement the secure erasing function
     func eraser_gun(url: URL)
     {
-        let fm = FileManager.default
         num_of_files = 0
         bytes_written = 0
         
         // at this point let's see if we can help the energy impacts by using lower priority threads
         DispatchQueue.global(qos: .utility).async {
+            
+            let fm = FileManager.default
+            let delegate = CustomFileManagerDelegate()
+            fm.delegate = delegate
             
             // use this block to unit test
 //            popIn = true
@@ -362,7 +367,6 @@ struct BlackHoleView: View {
                             num_of_files += 1
                             try fm.removeItem(at: fileURL)
                         }
-                        usleep(UInt32(100))  // its critical to delay this intense CPU loop or even the Debugger can't terminate the process
                     }
                 }
                 
@@ -395,6 +399,10 @@ struct BlackHoleView: View {
             blackholeAnimating = false
             
             Analytics.trackEvent("Files Erased Completed", withProperties: ["files_erased" : "\(num_of_files)"])
+            
+            //print("bytes_written = \(bytes_written)")
+            UserDefaults.increment(val: num_of_files, key: UserDefaultsConstants.files_destroyed)
+            UserDefaults.increment(val: Int(Double(bytes_written) / 1e6), key: UserDefaultsConstants.megabytes_destroyed)
         }
     }
     
@@ -408,75 +416,63 @@ struct BlackHoleView: View {
             
             var text_nums = ""
             fileHandle.seek(toFileOffset: 0)
+     
+            if SECURE_ERASE {
             
-            //print("secure_eraser size=\(size)")
-            let write_loops = 400
-            let sparse_size = size / write_loops
-            var test_bytes_written = 0
-            
-            // we'll base the randomness on the size of the file
-            let result = Array(repeating: 0, count: sparse_size)
-            
-            // this call takes a few seconds even for a 1 megabyte randomized pattern
-            let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
-            
-            // TODO -- still need to make this run faster...
-            
-            //print("secure_eraser writing sparse_array=\(sparse_size) randomized array of size=\(shuffledNumbers.count) to the file --")
+                //print("secure_eraser size=\(size)")
+                let write_loops = 400
+                let sparse_size = size / write_loops
+                var test_bytes_written = 0
+                
+                // we'll base the randomness on the size of the file
+                let result = Array(repeating: 0, count: sparse_size)
+                
+                // this call takes a few seconds even for a 1 megabyte randomized pattern
+                let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
+                
+                // TODO -- still need to make this run faster...
+                
+                //print("secure_eraser writing sparse_array=\(sparse_size) randomized array of size=\(shuffledNumbers.count) to the file --")
+                            
+                //let write_loops = size/1024/1024
+                let data = Data(bytes: shuffledNumbers, count: shuffledNumbers.count)
+                
+                // try writing size loops to the file
+                if (!DEBUG_ERASE) {
+                    do {
+                        for i in 1...write_loops {
+                            
+                            let offset = UInt64(i * data.count)
+                            fileHandle.write(data)
+                            fileHandle.seek(toFileOffset: offset)
+                            
+                            text_nums = String(format: "0x%02x\n", offset)
+                            hex_text_overlay = text_nums
+                            bytes_written += Int(data.count)
+                            test_bytes_written += Int(data.count)
+                            //print("seeking to \(offset)")
+                        }
                         
-            //let write_loops = size/1024/1024
-            let data = Data(bytes: shuffledNumbers, count: shuffledNumbers.count)
-            
-            
-            // try writing size loops to the file
-            if (!DEBUG_ERASE) {
-                do {
-                    for i in 1...write_loops {
-                        
-                        let offset = UInt64(i * data.count)
-                        fileHandle.write(data)
-                        fileHandle.seek(toFileOffset: offset)
-                        
-                        text_nums = String(format: "0x%02x\n", offset)
-                        hex_text_overlay = text_nums
-                        bytes_written += Int(data.count)
-                        test_bytes_written += Int(data.count)
-                        //print("seeking to \(offset)")
+                        // write the leftovers
+                        let remainder = size - (write_loops * sparse_size)
+                        let ending_data = Data(bytes: shuffledNumbers, count: remainder)
+                        fileHandle.write(ending_data)
+                        bytes_written += Int(ending_data.count)
+                        //print("writing remainder=\(remainder)")
                     }
-                    
-                    // write the leftovers
-                    let remainder = size - (write_loops * sparse_size)
-                    let ending_data = Data(bytes: shuffledNumbers, count: remainder)
-                    fileHandle.write(ending_data)
-                    bytes_written += Int(ending_data.count)
-                    //print("writing remainder=\(remainder)")
+                    catch { print("ERROR seeking / writing \(error)") }
                 }
-                catch { print("ERROR seeking / writing \(error)") }
+                
+                usleep(UInt32(100))  // its critical to delay this intense CPU loop or even the Debugger can't terminate the process
             }
-            
+            else {
+                bytes_written += size
+            }
             //print("secure_eraser Writing \(data) \(write_loops) times test_bytes_written=\(test_bytes_written)")
-            
-//            if (!DEBUG_ERASE) {
-//                fileHandle.write(data)
-//            }
-            
-            // this takes too long too, it loops forever across the files
-//            for var num in shuffledNumbers {
-//                //print(num)
-//                let data = Data(bytes: &num, count: 4)
-//
-//                if (!DEBUG_ERASE) {
-//                    fileHandle.write(data)
-//                }
-//                text_nums = String(format: "0x%02x\n", num)
-//                hex_text_overlay = text_nums
-//                bytes_written += 4
-//            }
             
             // this is even more secure if we can mess up the file descriptors dates
             // As an extra precaution I change the dates of the file so the
-            // original dates are hidden if you try to recover the file.
-            
+            // original dates are hidden if you try to recover the file
             if (!DEBUG_ERASE) {
                 do {
                     let date = Date()  // aka todays date
@@ -488,13 +484,6 @@ struct BlackHoleView: View {
                     print("ERROR setting creation of file! \(error)")
                 }
             }
-
-//            DateTime dt = new DateTime(2037, 1, 1, 0, 0, 0);
-//            File.SetCreationTime(filename, dt);
-//            File.SetLastAccessTime(filename, dt);
-//            File.SetLastWriteTime(filename, dt);
-            
-            //let array = shuffledNumbers as! NSArray
             fileHandle.closeFile()
         }
     }
