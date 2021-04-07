@@ -11,7 +11,7 @@ import Lottie
 import AppCenterAnalytics
 
 let DEBUG_ERASE = false  // enable to fake erasing (and save your real files)
-var SECURE_ERASE = false // enable to use crypto-secure erasing
+var SECURE_ERASE = true // enable to use crypto-secure erasing
 
 let MainViewHeight = CGFloat(700)
 

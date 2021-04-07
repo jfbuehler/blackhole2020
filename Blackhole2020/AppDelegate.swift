@@ -10,7 +10,6 @@ import SwiftUI
 import AppCenter
 import AppCenterAnalytics
 import AppCenterCrashes
-import StoreKit
 //import SDWebImageLottieCoder // for the coder, if we want to bring it back
 
 @NSApplicationMain
@@ -53,6 +52,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("didLaunchBefore = true")
         }
         
+        JonsMusicPlayer.sharedInstance.toggle_on_off()
+        
         // Add coder for rlottie support
         //let lottieCoder = SDImageLottieCoder.shared
         //SDImageCodersManager.shared.addCoder(lottieCoder)
@@ -68,20 +69,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         print("runs = \(runs)")
         
         Analytics.trackEvent("Run Count", withProperties: ["count" : "\(runs)"])
-        
-        #if !DEBUG
-        // ask for review past 10 runs
-        if runs > 10 {
-            
-            // burn all 3 reviews for now why the hell not
-            Analytics.trackEvent("Ask For Review", withProperties: [UserDefaultsConstants.run_count : "\(runs)"])
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-             
-                SKStoreReviewController.requestReview()
-            }
-        }
-        #endif        
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

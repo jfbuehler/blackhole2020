@@ -15,8 +15,8 @@ struct HelpView: View {
         
         VStack {
             Text("""
-                    Welcome to the BlackHole 2020 File Eraser! \n
-                    Please drag and drop files/folders on to the app to destroy them. \n
+                    Welcome to the BlackHole 2020 Secure File Eraser! \n
+                    Please drag and drop files/folders on to the app to destroy them forever!! \n
                     Press Space Bar to stop the destruction. \n
                     Press ⌘+m to toggle music on/off. \n
                     Please contact blackhole2020app@gmail.com or tap the button below with love / shade / complaints / joy \n
