@@ -66,6 +66,9 @@ struct BlackHoleView: View {
     
     @ObservedObject var videoItem: VideoItem = VideoItem()
     
+    @State private var showingAlert = false
+    @State var last_dropped_items = [NSItemProvider]()
+    
     init()
     {
         //print("blackhole init running")
@@ -243,6 +246,8 @@ struct BlackHoleView: View {
                     // funny looking but this is the SwiftUI syntax to iterately declare arrays of views
                     ForEach(0..<files.count, id: \.self) { i in
                         FileView(x: files[i].x, y: files[i].y, popInAnimation: $files[i].popIn, eraseAnimation: $files[i].erase, gracefulPause: $files[i].pause, reset: $files[i].reset, file_jsons: file_animations)
+                            //.blur(radius: 1)
+                        
                     }
 //                    FileView(x: -200, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
 //                    FileView(x: -100, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
@@ -270,8 +275,10 @@ struct BlackHoleView: View {
 //                    .offset(x: 500, y: -300)
             }
             .onDrop(of: ["public.url","public.file-url"], isTargeted: nil) { (items) -> Bool in
-                        
-                handle_drop(items: items)
+                       
+                showingAlert = true
+                last_dropped_items = items
+                //handle_drop(items: items)
                 return true
             }
             .onReceive(NotificationCenter.default.publisher(for: Notification.Name("pause_toggle"))) { notification in
@@ -279,6 +286,17 @@ struct BlackHoleView: View {
 //                    self.selection = tabTag
 //                }
                 shouldPause = true
+            }
+            .alert(isPresented:$showingAlert) {
+                Alert(
+                    title: Text("Are you TOTALLY SURE you want to delete these files?"),
+                    message: Text("There is *no* undo!"),
+                    primaryButton: .destructive(Text("DESTROY")) {
+                        print("Deleting...")
+                        handle_drop(items: last_dropped_items)
+                    },
+                    secondaryButton: .cancel()
+                )
             }
         }
         .frame(width: 1000, height: 700)
@@ -331,7 +349,7 @@ struct BlackHoleView: View {
 //            toggle_erasing_animation()
 //
 //            print("about to erase")
-//            sleep(5)
+//            sleep(15)
 //            print("done fake erasing")
 //
 //            popIn = false

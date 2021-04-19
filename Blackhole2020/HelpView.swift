@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HelpView: View {
     
+    let contact_email = "help@blackhole2020.app"
     var name: String = ""
 
     var body: some View {
@@ -16,11 +17,12 @@ struct HelpView: View {
         VStack {
             Text("""
                     Welcome to the BlackHole 2020 Secure File Eraser! \n
-                    Please drag and drop files/folders on to the app to destroy them forever!! \n
+                    Please drag and drop files/folders on to the app to destroy them forever! \n
                     Press Space Bar to stop the destruction. \n
                     Press ⌘+m to toggle music on/off. \n
-                    Please contact blackhole2020app@gmail.com or tap the button below with love / shade / complaints / joy \n
-                    Happy obliteration of your files =]
+                    Press ⌘+s to display fun stats. \n
+                    Please contact \(contact_email) or tap the button below with love / shade / complaints / joy \n
+                    Happy obliteration of your files.
                     """)
                 .font(.custom("VT323-Regular", size: 16))
                 .fontWeight(.medium)
@@ -33,12 +35,12 @@ struct HelpView: View {
                 
                     // figure out how to pop email here
                 let service = NSSharingService(named: NSSharingService.Name.composeEmail)!
-                        service.recipients = ["blackhole2020app@gmail.com"]
+                        service.recipients = [contact_email]
                         service.subject = "BlackHole Fan Mail!"
 
                         service.perform(withItems: [""])
                }) {
-               Text("Email, Email!!")
+               Text("Email, Email")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

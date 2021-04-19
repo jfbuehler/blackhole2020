@@ -52,7 +52,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("didLaunchBefore = true")
         }
         
-        JonsMusicPlayer.sharedInstance.toggle_on_off()
+        // START WITH MUSICS ON!
+        //JonsMusicPlayer.sharedInstance.toggle_on_off()
         
         // Add coder for rlottie support
         //let lottieCoder = SDImageLottieCoder.shared
