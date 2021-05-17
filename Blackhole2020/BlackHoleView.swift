@@ -81,7 +81,7 @@ struct BlackHoleView: View {
         file_animations.append(Animation.named("File_Disintegration_MidRight")!)
         //print("file_animations=\(file_animations.count)")
         
-        // disable auto music playing on open (the App Store people dont like it booooo)
+        // disable auto music playing on open
         //JonsMusicPlayer.sharedInstance.change_category(cat: .space_synth)
     }
     
@@ -95,7 +95,7 @@ struct BlackHoleView: View {
                 //VideoPlayer(player: AVPlayer(url:  Bundle.main.url(forResource: "video", withExtension: "mp4")!))
                 Video(url: blackhole_url)
                     .loop(true)
-                    .isPlaying($blackholeAnimating)
+                    .isPlaying(self.$blackholeAnimating)
                     .frame(width: 1000, height: 700)
                 
                 // TODO -- requires MacOS 11 :(
@@ -245,7 +245,7 @@ struct BlackHoleView: View {
                     
                     // funny looking but this is the SwiftUI syntax to iterately declare arrays of views
                     ForEach(0..<files.count, id: \.self) { i in
-                        FileView(x: files[i].x, y: files[i].y, popInAnimation: $files[i].popIn, eraseAnimation: $files[i].erase, gracefulPause: $files[i].pause, reset: $files[i].reset, file_jsons: file_animations)
+                        FileView(x: files[i].x, y: files[i].y, popInAnimation: self.$files[i].popIn, eraseAnimation: self.$files[i].erase, gracefulPause: self.$files[i].pause, reset: self.$files[i].reset, file_jsons: file_animations)
                             //.blur(radius: 1)
                         
                     }
@@ -276,18 +276,20 @@ struct BlackHoleView: View {
             }
             .onDrop(of: ["public.url","public.file-url"], isTargeted: nil) { (items) -> Bool in
                        
-                showingAlert = true
-                last_dropped_items = items
-                //handle_drop(items: items)
+                // if prompt
+                //showingAlert = true
+                //last_dropped_items = items
+                // else
+                handle_drop(items: items)
                 return true
             }
             .onReceive(NotificationCenter.default.publisher(for: Notification.Name("pause_toggle"))) { notification in
 //                if let tabTag = notification.object as? Int {
 //                    self.selection = tabTag
 //                }
-                shouldPause = true
+                self.shouldPause = true
             }
-            .alert(isPresented:$showingAlert) {
+            .alert(isPresented:self.$showingAlert) {
                 Alert(
                     title: Text("Are you TOTALLY SURE you want to delete these files?"),
                     message: Text("There is *no* undo!"),
@@ -358,8 +360,8 @@ struct BlackHoleView: View {
 //            return  // disable the actual erasing for now
             
             do {
-                popIn = true
-                blackholeAnimating = true
+                self.popIn = true
+                self.blackholeAnimating = true
                 toggle_erasing_animation()
                 
                 print("Try to read -- \(url.path)")
@@ -380,7 +382,9 @@ struct BlackHoleView: View {
                     }
                     
                     if let file_size = resourceValues.fileSize {
+                        
                         secure_eraser(file: fileURL, size:  file_size)
+                        
                         if (!DEBUG_ERASE) {
                             num_of_files += 1
                             try fm.removeItem(at: fileURL)
@@ -409,12 +413,13 @@ struct BlackHoleView: View {
                 print("ERROR getting contents of folder! \(error)")
             }
             
+            sleep(1)
             hex_text_overlay = ""
             current_filename = ""
-            shouldPause = false
-            popIn = false
-            gracefulPauseFiles = true
-            blackholeAnimating = false
+            self.shouldPause = false
+            self.popIn = false
+            self.gracefulPauseFiles = true
+            self.blackholeAnimating = false
             
             Analytics.trackEvent("Files Erased Completed", withProperties: ["files_erased" : "\(num_of_files)"])
             
@@ -512,16 +517,16 @@ struct BlackHoleView: View {
         let radius_px = 300.0
         let event_horizon_px: CGFloat = 200.0
         
-        if (isFileAnimationThreadRunning == false)
+        if (self.isFileAnimationThreadRunning == false)
         {
             
             DispatchQueue.global(qos: .background).async {
                 
                 var speed_factor = CGFloat(0)
-                isFileAnimationThreadRunning = true
+                self.isFileAnimationThreadRunning = true
                 
                 // keep the animation thread alive while actively working
-                while blackholeAnimating
+                while self.blackholeAnimating
                 {
                     // eventually we'll iterate the state of each file
                     for var i in 0...files.count - 1 {
@@ -585,7 +590,7 @@ struct BlackHoleView: View {
                 }
                 
                 print("file moving thread exiting")
-                isFileAnimationThreadRunning = false
+                self.isFileAnimationThreadRunning = false
             }
         }
     }

@@ -60,6 +60,11 @@
                                                 <action selector="pause_toggle:" target="Voe-Tx-rLC" id="6jC-Os-wKQ"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Options" keyEquivalent="o" id="6jB-aM-Afx" userLabel="Options">
+                                            <connections>
+                                                <action selector="options_toggle:" target="Voe-Tx-rLC" id="xQ1-4t-w9C"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
@@ -99,7 +104,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                                     <items>
-                                        <menuItem title="Blackhole2020 Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                                        <menuItem title="Blackhole2020 Help" keyEquivalent="h" id="FKE-Sm-Kum">
                                             <connections>
                                                 <action selector="help_toggle:" target="Voe-Tx-rLC" id="E6Y-j9-PeA"/>
                                             </connections>

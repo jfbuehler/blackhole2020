@@ -71,7 +71,7 @@ struct StatsView: View {
 
 
                     From Code With Love
-                    ❤️ v\(NSApplication.appVersion!) ❤️
+                    ❤️ v\(NSApplication.appVersion!) [\(NSApplication.buildVersion!)] ❤️
                     """)
                 .font(.custom("VT323-Regular", size: 20))
                 .fontWeight(.medium)

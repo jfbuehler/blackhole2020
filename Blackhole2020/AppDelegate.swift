@@ -100,7 +100,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let helpView = HelpView()
         helpWindow = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
+            contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false)
         helpWindow.center()
@@ -128,6 +128,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statsWindow.makeKeyAndOrderFront(nil)
     }
     
+    @IBAction func options_toggle(_ sender: Any) {
+        
+        
+        
+    }
     
 }
 

@@ -16,15 +16,25 @@ struct HelpView: View {
         
         VStack {
             Text("""
-                    Welcome to the BlackHole 2020 Secure File Eraser! \n
+                    * Welcome to the BlackHole 2020 Secure File Eraser *\n
+                 """)
+                .font(.custom("VT323-Regular", size: 34))
+                .fontWeight(.medium)
+                .foregroundColor(Color.white)
+                .multilineTextAlignment(.center)
+            Text("""
                     Please drag and drop files/folders on to the app to destroy them forever! \n
                     Press Space Bar to stop the destruction. \n
                     Press ⌘+m to toggle music on/off. \n
                     Press ⌘+s to display fun stats. \n
+                    *************** \n
                     Please contact \(contact_email) or tap the button below with love / shade / complaints / joy \n
                     Happy obliteration of your files.
+
+                    From Code With Love
+                    ❤️ v\(NSApplication.appVersion!) [\(NSApplication.buildVersion!)] ❤️
                     """)
-                .font(.custom("VT323-Regular", size: 16))
+                .font(.custom("VT323-Regular", size: 26))
                 .fontWeight(.medium)
                 .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
@@ -32,8 +42,7 @@ struct HelpView: View {
                 let prefix = "url://"
                 let formattedString = prefix
                 guard let url = URL(string: formattedString) else { return }
-                
-                    // figure out how to pop email here
+                                    
                 let service = NSSharingService(named: NSSharingService.Name.composeEmail)!
                         service.recipients = [contact_email]
                         service.subject = "BlackHole Fan Mail!"
@@ -41,6 +50,7 @@ struct HelpView: View {
                         service.perform(withItems: [""])
                }) {
                Text("Email, Email")
+                    .font(.custom("VT323-Regular", size: 20))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -53,5 +63,6 @@ struct HelpView: View {
 struct HelpView_Previews: PreviewProvider {
     static var previews: some View {
         HelpView()
+            .frame(width: 800.0, height: 600.0)
     }
 }
