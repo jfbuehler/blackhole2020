@@ -23,18 +23,25 @@ struct HelpView: View {
                 .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
             Text("""
-                    Please drag and drop files/folders on to the app to destroy them forever! \n
-                    Press Space Bar to stop the destruction. \n
-                    Press ⌘+m to toggle music on/off. \n
-                    Press ⌘+s to display fun stats. \n
-                    *************** \n
-                    Please contact \(contact_email) or tap the button below with love / shade / complaints / joy \n
-                    Happy obliteration of your files.
+                    - Please drag and drop files/folders on to the app to destroy them forever
+                    - Press Space Bar to stop the destruction
+                    - Press ⌘+m to toggle music on/off
+                    - Press ⌘+s to display some stats
 
-                    From Code With Love
-                    ❤️ v\(NSApplication.appVersion!) [\(NSApplication.buildVersion!)] ❤️
+                    Please contact \(contact_email) or tap the button below with love / shade / complaints / joy \n
+                    Happy obliteration of your files
                     """)
                 .font(.custom("VT323-Regular", size: 26))
+                .fontWeight(.medium)
+                .foregroundColor(Color.white)
+                .multilineTextAlignment(.leading)
+                .padding(.leading, 55.0)
+            Text("""
+
+                 From Code With Love
+                 ❤️ v\(NSApplication.appVersion!) [\(NSApplication.buildVersion!)] ❤️
+                 """)
+                .font(.custom("VT323-Regular", size: 30))
                 .fontWeight(.medium)
                 .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)

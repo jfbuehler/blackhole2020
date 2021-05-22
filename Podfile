@@ -9,6 +9,7 @@ target 'Blackhole2020' do
 
   pod 'lottie-ios'
   pod 'AppCenter'
+  #pod 'Preferences' # has compiler problems (with xcode 12.3 anyway)
   #pod 'SDWebImageLottieCoder'
   #pod 'SDWebImageSwiftUI'
 
