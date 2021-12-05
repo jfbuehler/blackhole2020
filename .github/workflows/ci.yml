@@ -35,5 +35,5 @@ jobs:
 # weird issues with build-for-testing on MacOS on this runner...
       - name: MacOS build stage
         run: |
-          xcodebuild build -scheme Blackhole2020 -workspace Blackhole2020.xcworkspace -destination platform=macOS -showBuildTimingSummary
+          xcodebuild build -scheme Blackhole2020 -workspace Blackhole2020.xcworkspace -destination platform=macOS -showBuildTimingSummary -allowProvisioningUpdate
           
