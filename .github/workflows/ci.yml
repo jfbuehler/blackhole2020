@@ -32,6 +32,8 @@ jobs:
 #      - name: iPad Air Test
 #        run:  xcodebuild test -scheme NAME_OF_SCHEME -workspace WORKSPACE.xcworkspace -destination 'platform=iOS Simulator,name=iPad Air (3rd generation),OS=13.1'
 
+# weird issues with build-for-testing on MacOS on this runner...
       - name: MacOS build stage
         run: |
-          xcodebuild build-for-testing -scheme Blackhole2020 -workspace Blackhole2020.xcworkspace -destination platform=macOS -showBuildTimingSummary
+          xcodebuild build -scheme Blackhole2020 -workspace Blackhole2020.xcworkspace -destination platform=macOS -showBuildTimingSummary
+          
