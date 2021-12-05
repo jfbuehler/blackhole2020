@@ -33,4 +33,4 @@ jobs:
 
       - name: MacOS build stage
         run: |
-          xcodebuild build-for-testing -scheme Blackhole2020 -workspace Blackhole2020.xcworkspace
+          xcodebuild build-for-testing -scheme Blackhole2020 -workspace Blackhole2020.xcworkspace -destination platform=macOS -showBuildTimingSummary
