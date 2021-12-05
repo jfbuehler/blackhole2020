@@ -19,12 +19,12 @@ jobs:
         uses: actions/checkout@v2
       - name: CocoaPod Install
         run: pod install
-      #- name: Use this line to see how many versions of Xcode are installed on the CI
-      #  run: ls /Applications | grep Xcode
+      - name: Use this line to see how many versions of Xcode are installed on the CI
+        run: ls /Applications | grep Xcode
 
       # Use this if your app requires a specific Xcode (or breaks on the latest one haha)
-      #- name: Force xcode 11 
-      #  run: sudo xcode-select -switch /Applications/Xcode_11.4.app
+      - name: Force xcode 11 
+        run: sudo xcode-select -switch /Applications/Xcode_13.0.app
       # - how to run build/test all in one line for starters
 #      - name: iPhone 11 Test
 #        run:  xcodebuild test -scheme NAME_OF_SCHEME -workspace WORKSPACE.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.1'
