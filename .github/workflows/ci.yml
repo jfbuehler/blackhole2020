@@ -11,7 +11,8 @@ jobs:
   build:
 
     name: Build Check
-    runs-on: macOS-latest
+    #runs-on: macOS-latest. -- update later when local is updated to 12 --
+    runs-on: macOS-11
     
     steps:
       - name: Checkout
