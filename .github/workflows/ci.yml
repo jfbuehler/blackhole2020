@@ -1,0 +1,36 @@
+name: Blackhole Pipeline
+
+# Other types of triggers exist -- lookup the docs to see! on new git pushes is most useful
+# on:
+#  milestone:
+#    type: [closed]
+
+on: [push]
+
+jobs:
+  build:
+
+    name: Build Check
+    runs-on: macOS-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: CocoaPod Install
+        run: pod install
+      #- name: Use this line to see how many versions of Xcode are installed on the CI
+      #  run: ls /Applications | grep Xcode
+
+      # Use this if your app requires a specific Xcode (or breaks on the latest one haha)
+      #- name: Force xcode 11 
+      #  run: sudo xcode-select -switch /Applications/Xcode_11.4.app
+      # - how to run build/test all in one line for starters
+#      - name: iPhone 11 Test
+#        run:  xcodebuild test -scheme NAME_OF_SCHEME -workspace WORKSPACE.xcworkspace -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.1'
+      
+#      - name: iPad Air Test
+#        run:  xcodebuild test -scheme NAME_OF_SCHEME -workspace WORKSPACE.xcworkspace -destination 'platform=iOS Simulator,name=iPad Air (3rd generation),OS=13.1'
+
+      - name: MacOS build stage
+        run: |
+          xcodebuild build-for-testing -scheme Blackhole2020 -workspace Blackhole2020.xcworkspace
