@@ -10,6 +10,7 @@ import AVKit
 import Lottie
 import AppCenterAnalytics
 
+let DISABLE_ERASE = true
 let DEBUG_ERASE = false  // enable to fake erasing (and save your real files)
 var SECURE_ERASE = true // enable to use crypto-secure erasing
 
@@ -47,9 +48,13 @@ struct BlackHoleView: View {
     @State var popIn = false
     @State var gracefulPauseFiles = false
     @State var blackholeAnimating = false
+    
+    @State var total_num_of_files = 0
     @State var num_of_files = 0
-    @State var bytes_written = 0
-    @State var hex_text_overlay = ""
+    
+    @State var total_bytes_to_erase = 0.0
+    @State var bytes_written = 0.0
+    @State var hex_text_overlay = ""        // not sure I want to use this anymore, but leave it in-code (remove from display)
     @State var current_filename = ""
     
     // use this to pause / stop the file erasing
@@ -69,6 +74,12 @@ struct BlackHoleView: View {
     @State private var showingAlert = false
     @State var last_dropped_items = [NSItemProvider]()
     
+    @State private var progress_gradient = LinearGradient(
+            gradient: Gradient(colors: [.purple, .purple, .purple]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    
     init()
     {
         //print("blackhole init running")
@@ -86,6 +97,13 @@ struct BlackHoleView: View {
     }
     
     var body: some View {
+        
+        let gradientStyle = GradientProgressStyle(
+                    stroke: progress_gradient,
+                    fill: progress_gradient,
+                    caption: ""
+                )
+        
         VStack {
             ZStack(alignment: .center) {
                 // can't use Lottie to generate these its too CPU intensive
@@ -136,7 +154,7 @@ struct BlackHoleView: View {
                         .foregroundColor(.black)
                         .position(x: 150, y: 50)
                     
-                    Text("\(num_of_files) files destroyed")
+                    Text("\(total_num_of_files) files destroyed")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
@@ -156,7 +174,7 @@ struct BlackHoleView: View {
                         .foregroundColor(.black)
                         .position(x: 850, y: 60)
                     
-                    Text("\(bytes_written)")
+                    Text("\(Int(bytes_written))")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
@@ -168,7 +186,7 @@ struct BlackHoleView: View {
                         .position(x: 850, y: 40)
                         .transition(.opacity)
                     
-                    Text(hex_text_overlay)
+                    Text("\(Int(total_bytes_to_erase))")
                     //Text("0x4ff4")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
@@ -205,7 +223,7 @@ struct BlackHoleView: View {
                         //.id("text-overwrite-" + hex_text_overlay)
                         
                     
-                    Text("bytes destroyed")
+                    Text("bytes destroyed of")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)
@@ -222,14 +240,22 @@ struct BlackHoleView: View {
 //
 //                        })
                 
-                Text(current_filename)
-                    .font(.custom("VT323-Regular", size: 16))
-                    .fontWeight(.medium)
-                    .foregroundColor(Color.white)
-                    .multilineTextAlignment(.center)
-                    //.background(Color.yellow)
-                    .frame(width: 500, height: 100, alignment: .center)
-                    .position(x: 500, y: 660)
+                ZStack {
+                    
+                    ProgressView(value: bytes_written, total: total_bytes_to_erase)
+                        .frame(width: 500, height: 100, alignment: .center)
+                        .position(x: 500, y: 660)
+                        .progressViewStyle(gradientStyle)
+                    
+                    Text(current_filename)
+                        .font(.custom("VT323-Regular", size: 16))
+                        .fontWeight(.medium)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(.center)
+                        //.background(Color.yellow)
+                        .frame(width: 500, height: 100, alignment: .center)
+                        .position(x: 500, y: 660)
+                }
                 
                 
                 // ~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~
@@ -307,7 +333,9 @@ struct BlackHoleView: View {
     
     func handle_drop(items: [NSItemProvider]) -> Bool
     {
-        if let item = items.first {
+        for item in items {
+        //}
+        //if let item = items.first {
             if let identifier = item.registeredTypeIdentifiers.first {
                 if identifier == "public.url" || identifier == "public.file-url" {
                     item.loadItem(forTypeIdentifier: identifier, options: nil) { (urlData, error) in
@@ -315,8 +343,37 @@ struct BlackHoleView: View {
                         if let urlData = urlData as? Data {
                             let urll = NSURL(absoluteURLWithDataRepresentation: urlData, relativeTo: nil) as URL
                             
-                            print("onDrop with files = \(urll.absoluteString)")
-                            
+                            // TODO: Not sure what this is anymore, consider removing soon
+//                            do {
+//                                //let total_items_in_folders = try FileManager.default.contentsOfDirectory(at: urll, includingPropertiesForKeys: .none, options: nil)
+//
+//                               // try #1 is kinda a failure... but good code keeps for laters!
+//                                var total_bytes: UInt64 = 0
+//                                let url = urll
+//                                var files = [URL]()
+//                                if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
+//                                    for case let fileURL as URL in enumerator {
+//                                        do {
+//                                            let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
+//                                            if fileAttributes.isRegularFile! {
+//                                                files.append(fileURL)
+//
+//                                                print("\(fileURL.path) size=\(fileURL.fileSize)")
+//                                                total_bytes += fileURL.fileSize
+//                                            }
+//                                        } catch { print(error, fileURL) }
+//                                    }
+//                                    //print(files)
+//                                }
+//
+//                                total_bytes_to_erase = Double(total_bytes)
+//
+//                                print("onDrop with files = \(urll.absoluteString) files count=\(files.count) of size=\(total_bytes)")
+//                            }
+//                            catch {
+//                                print("*** ERROR *** trying to deep search url -- \(error)")
+//                            }
+                                
                             // set to true while we attempt to erase, disable when complete
                             Analytics.trackEvent("Files Erased", withProperties: ["url_count" : "\(items.count)"])
                             
@@ -327,12 +384,16 @@ struct BlackHoleView: View {
                     }
                 }
             }
-            return true
-        } else { print("item not here")
-            return false }
+            
+        }
+//        else { print("item not here")
+//            return false }
+        
+        return true
     }
     
-    // Implement the secure erasing function
+    
+    // Implement the secure erasing (yes, like the Recoom Boom)
     func eraser_gun(url: URL)
     {
         num_of_files = 0
@@ -371,7 +432,29 @@ struct BlackHoleView: View {
     //                print("found file -- \(file)")
     //            }
                 let resourceKeys : [URLResourceKey] = [.creationDateKey, .isDirectoryKey, .fileSizeKey]
-                let enumerator = fm.enumerator(at: url, includingPropertiesForKeys: resourceKeys)!
+                var enumerator = fm.enumerator(at: url, includingPropertiesForKeys: resourceKeys)!
+                var total_bytes: UInt64 = 0
+                
+                // this is what to do when directories are dropped
+                // 1st pass through files to generate total sizes / determine if multiple things are dropped
+                for case let fileURL as URL in enumerator {
+                
+                    total_bytes += fileURL.fileSize
+                    print("total_bytes [\(total_bytes)] += file -- \(fileURL.fileSize)")
+                }
+                // else its a single file
+                if total_bytes == 0 {
+                    let resourceValues = try url.resourceValues(forKeys: Set(resourceKeys))
+                    
+                    if let fileSize = resourceValues.fileSize {
+                        total_bytes += UInt64(fileSize)
+                        print("total_bytes [\(total_bytes)] += file -- \(fileSize)")
+                    }
+                }
+                
+                total_bytes_to_erase = Double(total_bytes)
+                
+                enumerator = fm.enumerator(at: url, includingPropertiesForKeys: resourceKeys)!
                 
                 for case let fileURL as URL in enumerator {
                     let resourceValues = try fileURL.resourceValues(forKeys: Set(resourceKeys))
@@ -423,6 +506,8 @@ struct BlackHoleView: View {
             
             Analytics.trackEvent("Files Erased Completed", withProperties: ["files_erased" : "\(num_of_files)"])
             
+            total_num_of_files += num_of_files
+            
             //print("bytes_written = \(bytes_written)")
             UserDefaults.increment(val: num_of_files, key: UserDefaultsConstants.files_destroyed)
             UserDefaults.increment(val: Int(Double(bytes_written) / 1e6), key: UserDefaultsConstants.megabytes_destroyed)
@@ -437,19 +522,75 @@ struct BlackHoleView: View {
                         
             current_filename = file.lastPathComponent
             
+            var test_bytes_written = 0
             var text_nums = ""
             fileHandle.seek(toFileOffset: 0)
      
-            if SECURE_ERASE {
+            // Handle larger files specially
+            // specifically take longer on the big files like movies to enjoy the secure destruction :)
+            
+            var write_loops = 0
+            
+            let special_size_megs = 1024 * 1024 * 10
+            if size > special_size_megs {
+                
+                // TODO: -- we need a couple speeds
+                // the 100+ meg files need to stride even faster or they just take forever
+                
+                let sizeof_int32 = UInt32.bitWidth / 8
+                let ints_per_loop = 4 * 8
+                write_loops = size / ints_per_loop / sizeof_int32
+                
+                // Create an array full of COFFEE 32-bit integers, hence divide size by 4
+                
+                // Note below you must use UInt64 to call the Swift fileHandle.seek()
+                // but i purposefully leave 0s in between the 8-byte patterns
+                let pattern = 0x00eeffc0
+                // we need to define this in reverse since most Macos systems today are little endian (x86 or arm64) that way it displays like 0xC0ffee in a hex editor!
+                let result = Array(repeating: pattern, count: ints_per_loop)
+                
+                // now fill the 0s in the array with random numbers from 0 to the size of the file
+                // this also takes a long time if result is huge
+                //let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
+                
+                // convert the Integer array to bytes so we can write it to the file
+                let data = Data(bytes: result, count: result.count * sizeof_int32)
+                
+                do {
+                    for i in 1...write_loops {
+                        
+                        let offset = UInt64(i * data.count)
+                        fileHandle.write(data)
+                        fileHandle.seek(toFileOffset: offset)
+                        
+                        text_nums = String(format: "0x%02x\n", offset)
+                        hex_text_overlay = text_nums
+                        bytes_written += Double(data.count)
+                        test_bytes_written += Int(data.count)
+                        print("Writing \(data.count) | seeking to \(offset)")
+                    }
+                    
+                    // write the leftovers
+                    let remainder = size - (write_loops * size)
+                    //let ending_data = Data(bytes: data, count: remainder)
+                    fileHandle.write(data)
+                    bytes_written += Double(data.count)
+                    //print("writing remainder=\(remainder)")
+                }
+                catch { print("ERROR seeking / writing \(error)") }
+            }
+            
+            // the faster way
+            else {
             
                 //print("secure_eraser size=\(size)")
-                let write_loops = 400
+                write_loops = 400
                 let sparse_size = size / write_loops
-                var test_bytes_written = 0
                 
                 // we'll base the randomness on the size of the file
                 let result = Array(repeating: 0, count: sparse_size)
                 
+                // TODO -- won't this overflow if given a file of > signed Int?
                 // this call takes a few seconds even for a 1 megabyte randomized pattern
                 let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
                 
@@ -460,7 +601,8 @@ struct BlackHoleView: View {
                 //let write_loops = size/1024/1024
                 let data = Data(bytes: shuffledNumbers, count: shuffledNumbers.count)
                 
-                // try writing size loops to the file
+                // Loop over the file "sparse write loop" times (const 400 right now)
+                // write the same randomized byte pattern 400 times to the file
                 if (!DEBUG_ERASE) {
                     do {
                         for i in 1...write_loops {
@@ -471,7 +613,7 @@ struct BlackHoleView: View {
                             
                             text_nums = String(format: "0x%02x\n", offset)
                             hex_text_overlay = text_nums
-                            bytes_written += Int(data.count)
+                            bytes_written += Double(data.count)
                             test_bytes_written += Int(data.count)
                             //print("seeking to \(offset)")
                         }
@@ -480,18 +622,18 @@ struct BlackHoleView: View {
                         let remainder = size - (write_loops * sparse_size)
                         let ending_data = Data(bytes: shuffledNumbers, count: remainder)
                         fileHandle.write(ending_data)
-                        bytes_written += Int(ending_data.count)
+                        bytes_written += Double(ending_data.count)
+                        test_bytes_written += Int(ending_data.count)
                         //print("writing remainder=\(remainder)")
                     }
                     catch { print("ERROR seeking / writing \(error)") }
                 }
-                
-                usleep(UInt32(100))  // its critical to delay this intense CPU loop or even the Debugger can't terminate the process
             }
-            else {
-                bytes_written += size
-            }
-            //print("secure_eraser Writing \(data) \(write_loops) times test_bytes_written=\(test_bytes_written)")
+            
+            usleep(UInt32(100))  // its critical to delay this intense CPU loop or even the Debugger can't terminate the process
+            
+            // TODO: -- theres a slight bug in the way we're writing so the bytes don't match up (and our progress bar aint nicely full :\ )
+            print("secure_eraser Writing \(file.relativePath) size=\(file.fileSize) \(write_loops) times, test_bytes_written=\(test_bytes_written)")
             
             // this is even more secure if we can mess up the file descriptors dates
             // As an extra precaution I change the dates of the file so the

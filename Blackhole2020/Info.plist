@@ -43,9 +43,7 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>VT323-Regular.ttf</string>
-	</array>
+	<key>ATSApplicationFontsPath</key>
+	<string>.</string>
 </dict>
 </plist>

@@ -36,6 +36,7 @@
 		FCDA4BDC25BFDA750032F4D1 /* black-hole.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = FCDA4BDB25BFDA750032F4D1 /* black-hole.mp4 */; };
 		FCDA4BE125BFDB800032F4D1 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDA4BE025BFDB800032F4D1 /* PlayerView.swift */; };
 		FCDA4BE925C08D630032F4D1 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDA4BE825C08D630032F4D1 /* VideoView.swift */; };
+		FCDA710C275FFC4E001EA3E0 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCDA710B275FFC4E001EA3E0 /* Styles.swift */; };
 		FCF0631725BCAFDF00912900 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCF0631625BCAFDF00912900 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		FCDA4BDB25BFDA750032F4D1 /* black-hole.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "black-hole.mp4"; sourceTree = "<group>"; };
 		FCDA4BE025BFDB800032F4D1 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		FCDA4BE825C08D630032F4D1 /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
+		FCDA710B275FFC4E001EA3E0 /* Styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		FCF0631625BCAFDF00912900 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FFF8440979041A5696AC5B2C /* Pods-Blackhole2020.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -205,6 +207,7 @@
 		FCCE63032595A7AD006604A4 /* Blackhole2020 */ = {
 			isa = PBXGroup;
 			children = (
+				FCDF180127A72AB300DEA6C0 /* Fonts */,
 				FC10772E25EAE57200A9A392 /* Modules */,
 				FCCE63362595A82D006604A4 /* Lotties */,
 				FCCE63042595A7AD006604A4 /* AppDelegate.swift */,
@@ -220,8 +223,8 @@
 				FCCE630D2595A7AF006604A4 /* Main.storyboard */,
 				FCCE63102595A7AF006604A4 /* Info.plist */,
 				FCCE63112595A7AF006604A4 /* Blackhole2020.entitlements */,
-				FC9B32C025CD07050061ED59 /* VT323-Regular.ttf */,
 				FCCE630A2595A7AF006604A4 /* Preview Content */,
+				FCDA710B275FFC4E001EA3E0 /* Styles.swift */,
 			);
 			path = Blackhole2020;
 			sourceTree = "<group>";
@@ -265,6 +268,14 @@
 				FCDA4BDB25BFDA750032F4D1 /* black-hole.mp4 */,
 			);
 			path = Lotties;
+			sourceTree = "<group>";
+		};
+		FCDF180127A72AB300DEA6C0 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				FC9B32C025CD07050061ED59 /* VT323-Regular.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -517,6 +528,7 @@
 			files = (
 				FCB6B09926153E4A00FC4121 /* UserDefaultsConstants.swift in Sources */,
 				FC10773125EAE58800A9A392 /* JonsMusicPlayer.swift in Sources */,
+				FCDA710C275FFC4E001EA3E0 /* Styles.swift in Sources */,
 				FCDA4BE925C08D630032F4D1 /* VideoView.swift in Sources */,
 				FCCE63072595A7AD006604A4 /* BlackHoleView.swift in Sources */,
 				FCB6B08C26113BFC00FC4121 /* CustomFileManagerDelegate.swift in Sources */,
@@ -707,7 +719,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -733,7 +745,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbsoft.Blackhole2020;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
