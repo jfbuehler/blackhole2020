@@ -333,6 +333,14 @@ struct BlackHoleView: View {
     
     func handle_drop(items: [NSItemProvider]) -> Bool
     {
+        // TODO: -- need to use promises here because we have too many multi-threads going
+        // that or dispatch groups, perhaps?
+        // we want to kick off all the erasures but we want them to run serially I imagine
+        // parallel deletions seems like a bad idea for disk access
+        // some kind of threading control would be ideal
+        
+        // its messing up the animation because multiple calls stops the animation (whoever is done first that is)
+        
         for item in items {
         //}
         //if let item = items.first {
