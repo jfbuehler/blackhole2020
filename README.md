@@ -19,9 +19,10 @@ That said, if you do stumble upon this repo, you are free to explore and suggest
 May this project and the way I've implemented certain things inspire you to greater heights. 
 
 Future growth includes:
-[] - Adding tests
-[] - Adding localizations 
-[] - Adding new features as they become interesting
+- Adding tests
+- Adding localizations 
+- Adding new features as they become interesting
+
 
 ## Installation
 
