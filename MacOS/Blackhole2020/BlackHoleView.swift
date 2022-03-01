@@ -35,44 +35,46 @@ struct BlackHoleView: View {
     let file_width: CGFloat = 200
     let file_height: CGFloat = 150
     
-    @State var isFileAnimationThreadRunning = false
-    var blackhole_url = Bundle.main.url(forResource: "black-hole", withExtension: "mp4")!
+    @State private var isFileAnimationThreadRunning = false
+    private var blackhole_url = Bundle.main.url(forResource: "black-hole", withExtension: "mp4")!
     
-    @State var animationTime = 5.0
+    @State private var animationTime = 5.0
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     // the elegant initializer to create an array
-    @State var files = [AnimatedFileState](repeating: AnimatedFileState.init(), count: 10)
+    @State private var files = [AnimatedFileState](repeating: AnimatedFileState.init(), count: 10)
     
-    @State var eraseFiles = false
-    @State var popIn = false
-    @State var gracefulPauseFiles = false
-    @State var blackholeAnimating = false
+    @State private var eraseFiles = false
+    @State private var popIn = false
+    @State private var gracefulPauseFiles = false
+    @State private var blackholeAnimating = false
     
-    @State var total_num_of_files = 0
-    @State var num_of_files = 0
+    @State private var total_num_of_files = 0
+    @State private var num_of_files = 0
     
-    @State var total_bytes_to_erase = 0.0
-    @State var bytes_written = 0.0
-    @State var hex_text_overlay = ""        // not sure I want to use this anymore, but leave it in-code (remove from display)
-    @State var current_filename = ""
+    private var bytes_display_lock = NSLock()
+    @State private var total_bytes_to_erase = 0.0
+    @State private var bytes_written = 0.0
+    
+    @State private var hex_text_overlay = ""        // not sure I want to use this anymore, but leave it in-code (remove from display)
+    @State private var current_filename = ""
     
     // use this to pause / stop the file erasing
-    @State var shouldPause = false
+    @State private var shouldPause = false
     
     // hex text
-    @State var hex_text_opacity = 1.0
-    @State var hex_text_x: CGFloat = 850
-    @State var hex_text_y: CGFloat = 85
-    @State var hex_scale: CGFloat = 1.0
+    @State private var hex_text_opacity = 1.0
+    @State private var hex_text_x: CGFloat = 850
+    @State private var hex_text_y: CGFloat = 85
+    @State private var hex_scale: CGFloat = 1.0
     
     // pre-allocate all the JSONs
-    var file_animations = [Lottie.Animation]()
+    private var file_animations = [Lottie.Animation]()
     
     @ObservedObject var videoItem: VideoItem = VideoItem()
     
     @State private var showingAlert = false
-    @State var last_dropped_items = [NSItemProvider]()
+    @State private var last_dropped_items = [NSItemProvider]()
     
     @State private var progress_gradient = LinearGradient(
             gradient: Gradient(colors: [.purple, .purple, .purple]),
@@ -82,8 +84,6 @@ struct BlackHoleView: View {
     
     init()
     {
-        //print("blackhole init running")
-        
         file_animations.append(Animation.named("File_Disintegration_TopLeft")!)
         file_animations.append(Animation.named("File_Disintegration_BottomLeft")!)
         file_animations.append(Animation.named("File_Disintegration_MidLeft")!)
@@ -92,7 +92,7 @@ struct BlackHoleView: View {
         file_animations.append(Animation.named("File_Disintegration_MidRight")!)
         //print("file_animations=\(file_animations.count)")
         
-        // disable auto music playing on open
+        // enable auto music playing on open, right now we don't want it
         //JonsMusicPlayer.sharedInstance.change_category(cat: .space_synth)
     }
     
@@ -106,17 +106,18 @@ struct BlackHoleView: View {
         
         VStack {
             ZStack(alignment: .center) {
-                // can't use Lottie to generate these its too CPU intensive
+                // can't use Lottie to generate this JSON animation; its too CPU intensive sadly
                 //LottieView(filename: "StarField", autoplay: true)
                 
-                // crap have to update to MacOS 11 finally... this VideoPlayer replaces the 3rd party github code below but requires OS 11
+                // this native VideoPlayer replaces the 3rd party github code below but requires OS 11, so I haven't tested it yet
+                // (built this to support 10.x at first)
                 //VideoPlayer(player: AVPlayer(url:  Bundle.main.url(forResource: "video", withExtension: "mp4")!))
                 Video(url: blackhole_url)
                     .loop(true)
                     .isPlaying(self.$blackholeAnimating)
                     .frame(width: 1000, height: 700)
                 
-                // TODO -- requires MacOS 11 :(
+                // TODO: -- some more features requiring MacOS 11, we can now explore time permitting!!
                 // a size zero button to disable/enable music?
 //                Button("Help") {
 //                    self.showingHelp.toggle()
@@ -139,10 +140,6 @@ struct BlackHoleView: View {
 //                }
 //                .position(x: -10, y: -10)
                 //.keyboardShortcut("m")
-                
-                // TODO -- figure out how to draw the purple "file counters" in swiftui
-                
-                // TODO -- do we display the files current being deleted? It would be more fun... but it doesnt fit anywhere....maybe draw it out a bit
 
                 ZStack {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -208,20 +205,6 @@ struct BlackHoleView: View {
 //                        )
                         //.rotation3DEffect(Angle.degrees(30), axis: (x: 1, y: 0, z: 0))
                         //.animation(.easeInOut)
-                    // TODO -- I have no idea what to do with this yet, need to figure out a good animation
-//                        .onAppear(perform: {
-//                            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(), {
-//                                self.hex_text_opacity = 2
-//                                hex_scale = 1.3
-//                            })
-//                            withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: false), {
-//                                //self.hex_text_x = 870
-//                                //hex_text_y = 125
-//                            })
-//                        })
-                        //.transition(.opacity)
-                        //.id("text-overwrite-" + hex_text_overlay)
-                        
                     
                     Text("bytes destroyed of")
                         .font(.custom("VT323-Regular", size: 16))
@@ -235,7 +218,7 @@ struct BlackHoleView: View {
                         .position(x: 850, y: 60)
                 }
                 
-                 // TODO -- more reason need OS 11, to use this guy
+                 // TODO: -- now that OS X 11 is "old" we can upgrade to newer SwiftUI features such as this
 //                        .onChange(of: text_overwrite, perform: { value in
 //
 //                        })
@@ -257,55 +240,25 @@ struct BlackHoleView: View {
                         .position(x: 500, y: 660)
                 }
                 
-                
                 // ~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~
-                // Manually setup the file animation area
+                // MARK: File Animation Area
                 // ~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~~-~-~-~-~
-                
-                //.opacity(shouldPlay.wrappedValue ? 1.0 : 0.0)
-                //.animation(.spring())
-                
-                // TODO -- the real elegant way to do this here is use the ForEach loops and run the radius / offset calculation here
                 
                 ZStack {
                     
-                    // funny looking but this is the SwiftUI syntax to iterately declare arrays of views
                     ForEach(0..<files.count, id: \.self) { i in
-                        FileView(x: files[i].x, y: files[i].y, popInAnimation: self.$files[i].popIn, eraseAnimation: self.$files[i].erase, gracefulPause: self.$files[i].pause, reset: self.$files[i].reset, file_jsons: file_animations)
-                            //.blur(radius: 1)
-                        
+                        FileView(x: files[i].x,
+                                 y: files[i].y,
+                                 popInAnimation: $files[i].popIn,
+                                 eraseAnimation: $files[i].erase,
+                                 gracefulPause: $files[i].pause,
+                                 reset: $files[i].reset,
+                                 file_jsons: file_animations)
                     }
-//                    FileView(x: -200, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-//                    FileView(x: -100, y: -200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-//                    FileView(x: -100, y: -100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-                    //FileView(x: files[0].x, y: files[0].y, popInAnimation: $files[0].popIn, eraseAnimation: $eraseFiles, gracefulPause: $gracefulPauseFiles)
-                        //.position(x: file1_x, y: file1_y)
-//                    FileView(x: 50, y: 50, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-//                    FileView(x: 100, y: 100, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-//                    FileView(x: 100, y: 200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-//                    FileView(x: 200, y: 200, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
-//                    FileView(x: 150, y: 220, animating: $areFilesAnimating, gracefulPause: $gracefulPauseFiles)
                 }
-                
-                // for now...can't get these SwiftUI extensions to work. They don't appear for unknown reasons
-//                 AnimatedImage(name: "File_Disintegration_TopLeft.json", isAnimating: $areFilesAnimating)
-//                    .customLoopCount(1)
-//
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: file_width, height: file_height, alignment: .center)
-//                    .offset(x: -200, y: -150)
-                
-//                LottieView(filename: "File_Disintegration_TopLeft", width: file_width, height: file_height)
-//                    .frame(width: file_width, height: file_height, alignment: .center)
-//                    .offset(x: 500, y: -300)
             }
             .onDrop(of: ["public.url","public.file-url"], isTargeted: nil) { (items) -> Bool in
-                       
-                // if prompt
-                //showingAlert = true
-                //last_dropped_items = items
-                // else
+                                       
                 handle_drop(items: items)
                 return true
             }
@@ -333,80 +286,49 @@ struct BlackHoleView: View {
     
     func handle_drop(items: [NSItemProvider]) -> Bool
     {
-        // TODO: -- need to use promises here because we have too many multi-threads going
-        // that or dispatch groups, perhaps?
-        // we want to kick off all the erasures but we want them to run serially I imagine
-        // parallel deletions seems like a bad idea for disk access
-        // some kind of threading control would be ideal
-        
-        // its messing up the animation because multiple calls stops the animation (whoever is done first that is)
+        let groupDeletes = DispatchGroup()
+        toggle_erasing_animation()
+        total_bytes_to_erase = 0
+        bytes_written = 0
+        num_of_files = 0
         
         for item in items {
-        //}
-        //if let item = items.first {
             if let identifier = item.registeredTypeIdentifiers.first {
                 if identifier == "public.url" || identifier == "public.file-url" {
+                    
+                    groupDeletes.enter()
+                    print("groupDeletes.enter()")
                     item.loadItem(forTypeIdentifier: identifier, options: nil) { (urlData, error) in
                         
                         if let urlData = urlData as? Data {
                             let urll = NSURL(absoluteURLWithDataRepresentation: urlData, relativeTo: nil) as URL
-                            
-                            // TODO: Not sure what this is anymore, consider removing soon
-//                            do {
-//                                //let total_items_in_folders = try FileManager.default.contentsOfDirectory(at: urll, includingPropertiesForKeys: .none, options: nil)
-//
-//                               // try #1 is kinda a failure... but good code keeps for laters!
-//                                var total_bytes: UInt64 = 0
-//                                let url = urll
-//                                var files = [URL]()
-//                                if let enumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles, .skipsPackageDescendants]) {
-//                                    for case let fileURL as URL in enumerator {
-//                                        do {
-//                                            let fileAttributes = try fileURL.resourceValues(forKeys:[.isRegularFileKey])
-//                                            if fileAttributes.isRegularFile! {
-//                                                files.append(fileURL)
-//
-//                                                print("\(fileURL.path) size=\(fileURL.fileSize)")
-//                                                total_bytes += fileURL.fileSize
-//                                            }
-//                                        } catch { print(error, fileURL) }
-//                                    }
-//                                    //print(files)
-//                                }
-//
-//                                total_bytes_to_erase = Double(total_bytes)
-//
-//                                print("onDrop with files = \(urll.absoluteString) files count=\(files.count) of size=\(total_bytes)")
-//                            }
-//                            catch {
-//                                print("*** ERROR *** trying to deep search url -- \(error)")
-//                            }
-                                
-                            // set to true while we attempt to erase, disable when complete
                             Analytics.trackEvent("Files Erased", withProperties: ["url_count" : "\(items.count)"])
                             
-                            eraser_gun(url: urll)
-                            
-                            print("ERASURE COMPLETE")
+                            eraser_gun(url: urll, groupDeletes: groupDeletes)
                         }
                     }
                 }
             }
-            
         }
-//        else { print("item not here")
-//            return false }
+
+        groupDeletes.notify(queue: DispatchQueue.global()) {
+            
+            print("ERASURE COMPLETE")
+            
+            hex_text_overlay = ""
+            current_filename = ""
+            self.shouldPause = false
+            self.popIn = false
+            self.gracefulPauseFiles = true
+            self.blackholeAnimating = false
+        }
         
         return true
     }
     
-    
     // Implement the secure erasing (yes, like the Recoom Boom)
-    func eraser_gun(url: URL)
+    func eraser_gun(url: URL, groupDeletes: DispatchGroup)
     {
-        num_of_files = 0
-        bytes_written = 0
-        
         // at this point let's see if we can help the energy impacts by using lower priority threads
         DispatchQueue.global(qos: .utility).async {
             
@@ -414,28 +336,21 @@ struct BlackHoleView: View {
             let delegate = CustomFileManagerDelegate()
             fm.delegate = delegate
             
-            // use this block to unit test
-//            popIn = true
-//            blackholeAnimating = true
-//            toggle_erasing_animation()
-//
-//            print("about to erase")
-//            sleep(15)
-//            print("done fake erasing")
-//
-//            popIn = false
-//            gracefulPauseFiles = true
-//            blackholeAnimating = false
-//            return  // disable the actual erasing for now
+            #if UNIT_TEST
+                print("about to erase")
+                sleep(5)
+                print("done fake erasing")
+
+                groupDeletes.leave()
+                print("groupDeletes.leave()")
+                return  // disable the actual erasing for now
+            #endif
             
             do {
-                self.popIn = true
-                self.blackholeAnimating = true
-                toggle_erasing_animation()
                 
                 print("Try to read -- \(url.path)")
-                //let files = try fm.contentsOfDirectory(atPath: url.path)
                 
+                //let files = try fm.contentsOfDirectory(atPath: url.path)
     //            for file in files {
     //                print("found file -- \(file)")
     //            }
@@ -460,7 +375,8 @@ struct BlackHoleView: View {
                     }
                 }
                 
-                total_bytes_to_erase = Double(total_bytes)
+                total_bytes_to_erase += Double(total_bytes)
+                print("total_bytes_to_erase=\(total_bytes_to_erase)")
                 
                 enumerator = fm.enumerator(at: url, includingPropertiesForKeys: resourceKeys)!
                 
@@ -505,27 +421,22 @@ struct BlackHoleView: View {
             }
             
             sleep(1)
-            hex_text_overlay = ""
-            current_filename = ""
-            self.shouldPause = false
-            self.popIn = false
-            self.gracefulPauseFiles = true
-            self.blackholeAnimating = false
             
             Analytics.trackEvent("Files Erased Completed", withProperties: ["files_erased" : "\(num_of_files)"])
             
             total_num_of_files += num_of_files
             
-            //print("bytes_written = \(bytes_written)")
+            print("bytes_written = \(bytes_written)")
             UserDefaults.increment(val: num_of_files, key: UserDefaultsConstants.files_destroyed)
             UserDefaults.increment(val: Int(Double(bytes_written) / 1e6), key: UserDefaultsConstants.megabytes_destroyed)
+            
+            groupDeletes.leave()
         }
     }
     
     // Implement secure file erasing methods
     func secure_eraser(file: URL, size: Int)
     {
-        // Swift 4.2 implemented SE-0202: Random Unification so this is a cryptographically secure randomizer that’s baked right into the core of the language! Cool huh!
         if let fileHandle = FileHandle(forWritingAtPath: file.path) {
                         
             current_filename = file.lastPathComponent
@@ -533,37 +444,30 @@ struct BlackHoleView: View {
             var test_bytes_written = 0
             var text_nums = ""
             fileHandle.seek(toFileOffset: 0)
-     
-            // Handle larger files specially
-            // specifically take longer on the big files like movies to enjoy the secure destruction :)
             
-            var write_loops = 0
+            let write_loops = 400
+            let sparse_size = size / write_loops
             
-            let special_size_megs = 1024 * 1024 * 10
-            if size > special_size_megs {
-                
-                // TODO: -- we need a couple speeds
-                // the 100+ meg files need to stride even faster or they just take forever
-                
-                let sizeof_int32 = UInt32.bitWidth / 8
-                let ints_per_loop = 4 * 8
-                write_loops = size / ints_per_loop / sizeof_int32
-                
-                // Create an array full of COFFEE 32-bit integers, hence divide size by 4
-                
-                // Note below you must use UInt64 to call the Swift fileHandle.seek()
-                // but i purposefully leave 0s in between the 8-byte patterns
-                let pattern = 0x00eeffc0
-                // we need to define this in reverse since most Macos systems today are little endian (x86 or arm64) that way it displays like 0xC0ffee in a hex editor!
-                let result = Array(repeating: pattern, count: ints_per_loop)
-                
-                // now fill the 0s in the array with random numbers from 0 to the size of the file
-                // this also takes a long time if result is huge
-                //let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
-                
-                // convert the Integer array to bytes so we can write it to the file
-                let data = Data(bytes: result, count: result.count * sizeof_int32)
-                
+            // we'll base the randomness on the size of the file
+            let result = Array(repeating: 0, count: sparse_size)
+            
+            //
+            // Swift 4.2 implemented SE-0202: Random Unification so this is a cryptographically secure randomizer that’s baked right into the core of the language!
+            let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
+            
+            print("secure_eraser size=\(size) writing sparse_array=\(sparse_size) write_loops=\(write_loops) randomized array of size=\(shuffledNumbers.count) to the file --")
+                        
+            let data = Data(bytes: shuffledNumbers, count: shuffledNumbers.count)
+            
+            /// A note on older MacOS systems running this erasure algorithm
+            /// I noticed the loop can be kind of slow on 2017 and earlier models (what I originally developed this on)
+            /// Apple Silicon is brutally fast and so keep that in mind... not everyone has upgraded or will upgrade!
+            /// It's hard to tune for everyone, so I hope for now this is OK
+            /// Can modify as needed if anyone finds a huge problem
+            
+            // Loop over the file "sparse write loop" times (const 400 right now)
+            // write the same randomized byte pattern times to the file
+            if (!DEBUG_ERASE) {
                 do {
                     for i in 1...write_loops {
                         
@@ -573,74 +477,42 @@ struct BlackHoleView: View {
                         
                         text_nums = String(format: "0x%02x\n", offset)
                         hex_text_overlay = text_nums
-                        bytes_written += Double(data.count)
                         test_bytes_written += Int(data.count)
-                        print("Writing \(data.count) | seeking to \(offset)")
+                        //print("seeking to \(offset)")
+                        
+                        // Update inner for loop values so the progress bar updates more often
+                        if i % 10 > 0 {
+                            bytes_display_lock.lock()
+                            bytes_written += Double(test_bytes_written)
+                            bytes_display_lock.unlock()
+                            test_bytes_written = 0
+                        }
+                        
+                        /// Play around with slowing down the erasure for larger files so the user can enjoy watching the big file erase :)
+                        /// Peresonally I like to watch it
+                        let special_size_megs = 1024 * 1024 * 5  // this number is arbitrary and can be tuned
+                        if size > special_size_megs {
+                            usleep(UInt32(10000))
+                        }
                     }
+                    //print("bytes_written=\(bytes_written), test_bytes_written=\(test_bytes_written)")
                     
                     // write the leftovers
-                    let remainder = size - (write_loops * size)
-                    //let ending_data = Data(bytes: data, count: remainder)
-                    fileHandle.write(data)
-                    bytes_written += Double(data.count)
+                    let remainder = size - (write_loops * sparse_size)
+                    let ending_data = Data(bytes: shuffledNumbers, count: remainder)
+                    fileHandle.write(ending_data)
+                    test_bytes_written += Int(ending_data.count)
                     //print("writing remainder=\(remainder)")
+                    
+                    bytes_display_lock.lock()
+                    bytes_written += Double(test_bytes_written)
+                    bytes_display_lock.unlock()
                 }
                 catch { print("ERROR seeking / writing \(error)") }
             }
             
-            // the faster way
-            else {
-            
-                //print("secure_eraser size=\(size)")
-                write_loops = 400
-                let sparse_size = size / write_loops
-                
-                // we'll base the randomness on the size of the file
-                let result = Array(repeating: 0, count: sparse_size)
-                
-                // TODO -- won't this overflow if given a file of > signed Int?
-                // this call takes a few seconds even for a 1 megabyte randomized pattern
-                let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
-                
-                // TODO -- still need to make this run faster...
-                
-                //print("secure_eraser writing sparse_array=\(sparse_size) randomized array of size=\(shuffledNumbers.count) to the file --")
-                            
-                //let write_loops = size/1024/1024
-                let data = Data(bytes: shuffledNumbers, count: shuffledNumbers.count)
-                
-                // Loop over the file "sparse write loop" times (const 400 right now)
-                // write the same randomized byte pattern 400 times to the file
-                if (!DEBUG_ERASE) {
-                    do {
-                        for i in 1...write_loops {
-                            
-                            let offset = UInt64(i * data.count)
-                            fileHandle.write(data)
-                            fileHandle.seek(toFileOffset: offset)
-                            
-                            text_nums = String(format: "0x%02x\n", offset)
-                            hex_text_overlay = text_nums
-                            bytes_written += Double(data.count)
-                            test_bytes_written += Int(data.count)
-                            //print("seeking to \(offset)")
-                        }
+            //usleep(UInt32(100))  // delay this intense CPU loop if the Debugger can't terminate the process
                         
-                        // write the leftovers
-                        let remainder = size - (write_loops * sparse_size)
-                        let ending_data = Data(bytes: shuffledNumbers, count: remainder)
-                        fileHandle.write(ending_data)
-                        bytes_written += Double(ending_data.count)
-                        test_bytes_written += Int(ending_data.count)
-                        //print("writing remainder=\(remainder)")
-                    }
-                    catch { print("ERROR seeking / writing \(error)") }
-                }
-            }
-            
-            usleep(UInt32(100))  // its critical to delay this intense CPU loop or even the Debugger can't terminate the process
-            
-            // TODO: -- theres a slight bug in the way we're writing so the bytes don't match up (and our progress bar aint nicely full :\ )
             print("secure_eraser Writing \(file.relativePath) size=\(file.fileSize) \(write_loops) times, test_bytes_written=\(test_bytes_written)")
             
             // this is even more secure if we can mess up the file descriptors dates
@@ -664,16 +536,19 @@ struct BlackHoleView: View {
     // allow the animation loop to run
     func toggle_erasing_animation()
     {
+        print("toggle_erasing_animation()")
         let radius_px = 300.0
         let event_horizon_px: CGFloat = 200.0
         
+        blackholeAnimating = true
+        popIn = true
+        
         if (self.isFileAnimationThreadRunning == false)
         {
-            
-            DispatchQueue.global(qos: .background).async {
+            self.isFileAnimationThreadRunning = true
+            DispatchQueue.global(qos: .userInteractive).async {
                 
                 var speed_factor = CGFloat(0)
-                self.isFileAnimationThreadRunning = true
                 
                 // keep the animation thread alive while actively working
                 while self.blackholeAnimating

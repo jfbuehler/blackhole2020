@@ -52,13 +52,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print("didLaunchBefore = true")
         }
         
-        // START WITH MUSICS ON!
+        // Enable to start with music
         //JonsMusicPlayer.sharedInstance.toggle_on_off()
-        
-        // Add coder for rlottie support
-        //let lottieCoder = SDImageLottieCoder.shared
-        //SDImageCodersManager.shared.addCoder(lottieCoder)
-        
+                
         AppCenter.start(withAppSecret: "c9e9af8c-92d6-4654-9452-313c96f20102", services:[
           Analytics.self,
           Crashes.self
