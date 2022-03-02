@@ -1,6 +1,6 @@
 # ✨ Blackhole 2020 ✨
 
-Blackhole is a secure file eraser. Make your files vanish in style!
+Blackhole is an open-source secure file eraser. Make your files vanish in style!
 
 ![blackhole_store_animation_try1](https://user-images.githubusercontent.com/13276545/155787068-310ab850-5a65-42e8-bd23-9d3133d406ea.gif)
 

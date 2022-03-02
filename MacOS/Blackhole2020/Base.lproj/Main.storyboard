@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -15,7 +15,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Blackhole2020" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About Blackhole2020" id="5kV-Vb-QxS">
+                                        <menuItem title="About Blackhole2020" id="5kV-Vb-QxS" userLabel="about-blackhole" colorLabel="IBBuiltInLabel-Orange">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
@@ -91,7 +91,8 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Stats" id="Vv4-mC-7kC">
                                     <items>
-                                        <menuItem title="Fun Statistics" keyEquivalent="s" id="l39-le-glY">
+                                        <menuItem title="Fun Statistics" keyEquivalent="s" identifier="fun-stats" id="l39-le-glY">
+                                            <attributedString key="attributedTitle"/>
                                             <connections>
                                                 <action selector="stats_toggle:" target="Voe-Tx-rLC" id="cCf-mJ-RZy"/>
                                             </connections>

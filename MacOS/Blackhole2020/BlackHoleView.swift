@@ -184,7 +184,6 @@ struct BlackHoleView: View {
                         .transition(.opacity)
                     
                     Text("\(Int(total_bytes_to_erase))")
-                    //Text("0x4ff4")
                         .font(.custom("VT323-Regular", size: 16))
                         .fontWeight(.medium)
                         .foregroundColor(Color.white)

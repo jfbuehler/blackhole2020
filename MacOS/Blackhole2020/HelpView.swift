@@ -22,20 +22,20 @@ struct HelpView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
-            Text("""
-                    - Please drag and drop files/folders on to the app to destroy them forever
-                    - Press Space Bar to stop the destruction
-                    - Press ⌘+m to toggle music on/off
-                    - Press ⌘+s to display some stats
-
-                    Please contact \(contact_email) or tap the button below with love / shade / complaints / joy \n
-                    Happy obliteration of your files
-                    """)
-                .font(.custom("VT323-Regular", size: 26))
-                .fontWeight(.medium)
-                .foregroundColor(Color.white)
-                .multilineTextAlignment(.leading)
-                .padding(.leading, 55.0)
+            
+            Group {
+                Text("Please drag and drop files/folders on to the app to destroy them forever")
+                Text("Press Space Bar to stop the destruction")
+                Text("Press ⌘+m to toggle music on/off")
+                Text("Press ⌘+s to display some stats")
+                Text("Please contact \(contact_email) or tap the button below with love / complaints / joys")
+                Text("Happy obliteration of your files!!")
+            }
+            .font(.custom("VT323-Regular", size: 26))
+            .foregroundColor(Color.white)
+            .multilineTextAlignment(.leading)
+            .padding(.leading, 55.0)
+                        
             Text("""
 
                  From Code With Love

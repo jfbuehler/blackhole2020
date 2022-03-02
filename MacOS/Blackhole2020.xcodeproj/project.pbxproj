@@ -10,6 +10,8 @@
 		A615CED571EA29F4E2750F34 /* Pods_Blackhole2020Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5224F67E69F154DD7327CEAB /* Pods_Blackhole2020Tests.framework */; };
 		B746F8C29F6A45AE16DE2D16 /* Pods_Blackhole2020_Blackhole2020UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 733C6C4FA33ECF15B1B598E3 /* Pods_Blackhole2020_Blackhole2020UITests.framework */; };
 		F855BD06CB9450BDECB9E42E /* Pods_Blackhole2020.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711E3C9EBD3AF1E8C2CEB239 /* Pods_Blackhole2020.framework */; };
+		FC095D2527CFF42F00F11C7A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC095D2727CFF42F00F11C7A /* Localizable.strings */; };
+		FC095D2827CFF44F00F11C7A /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = FC095D2A27CFF44F00F11C7A /* Localizable.stringsdict */; };
 		FC10773125EAE58800A9A392 /* JonsMusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC10773025EAE58800A9A392 /* JonsMusicPlayer.swift */; };
 		FC10773D25EAE79B00A9A392 /* space_synth in Resources */ = {isa = PBXBuildFile; fileRef = FC10773C25EAE79B00A9A392 /* space_synth */; };
 		FC10775C25F5CCA200A9A392 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC10775B25F5CCA200A9A392 /* HelpView.swift */; };
@@ -66,6 +68,9 @@
 		A34F86E75FEE7D1B700CE8F0 /* Pods-Blackhole2020-Blackhole2020UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020-Blackhole2020UITests.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020-Blackhole2020UITests/Pods-Blackhole2020-Blackhole2020UITests.release.xcconfig"; sourceTree = "<group>"; };
 		AD48376A8CCFA15F07DD5E4E /* Pods-Blackhole2020Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020Tests.release.xcconfig"; path = "Target Support Files/Pods-Blackhole2020Tests/Pods-Blackhole2020Tests.release.xcconfig"; sourceTree = "<group>"; };
 		F94163FDCA1FCDD34612F05C /* Pods-Blackhole2020.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Blackhole2020.debug.xcconfig"; path = "Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020.debug.xcconfig"; sourceTree = "<group>"; };
+		FC095D2427CF43D600F11C7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		FC095D2627CFF42F00F11C7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FC095D2927CFF44F00F11C7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		FC10773025EAE58800A9A392 /* JonsMusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JonsMusicPlayer.swift; sourceTree = "<group>"; };
 		FC10773C25EAE79B00A9A392 /* space_synth */ = {isa = PBXFileReference; lastKnownFileType = folder; path = space_synth; sourceTree = "<group>"; };
 		FC10775B25F5CCA200A9A392 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
@@ -225,6 +230,8 @@
 				FCCE63112595A7AF006604A4 /* Blackhole2020.entitlements */,
 				FCCE630A2595A7AF006604A4 /* Preview Content */,
 				FCDA710B275FFC4E001EA3E0 /* Styles.swift */,
+				FC095D2727CFF42F00F11C7A /* Localizable.strings */,
+				FC095D2A27CFF44F00F11C7A /* Localizable.stringsdict */,
 			);
 			path = Blackhole2020;
 			sourceTree = "<group>";
@@ -389,10 +396,12 @@
 				FC10773D25EAE79B00A9A392 /* space_synth in Resources */,
 				FCCE63432595A922006604A4 /* File_Disintegration_TopLeft.json in Resources */,
 				FCCE63472595A922006604A4 /* File_Disintegration_MidRight.json in Resources */,
+				FC095D2527CFF42F00F11C7A /* Localizable.strings in Resources */,
 				FCCE63442595A922006604A4 /* StarField.json in Resources */,
 				FCCE630F2595A7AF006604A4 /* Main.storyboard in Resources */,
 				FC9B32C125CD07050061ED59 /* VT323-Regular.ttf in Resources */,
 				FCCE63452595A922006604A4 /* File_Disintegration_BottomRight.json in Resources */,
+				FC095D2827CFF44F00F11C7A /* Localizable.stringsdict in Resources */,
 				FCCE634B2595A922006604A4 /* File_Disintegration_BottomLeft.json in Resources */,
 				FCCE63482595A922006604A4 /* File_Disintegration_TopRight.json in Resources */,
 				FCDA4BDC25BFDA750032F4D1 /* black-hole.mp4 in Resources */,
@@ -574,10 +583,27 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		FC095D2727CFF42F00F11C7A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC095D2627CFF42F00F11C7A /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		FC095D2A27CFF44F00F11C7A /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FC095D2927CFF44F00F11C7A /* en */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
 		FCCE630D2595A7AF006604A4 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				FCCE630E2595A7AF006604A4 /* Base */,
+				FC095D2427CF43D600F11C7A /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

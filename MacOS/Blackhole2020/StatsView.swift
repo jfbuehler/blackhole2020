@@ -69,7 +69,6 @@ struct StatsView: View {
             
             Text("""
 
-
                     From Code With Love
                     ❤️ v\(NSApplication.appVersion!) [\(NSApplication.buildVersion!)] ❤️
                     """)
