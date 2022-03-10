@@ -1,0 +1,69 @@
+
+/* Class = "NSMenuItem"; title = "Blackhole2020"; ObjectID = "1Xt-HY-uBw"; */
+"1Xt-HY-uBw.title" = "Blackhole2020";
+
+/* Class = "NSMenuItem"; title = "Quit Blackhole2020"; ObjectID = "4sb-4s-VLi"; */
+"4sb-4s-VLi.title" = "Verlassen Blackhole2020";
+
+/* Class = "NSMenuItem"; title = "About Blackhole2020"; ObjectID = "5kV-Vb-QxS"; */
+"5kV-Vb-QxS.title" = "Über Blackhole2020";
+
+/* Class = "NSMenuItem"; title = "Options"; ObjectID = "6jB-aM-Afx"; */
+"6jB-aM-Afx.title" = "Optionen";
+
+/* Class = "NSMenuItem"; title = "Music"; ObjectID = "9eu-Eq-qdt"; */
+"9eu-Eq-qdt.title" = "Musik";
+
+/* Class = "NSMenu"; title = "Main Menu"; ObjectID = "AYu-sK-qS6"; */
+"AYu-sK-qS6.title" = "Main Menu";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "BOF-NM-1cW"; */
+"BOF-NM-1cW.title" = "Preferences…";
+
+/* Class = "NSMenuItem"; title = "Close"; ObjectID = "DVo-aG-piG"; */
+"DVo-aG-piG.title" = "Geschlossen";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "F2S-fz-NVQ"; */
+"F2S-fz-NVQ.title" = "Hilfe";
+
+/* Class = "NSMenuItem"; title = "Blackhole2020 Help"; ObjectID = "FKE-Sm-Kum"; */
+"FKE-Sm-Kum.title" = "Blackhole2020 Help";
+
+/* Class = "NSMenuItem"; title = "Pause Toggle"; ObjectID = "FO1-TN-6ZO"; */
+"FO1-TN-6ZO.title" = "Pause Toggle";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
+"Kd2-mp-pUS.title" = "Zeige Alles";
+
+/* Class = "NSMenuItem"; title = "Hide Blackhole2020"; ObjectID = "Olw-nP-bQN"; */
+"Olw-nP-bQN.title" = "Verstecken Blackhole2020";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO"; */
+"Vdr-fp-XzO.title" = "Verstecken Others";
+
+/* Class = "NSMenu"; title = "Stats"; ObjectID = "Vv4-mC-7kC"; */
+"Vv4-mC-7kC.title" = "Stats";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "bib-Uj-vzu"; */
+"bib-Uj-vzu.title" = "Datei";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "dMs-cI-mzQ"; */
+"dMs-cI-mzQ.title" = "Datei";
+
+/* Class = "NSMenuItem"; title = "Toggle On/Off"; ObjectID = "iS2-aq-JiU"; */
+"iS2-aq-JiU.title" = "Umschalten On/Off";
+
+/* Class = "NSMenuItem"; title = "Fun Statistics"; ObjectID = "l39-le-glY"; */
+"l39-le-glY.title" = "Fun Statistics";
+
+/* Class = "NSMenuItem"; title = "Stats"; ObjectID = "lT9-OA-Qcv"; */
+"lT9-OA-Qcv.title" = "Stats";
+
+/* Class = "NSMenu"; title = "Music"; ObjectID = "njK-2q-3HF"; */
+"njK-2q-3HF.title" = "Musik";
+
+/* Class = "NSMenu"; title = "Blackhole2020"; ObjectID = "uQy-DD-JDr"; */
+"uQy-DD-JDr.title" = "Blackhole2020";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "wpr-3q-Mcd"; */
+"wpr-3q-Mcd.title" = "Hilfe";

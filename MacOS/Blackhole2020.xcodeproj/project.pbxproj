@@ -71,6 +71,12 @@
 		FC095D2427CF43D600F11C7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		FC095D2627CFF42F00F11C7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FC095D2927CFF44F00F11C7A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		FC0AE50327D9D49E00E7F1D4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		FC0AE50427D9D49E00E7F1D4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FC0AE50527D9D49E00E7F1D4 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		FC0AE50627DA5D7700E7F1D4 /* la */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = la; path = la.lproj/Main.strings; sourceTree = "<group>"; };
+		FC0AE50727DA5D7700E7F1D4 /* la */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = la; path = la.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FC0AE50827DA5D7700E7F1D4 /* la */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = la; path = la.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		FC10773025EAE58800A9A392 /* JonsMusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JonsMusicPlayer.swift; sourceTree = "<group>"; };
 		FC10773C25EAE79B00A9A392 /* space_synth */ = {isa = PBXFileReference; lastKnownFileType = folder; path = space_synth; sourceTree = "<group>"; };
 		FC10775B25F5CCA200A9A392 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
@@ -375,6 +381,8 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				la,
 			);
 			mainGroup = FCCE62F82595A7AD006604A4;
 			productRefGroup = FCCE63022595A7AD006604A4 /* Products */;
@@ -587,6 +595,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				FC095D2627CFF42F00F11C7A /* en */,
+				FC0AE50427D9D49E00E7F1D4 /* de */,
+				FC0AE50727DA5D7700E7F1D4 /* la */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -595,6 +605,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				FC095D2927CFF44F00F11C7A /* en */,
+				FC0AE50527D9D49E00E7F1D4 /* de */,
+				FC0AE50827DA5D7700E7F1D4 /* la */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
@@ -604,6 +616,8 @@
 			children = (
 				FCCE630E2595A7AF006604A4 /* Base */,
 				FC095D2427CF43D600F11C7A /* en */,
+				FC0AE50327D9D49E00E7F1D4 /* de */,
+				FC0AE50627DA5D7700E7F1D4 /* la */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -615,6 +629,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -662,7 +677,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -676,6 +691,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -717,7 +733,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
