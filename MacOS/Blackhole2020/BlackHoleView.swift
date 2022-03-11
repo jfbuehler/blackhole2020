@@ -10,6 +10,8 @@ import AVKit
 import Lottie
 import AppCenterAnalytics
 
+// swiftlint:disable type_body_length
+
 let DISABLE_ERASE = true
 let DEBUG_ERASE = false  // enable to fake erasing (and save your real files)
 var SECURE_ERASE = true // enable to use crypto-secure erasing
@@ -541,13 +543,13 @@ struct BlackHoleView: View {
                 // keep the animation thread alive while actively working
                 while self.blackholeAnimating {
                     // eventually we'll iterate the state of each file
-                    for var i in 0...files.count - 1 {
+                    for i in 0...files.count - 1 {
 
                         if files[i].animating == false {
                             let angle = Double.random(in: 0.0...1.0) * Double.pi * 2
                             let x = cos(angle) * radius_px
                             let y = sin(angle) * radius_px
-                            // print("\(i) generating random angle = \(angle / Double.pi * 180), \(atan2(y,x)  / Double.pi * 180), \(x),\(y) dist=\(CGPointDistance(from: CGPoint(x: x, y: y), to: CGPoint.zero))")
+                            // print("\(i) generating random angle = \(angle / Double.pi * 180), \(atan2(y,x)  / Double.pi * 180), \(x),\(y) dist=\(CGPointDistance(from: CGPoint(x: x, y: y),to: CGPoint.zero))")
                             files[i].x = CGFloat(x)
                             files[i].y = CGFloat(y)
                             files[i].animating = true

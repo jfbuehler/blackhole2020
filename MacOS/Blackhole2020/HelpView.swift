@@ -55,10 +55,10 @@ struct HelpView: View {
                         service.subject = "BlackHole Fan Mail!"
 
                         service.perform(withItems: [""])
-               }) {
+            }, label: {
                Text("Email, Email")
                     .font(.custom("VT323-Regular", size: 20))
-            }
+            })
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()

@@ -8,8 +8,7 @@
 import Foundation
 
 class CustomFileManagerDelegate: NSObject, FileManagerDelegate {
-    func fileManager(_ fileManager: FileManager,
-                              shouldRemoveItemAt URL: URL) -> Bool {
+    func fileManager(_ fileManager: FileManager, shouldRemoveItemAt URL: URL) -> Bool {
         // Don't delete PDF files
         // return URL.pathExtension != "pdf"
 

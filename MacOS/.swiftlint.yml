@@ -3,6 +3,11 @@
 
 line_length: 210
 
+function_body_length: 60
+
+cyclomatic_complexity:
+  ignores_case_statements: true
+
 disabled_rules:
     - identifier_name
     - todo

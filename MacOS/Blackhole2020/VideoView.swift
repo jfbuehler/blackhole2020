@@ -6,6 +6,8 @@
 // Original Source from https://github.com/SergioEstevao/SVEVideoUI
 //
 
+// swiftlint:disable missing_docs
+
 import SwiftUI
 import AVFoundation
 import AVKit
@@ -230,6 +232,7 @@ extension Video {
             }
         }
 
+        // swiftlint:disable block_based_kvo
         override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
 
             // Only handle observations for the playerContext

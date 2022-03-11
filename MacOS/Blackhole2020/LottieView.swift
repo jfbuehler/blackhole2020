@@ -70,7 +70,10 @@ struct FileView: View {
         // translate the filenames based on x/y axis
         // swiftUI frame coordinate space is 0,0 centered in the window so its a bit funky (not topleft or bottom right)
 
-        LottieView(file_ani: file_animations, filename: filename, width: file_width, height: file_height, x: x, y: y, shouldPlay: $shouldPlay, shouldErase: $shouldErase, shouldGracefulPause: $shouldGracefulPause, shouldReset: $shouldReset)
+        LottieView(file_ani: file_animations,
+                   filename: filename, width: file_width, height: file_height, x: x, y: y,
+                   shouldPlay: $shouldPlay, shouldErase: $shouldErase,
+                   shouldGracefulPause: $shouldGracefulPause, shouldReset: $shouldReset)
             .frame(width: file_width, height: file_height, alignment: .center)
             .offset(x: x, y: y)
             // .animation(Animation.spring(response: 1, dampingFraction: 1, blendDuration: 1))

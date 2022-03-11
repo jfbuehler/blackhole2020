@@ -47,7 +47,8 @@ class JonsMusicPlayer: NSObject {
         // Category playback allows audio to play even with the Silent button enabled (per the API)
         // there are other categories and options available, pretty cool, check em out!
 //        do {
-//        try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode(rawValue: convertFromAVAudioSessionMode(AVAudioSession.Mode.default)), options: .mixWithOthers)
+//        try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback,
+//    mode: AVAudioSession.Mode(rawValue: convertFromAVAudioSessionMode(AVAudioSession.Mode.default)), options: .mixWithOthers)
 //        try AVAudioSession.sharedInstance().setActive(true)
 //        }
 //        catch let error {
