@@ -303,6 +303,7 @@
 				FCCE62FE2595A7AD006604A4 /* Frameworks */,
 				FCCE62FF2595A7AD006604A4 /* Resources */,
 				E4CCDEBC9FC8F7ED3B8BD70B /* [CP] Embed Pods Frameworks */,
+				FC0AE50927DBE86D00E7F1D4 /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -535,6 +536,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Blackhole2020/Pods-Blackhole2020-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		FC0AE50927DBE86D00E7F1D4 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# M1 Apple Silicon workaround (homebrew doesn't install in the default path anymore)\nif test -d \"/opt/homebrew/bin/\"; then\n  PATH=\"/opt/homebrew/bin/:${PATH}\"\nfi\n\nexport PATH\n\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

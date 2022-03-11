@@ -8,8 +8,8 @@
 import SwiftUI
 
 extension NSOpenPanel {
-    
-    static func openImage(completion: @escaping (_ result: Result<NSImage, Error>) -> ()) {
+
+    static func openImage(completion: @escaping (_ result: Result<NSImage, Error>) -> Void) {
         let panel = NSOpenPanel()
         panel.allowsMultipleSelection = false
         panel.canChooseFiles = true
@@ -52,7 +52,7 @@ extension NSApplication {
 }
 
 extension URL {
-    var attributes: [FileAttributeKey : Any]? {
+    var attributes: [FileAttributeKey: Any]? {
         do {
             return try FileManager.default.attributesOfItem(atPath: path)
         } catch let error as NSError {

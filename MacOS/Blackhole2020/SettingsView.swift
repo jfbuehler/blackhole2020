@@ -6,19 +6,19 @@
 //
 
 import SwiftUI
-//import Preferences // won't compile
+// import Preferences // won't compile
 
 // TODO -- consider this view maybe. For now we don't need
 
 struct SettingsView: View {
-    
+
     @State private var colorSelecction = 0
     @State private var autoCloseWindowEditor = false
     @State private var notesSizeInGrid = 0.0
     @State private var autoCloseWindowTimer = 0
-    
+
     private let contentWidth: Double = 450.0
-        
+
         var body: some View {
             Text("errrooo")
 //            Preferences.Container(contentWidth: contentWidth) {

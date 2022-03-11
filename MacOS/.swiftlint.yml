@@ -1,0 +1,15 @@
+
+# SwiftLint Customizations #
+
+line_length: 210
+
+disabled_rules:
+    - identifier_name
+    - todo
+
+opt_in_rules:
+    - missing_docs
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - Carthage
+  - Pods

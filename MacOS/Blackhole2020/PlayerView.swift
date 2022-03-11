@@ -38,4 +38,3 @@ struct PlayerView: NSViewRepresentable {
         return AVPlayerView(frame: .zero)
     }
 }
-

@@ -14,10 +14,10 @@ struct GradientProgressStyle<Stroke: ShapeStyle, Background: ShapeStyle>: Progre
     var cornerRadius: CGFloat = 10
     var height: CGFloat = 20
     var animation: Animation = .easeInOut
-    
+
     func makeBody(configuration: Configuration) -> some View {
         let fractionCompleted = configuration.fractionCompleted ?? 0
-        
+
         return VStack {
             ZStack(alignment: .topLeading) {
                 GeometryReader { geo in
@@ -33,7 +33,7 @@ struct GradientProgressStyle<Stroke: ShapeStyle, Background: ShapeStyle>: Progre
                 RoundedRectangle(cornerRadius: cornerRadius)
                         .stroke(stroke, lineWidth: 2)
             )
-            
+
             if !caption.isEmpty {
                 Text("\(caption)")
                     .font(.caption)
@@ -41,4 +41,3 @@ struct GradientProgressStyle<Stroke: ShapeStyle, Background: ShapeStyle>: Progre
         }
     }
 }
-

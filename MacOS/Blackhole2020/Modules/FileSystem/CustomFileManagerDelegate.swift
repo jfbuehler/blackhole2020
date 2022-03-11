@@ -9,11 +9,10 @@ import Foundation
 
 class CustomFileManagerDelegate: NSObject, FileManagerDelegate {
     func fileManager(_ fileManager: FileManager,
-                              shouldRemoveItemAt URL: URL) -> Bool
-    {
+                              shouldRemoveItemAt URL: URL) -> Bool {
         // Don't delete PDF files
-        //return URL.pathExtension != "pdf"
-        
+        // return URL.pathExtension != "pdf"
+
         // allow deletion of everything for now
         print("fileManager -- shouldRemoveItemAt url=\(URL)")
         return true

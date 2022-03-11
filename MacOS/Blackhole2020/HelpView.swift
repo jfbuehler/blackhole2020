@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct HelpView: View {
-    
+
     let contact_email = "help@blackhole2020.app"
     var name: String = ""
 
     var body: some View {
-        
+
         VStack {
             Text("""
                     * Welcome to the BlackHole 2020 Secure File Eraser *\n
@@ -22,7 +22,7 @@ struct HelpView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
-            
+
             Group {
                 Text("Please drag and drop files/folders on to the app to destroy them forever")
                 Text("Press Space Bar to stop the destruction")
@@ -35,7 +35,7 @@ struct HelpView: View {
             .foregroundColor(Color.white)
             .multilineTextAlignment(.leading)
             .padding(.leading, 55.0)
-                        
+
             Text("""
 
                  From Code With Love
@@ -49,7 +49,7 @@ struct HelpView: View {
                 let prefix = "url://"
                 let formattedString = prefix
                 guard let url = URL(string: formattedString) else { return }
-                                    
+
                 let service = NSSharingService(named: NSSharingService.Name.composeEmail)!
                         service.recipients = [contact_email]
                         service.subject = "BlackHole Fan Mail!"

@@ -26,7 +26,7 @@ public struct Video {
     var showsPlaybackControls: Bool = false
 
     /// If true the option to show the video in PIP mode will be available in the controls
-    var allowsPictureInPicturePlayback:Bool = false
+    var allowsPictureInPicturePlayback: Bool = false
 
     /// If true the video sound will be muted
     var isMuted: Binding<Bool> = .constant(true)
@@ -40,8 +40,7 @@ public struct Video {
     /// if true the video will play itself automattically
     var isPlaying: Binding<Bool>
 
-    public init(url: URL, playing: Binding<Bool> = .constant(true), muted: Binding<Bool> = .constant(false))
-    {
+    public init(url: URL, playing: Binding<Bool> = .constant(true), muted: Binding<Bool> = .constant(false)) {
         videoURL = url
         isPlaying = playing
         isMuted = muted
@@ -50,7 +49,7 @@ public struct Video {
 
 #if os(iOS)
 extension Video: UIViewControllerRepresentable {
-    
+
     public func makeUIViewController(context: Context) -> AVPlayerViewController {
         let videoViewController = AVPlayerViewController()
         videoViewController.player = AVPlayer(url: videoURL)
@@ -85,13 +84,13 @@ extension Video: NSViewRepresentable {
     public func makeNSView(context: Context) -> AVPlayerView {
         let videoView = AVPlayerView()
         videoView.player = AVPlayer(url: videoURL)
-        //let item = AVPlayerItem(url: videoURL)
-        //let item2 = AVPlayerItem(url: videoURL)
-        //videoView.player = AVQueuePlayer(playerItem: item)
-        
+        // let item = AVPlayerItem(url: videoURL)
+        // let item2 = AVPlayerItem(url: videoURL)
+        // videoView.player = AVQueuePlayer(playerItem: item)
+
         // todo -- unsure if this does anything or is useful at all
         videoView.window?.isOpaque = false
-        
+
         // maybe need to replace the PlayerView with a PlayerLayer ?? to get transparency to work
 
         let videoCoordinator = context.coordinator
@@ -104,13 +103,13 @@ extension Video: NSViewRepresentable {
     public func updateNSView(_ videoView: AVPlayerView, context: Context) {
         if videoURL != context.coordinator.url {
             videoView.player = AVPlayer(url: videoURL)
-            //let item = AVPlayerItem(url: videoURL)
-            //let item2 = AVPlayerItem(url: videoURL)
-            //videoView.player = AVQueuePlayer(playerItem: item)
+            // let item = AVPlayerItem(url: videoURL)
+            // let item2 = AVPlayerItem(url: videoURL)
+            // videoView.player = AVQueuePlayer(playerItem: item)
             context.coordinator.player = videoView.player
             context.coordinator.url = videoURL
-            
-            //context.coordinator.playerLooper = AVPlayerLooper(player: videoView.player! as! AVQueuePlayer, templateItem: item)
+
+            // context.coordinator.playerLooper = AVPlayerLooper(player: videoView.player! as! AVQueuePlayer, templateItem: item)
         }
         if showsPlaybackControls {
             videoView.controlsStyle = .inline
@@ -154,16 +153,15 @@ extension Video {
                 addKVOObservers(to: player)
 
                 NotificationCenter.default.addObserver(self,
-                                                       selector:#selector(Video.VideoCoordinator.playerItemDidReachEnd),
-                                                       name:.AVPlayerItemDidPlayToEndTime,
-                                                       object:player?.currentItem)
-
+                                                       selector: #selector(Video.VideoCoordinator.playerItemDidReachEnd),
+                                                       name: .AVPlayerItemDidPlayToEndTime,
+                                                       object: player?.currentItem)
 
             }
         }
 
         private func addTimeObserver(to player: AVPlayer?) {
-            timeObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 4), queue: nil, using: { [weak self](time) in
+            timeObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 4), queue: nil, using: { [weak self](_) in
                 self?.updateStatus()
             })
         }
@@ -182,16 +180,16 @@ extension Video {
         private func addKVOObservers(to player: AVPlayer?) {
             player?.addObserver(self, forKeyPath: "muted",
                                    options: [.new, .old],
-                                   context:&playerContext)
+                                   context: &playerContext)
 
             player?.addObserver(self, forKeyPath: "volume",
             options: [.new, .old],
-            context:&playerContext)
+            context: &playerContext)
         }
 
         var url: URL?
 
-        init(video: Video){
+        init(video: Video) {
             self.video = video
             super.init()
         }
@@ -232,7 +230,7 @@ extension Video {
             }
         }
 
-        override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
 
             // Only handle observations for the playerContext
             guard context == &(playerContext), keyPath == "muted" || keyPath == "volume" else {
@@ -252,13 +250,13 @@ extension Video {
 // MARK: - Modifiers
 extension Video {
 
-    public func pictureInPicturePlayback(_ value:Bool) -> Video {
+    public func pictureInPicturePlayback(_ value: Bool) -> Video {
         var new = self
         new.allowsPictureInPicturePlayback = value
         return new
     }
 
-    public func playbackControls(_ value: Bool) ->Video {
+    public func playbackControls(_ value: Bool) -> Video {
         var new = self
         new.showsPlaybackControls = value
         return new

@@ -7,17 +7,14 @@
 
 import Foundation
 
-class UserDefaultsConstants
-{
+class UserDefaultsConstants {
     static let run_count = "run_count"
     static let files_destroyed = "files_destroyed"
     static let megabytes_destroyed = "megabytes_destroyed"
 }
 
-extension UserDefaults
-{
-    static func increment(val: Int, key: String)
-    {
+extension UserDefaults {
+    static func increment(val: Int, key: String) {
         var old_val = UserDefaults.standard.integer(forKey: key)
         old_val += val
         UserDefaults.standard.set(old_val, forKey: key)

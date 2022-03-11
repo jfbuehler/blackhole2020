@@ -10,7 +10,7 @@ import SwiftUI
 import AppCenter
 import AppCenterAnalytics
 import AppCenterCrashes
-//import SDWebImageLottieCoder // for the coder, if we want to bring it back
+// import SDWebImageLottieCoder // for the coder, if we want to bring it back
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -33,11 +33,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         window.setFrameAutosaveName("Main Window")
         window.contentView = NSHostingView(rootView: contentView)
         window.makeKeyAndOrderFront(nil)
-        
-        //UserDefaults.standard.set(false, forKey: "didLaunchBefore")
+
+        // UserDefaults.standard.set(false, forKey: "didLaunchBefore")
         if !UserDefaults.standard.bool(forKey: "didLaunchBefore") {
             UserDefaults.standard.set(true, forKey: "didLaunchBefore")
-            
+
             print("didLaunchBefore = false")
             let helpView = HelpView()
             helpWindow = NSWindow(
@@ -47,53 +47,52 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             helpWindow.center()
             helpWindow.contentView = NSHostingView(rootView: helpView)
             helpWindow.makeKeyAndOrderFront(nil)
-        }
-        else {
+        } else {
             print("didLaunchBefore = true")
         }
-        
+
         // Enable to start with music
-        //JonsMusicPlayer.sharedInstance.toggle_on_off()
-                
-        AppCenter.start(withAppSecret: "c9e9af8c-92d6-4654-9452-313c96f20102", services:[
+        // JonsMusicPlayer.sharedInstance.toggle_on_off()
+
+        AppCenter.start(withAppSecret: "c9e9af8c-92d6-4654-9452-313c96f20102", services: [
           Analytics.self,
           Crashes.self
         ])
-        
+
         var runs = UserDefaults.standard.integer(forKey: UserDefaultsConstants.run_count)
         runs += 1
         UserDefaults.standard.set(runs, forKey: UserDefaultsConstants.run_count)
         print("runs = \(runs)")
-        
-        Analytics.trackEvent("Run Count", withProperties: ["count" : "\(runs)"])
+
+        Analytics.trackEvent("Run Count", withProperties: ["count": "\(runs)"])
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
     }
-    
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
 
     func application(_ sender: NSApplication, openFiles filenames: [String]) {
-        
+
         print("opening files...")
     }
-    
+
     @IBAction func music_toggle(_ sender: Any) {
         print("music toggle")
         JonsMusicPlayer.sharedInstance.toggle_on_off()
     }
-    
+
     @IBAction func pause_toggle(_ sender: Any) {
-        
+
         // notify file erasing to STOP -- maybe we support pausing in the future...
         NotificationCenter.default.post(name: .init("pause_toggle"), object: nil)
     }
-    
+
     @IBAction func help_toggle(_ sender: Any) {
-        
+
         let helpView = HelpView()
         helpWindow = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 800, height: 600),
@@ -104,16 +103,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         helpWindow.contentView = NSHostingView(rootView: helpView)
         helpWindow.makeKeyAndOrderFront(nil)
     }
-    
+
     @IBAction func stats_toggle(_ sender: Any) {
-        
+
         var statsView = StatsView()
-        
+
         // load data
         statsView.files_destroyed = UserDefaults.standard.integer(forKey: UserDefaultsConstants.files_destroyed)
         statsView.megabytes_destroyed = UserDefaults.standard.integer(forKey: UserDefaultsConstants.megabytes_destroyed)
         statsView.visits = UserDefaults.standard.integer(forKey: UserDefaultsConstants.run_count)
-        
+
         statsWindow = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 480, height: 300),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
@@ -123,12 +122,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statsWindow.contentView = NSHostingView(rootView: statsView)
         statsWindow.makeKeyAndOrderFront(nil)
     }
-    
-    @IBAction func options_toggle(_ sender: Any) {
-        
-        
-        
-    }
-    
-}
 
+    @IBAction func options_toggle(_ sender: Any) {
+
+    }
+
+}

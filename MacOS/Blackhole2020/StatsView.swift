@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct StatsView: View {
-    
+
     var files_destroyed: Int = 0
     var megabytes_destroyed: Int = 0
     var visits: Int = 0
-    
+
     var body: some View {
-        
+
         VStack {
 //            Text("""
 //                    Stats:
@@ -31,9 +31,9 @@ struct StatsView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color.white)
                 .multilineTextAlignment(.center)
-                //.position(x: 0, y: 0)
-                //.frame(width: 200, height: 20, alignment: .center)
-            
+                // .position(x: 0, y: 0)
+                // .frame(width: 200, height: 20, alignment: .center)
+
             HStack {
                 Text("""
                         Files Destroyed: \(files_destroyed)
@@ -42,11 +42,11 @@ struct StatsView: View {
                     .fontWeight(.medium)
                     .foregroundColor(Color.white)
                     .multilineTextAlignment(.leading)
-                    //.position(x: 20, y: 20)
-                    //.frame(width: 150, height: 20)
-                
+                    // .position(x: 20, y: 20)
+                    // .frame(width: 150, height: 20)
+
             }
-            
+
             HStack {
                 Text("""
                         Megabytes Destroyed: \(megabytes_destroyed)
@@ -55,10 +55,10 @@ struct StatsView: View {
                     .fontWeight(.medium)
                     .foregroundColor(Color.white)
                     .multilineTextAlignment(.leading)
-                    //.position(x: 20, y: 20)
-                    //.frame(width: 150, height: 20)
+                    // .position(x: 20, y: 20)
+                    // .frame(width: 150, height: 20)
             }
-            
+
             Text("""
                     Visits To The Blackhole: \(visits)
                     """)
@@ -66,7 +66,7 @@ struct StatsView: View {
                 .fontWeight(.medium)
                 .foregroundColor(Color.white)
                 .multilineTextAlignment(.leading)
-            
+
             Text("""
 
                     From Code With Love
