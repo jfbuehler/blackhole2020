@@ -7,22 +7,23 @@ Blackhole is an open-source secure file eraser. Make your files vanish in style!
 
 ## About
 
-I designed this project in my spare time...so it is as such -- no promises of features or perfection -- but if it brings more joy to the internet, then I am glad.
+I designed this project in my spare time...so it is as such -- no promises of features or perfection -- but if it brings more joy to the world, then I am glad. It certainly brings me joy! 
+
 That said, I strive to keep the core functionality bug-free and working solid. 
-To date the secure erasure has been tested on Terabytes of my own SSD data and looks good on MacOS. 
+To date on MacOS the secure erasure has been tested on Terabytes of my own SSD data.
 
-Windows is still a WIP (work in progress) and needs some more loving to keep up. 
+Windows, however, is still a major work-in-progress and needs some more loving to keep up. IMO this is a testament to the major differences in developing for the two operating systems in this 3rd decade of the 21st century -- 2022. 
 
-I use this project as a practice ground for best-practices, coding standards, learning new techniques, and expressing joy. 
+I use this project as a practice ground for best-practices, coding standards, learning new techniques, and expressing plain ol' coding joy. 
 So, its my hope that while it may be small in scope, the code is tight and well designed, bug free (mostly) and achieves its purpose with grace.
-That said, if you do stumble upon this repo, you are free to explore and suggest or fork and never talk to me :) Whatever your heart desires! 
-May this project and the way I've implemented certain things inspire you to greater heights. 
+That said, if you do stumble upon this repo, you are free to explore and suggest or fork it and never talk to me :) Whatever your heart desires.
+May this project and the way I've implemented things inspire you to great places!
 
 Future growth includes:
-- Adding tests
+- Adding automated tests
 - Adding localizations 
-- Adding new features as they become interesting
-
+- Sprucing up the animations
+- Maybe Windows catches up to MacOS, one day..
 
 ## Installation
 
@@ -36,12 +37,31 @@ Be sure to have cocoapods installed on your system.
 pod install
 ```
 
-Then build the Xcode workspace project for the MacOS target. 
+Then build the Xcode workspace project for the MacOS target. Yea...it's that simple! 
+
+It is tested working well on both x86 Intel Macs and M1 Apple Silicon. 
 
 ## Windows
 
-```python
-TBD!! It's coming soon :)
+```bash
+
+Windows.... is quite the fiasco. UWP file access makes everything challenging. Hopefully this project is still helpful in all its flawed beauty. 
+
+You will need Visual Studio 2019+ and UWP C# frameworks installed. Open the solution file Blackhole.sln and see if it builds in Debug mode. 
+
+Currently, there's no tested working installer or Release build (tho it may work anyway). 
+
+UWP ended up being a big disaster in regards to file system access. It has taken so much time, effort, frustration, and still refused to work.
+You will notice the Windows app lacks most of the nice featurse of the MacOS side (file counters, progress bars, moving animations, etc..)
+That's how much time got eaten up by the UWP "blackhole" >< 
+
+It's hard to put out not-great code into the world, even when it's free and a side project. BUT I didn't design this to be hidden away in a cave somewhere! 
+
+The Windows app *does* work, and it also shows a lot of ways that don't (commented out code heavy). 
+
+There are a few paths forward (falling back to C# WPF to name the first), it is just a bit more complex than originally desired. Such is life, yes? :) 
+
+
 ```
 
 ## Contributing
