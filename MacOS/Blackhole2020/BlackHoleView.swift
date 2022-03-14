@@ -10,7 +10,9 @@ import AVKit
 import Lottie
 import AppCenterAnalytics
 
+// TODO: -- would be good to refactor and remove these
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 let DISABLE_ERASE = true
 let DEBUG_ERASE = false  // enable to fake erasing (and save your real files)
