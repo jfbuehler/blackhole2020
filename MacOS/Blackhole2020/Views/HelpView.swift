@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Provide various help texts about using the app
 struct HelpView: View {
 
     let contact_email = "help@blackhole2020.app"

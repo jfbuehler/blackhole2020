@@ -7,10 +7,12 @@
 
 import SwiftUI
 
+/// Basic stats from using the app can be displayed here
 struct StatsView: View {
 
     var files_destroyed: Int = 0
     var megabytes_destroyed: Int = 0
+    /// Number of times the app has been launched
     var visits: Int = 0
 
     var body: some View {
