@@ -46,6 +46,8 @@
                 <lottie:LottieVisualSource UriSource="ms-appx:///Black_Hole_Rotation.json"/>
             </muxc:AnimatedVisualPlayer>
 
+            <Image x:Name="imgFile" />
+
             <TextBox Text="File Counter ------" CornerRadius="5" TextAlignment="Center" Padding="0,15,0,0" Margin="150,0,0,0"
                      BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" Foreground="white" Width="250"
                      FontFamily="Consolas" IsReadOnly="True" x:Name="txtFileCounter" HorizontalAlignment="Left"/>
@@ -159,6 +161,8 @@
         </StackPanel>-->
         <StackPanel x:Name="stkTest" >
             <!--AnimatedVisualPlayer with AutoPlay-->
+
+            <TextBlock x:Name="txtFileName" Text="Test file file file" TextAlignment="Center" />
 
         </StackPanel>
 
