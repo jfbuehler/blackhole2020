@@ -52,9 +52,9 @@
                      BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" Foreground="white" Width="250"
                      FontFamily="Consolas" IsReadOnly="True" x:Name="txtFileCounter" HorizontalAlignment="Left"/>
 
-            <TextBox Text="Securely Erased" CornerRadius="5" TextAlignment="Center" Padding="0,15,0,0" Margin="0,0,150,0"
+            <TextBox x:Name="txtFileBytes" Text="999 bytes" CornerRadius="5" TextAlignment="Center" Padding="0,15,0,0" Margin="0,0,150,0"
                      BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" Foreground="white" Width="250"
-                     FontFamily="Consolas" IsReadOnly="True" x:Name="txtFilesErased" HorizontalAlignment="Right"/>
+                     FontFamily="Consolas" IsReadOnly="True" HorizontalAlignment="Right"/>
 
             <!--<ListView Grid.Row="1" x:Name="listFiles" ItemsSource="{Binding Source={StaticResource FilesObvCollection}}">
                 <ListView.ItemTemplate>

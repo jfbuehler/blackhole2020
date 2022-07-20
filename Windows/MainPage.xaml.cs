@@ -58,6 +58,8 @@ namespace Blackhole
 
         static int num_erase_tasks_running = 0;
 
+        static UInt64 bytes_erased = 0;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -77,10 +79,18 @@ namespace Blackhole
         {
             if (ApiInformation.IsApiContractPresent("Windows.ApplicationModel.FullTrustAppContract", 1, 0))
             {
-                await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();                
+                await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
+
+                App.AppServiceConnected += ConnectionEstablished;
+                //App.Connection.RequestReceived += AppServiceConnection_RequestReceived;
             }
         }
-        
+
+        private void ConnectionEstablished(object sender, AppServiceTriggerDetails td)
+        {
+            App.Connection.RequestReceived += AppServiceConnection_RequestReceived;
+        }
+
 
         // another theory about how we can run ffmpeg on the cmd line
         // good for next time!
@@ -111,6 +121,51 @@ namespace Blackhole
         //    var ms = new MemoryStream(File.ReadAllBytes(path));
         //    return (Bitmap)Image.FromStream(ms);
         //}
+
+        // How to handle 2-way traffic back from WPF, if desired
+        private async void AppServiceConnection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
+        {
+            try
+            {                
+                string status = args.Request.Message["Status"] as string;
+
+                // TODO -- upgrade to enum soon
+                switch (status)
+                {
+                    case "Writing":
+
+                        string file_reply = args.Request.Message["File"] as string;
+                        ulong written_bytes = (ulong)args.Request.Message["Written"];
+                        //Debug.WriteLine("WPF sent us a message Status=" + status + " with file=" + file_reply + " and written_bytes=" + written_bytes);            
+
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                        {
+                            txtFileName.Text = file_reply;
+                            bytes_erased += written_bytes;
+                            txtFileBytes.Text = bytes_erased + " bytes";
+                        });
+
+                        break;
+
+                    case "Erased":
+                        
+                        break;
+
+                    case "Complete":
+                        files_erasing = false;
+                        num_erase_tasks_running -= 1;
+                        break;
+                }
+
+                ValueSet response = new ValueSet();
+                response.Add("Status", "ACK");
+                await args.Request.SendResponseAsync(response);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("argh we died -- " + e.ToString());
+            }
+        }
 
         /// <summary>
         /// Main method for handling incoming file / folders
@@ -166,13 +221,43 @@ namespace Blackhole
                                 StorageFile file = item as StorageFile;
                                 Debug.WriteLine("It's a file => " + file.Path);
 
-                                // TODO cleanup soon... it's working!!
+                                //bool isWpfErasing = true;
+
+                                // Make a request to the WPF Service to start erasure
                                 ValueSet request = new ValueSet();
                                 request.Add("folder_path", file.Path);
                                 AppServiceResponse response = await App.Connection.SendMessageAsync(request);
 
-                                Debug.WriteLine("WPF replied with msg = " + response.Message.ToString());
-                                
+                                // TODO -- perhaps receive the response and reflect UI ?
+                                //files_erasing = true;
+                                // probably want to move this here once things are up and running
+
+                                // -------------------------
+                                // try #1 did this
+                                //while (isWpfErasing)
+                                //{
+
+
+                                //    string file_reply = response.Message["File"] as string;
+                                //    string status = response.Message["Status"] as string;
+                                //    long written_bytes = (long)response.Message["Written"];
+                                //    Debug.WriteLine("WPF replied with file=" + file_reply + " and written_bytes=" + written_bytes);
+
+                                //    if (status == "Erased")
+                                //        isWpfErasing = false;
+                                //        // could also just write "break" here too, arguably
+                                //}
+
+                                // -------------------------
+
+                                // but we want to move into another handler loop instead
+
+
+                                //foreach (string key in response.Message.Keys)
+                                //{
+                                //    Debug.WriteLine(key + " = " + response.Message[key] + "\r\n");
+                                //}
+
 
                                 //
                                 // try to erase it
@@ -266,8 +351,8 @@ namespace Blackhole
                         }                   
                     }
 
-                    files_erasing = false;
-                    e.Handled = true;
+                    //files_erasing = false;
+                    //e.Handled = true;
                     
                     //
                     // This is how we would use a WPF process to interact with the file system
@@ -287,10 +372,10 @@ namespace Blackhole
             }
             catch (Exception ee)
             {
-                Debug.WriteLine("argh we done died -- " + ee.ToString());
+                Debug.WriteLine("argh we died -- " + ee.ToString());
             }
 
-            num_erase_tasks_running -= 1;
+            //num_erase_tasks_running -= 1;
 
             e.Handled = true;
         }
@@ -489,24 +574,7 @@ namespace Blackhole
             }
         }
 
-        #region extra code
-
-        // How to handle 2-way traffic back from WPF, if desired
-        //private async void AppServiceConnection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
-        //{
-        //    double d1 = (double)args.Request.Message["D1"];
-        //    double d2 = (double)args.Request.Message["D2"];
-        //    double result = d1 + d2;
-
-        //    ValueSet response = new ValueSet();
-        //    response.Add("RESULT", result);
-        //    await args.Request.SendResponseAsync(response);
-
-        //    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-        //    {
-        //        Debug.WriteLine(string.Format("Request: {0} + {1} --> Response = {2}\r\n", d1, d2, result));
-        //    });
-        //}
+        #region extra code        
 
         /// <summary>
         /// An attempt at a file query method using the Storage API, but it fails to deliver enough performance
