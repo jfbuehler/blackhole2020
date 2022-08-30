@@ -80,7 +80,7 @@ namespace Blackhole_WPF
             }
             catch (Exception e)
             {
-                MessageBox.Show("Unexpected exception on the outer loop => " + e.ToString());
+                MessageBox.Show("Unexpected exception on the outer loop, on path=" + path + "  exception=> " + e.ToString());
             }            
         }
 

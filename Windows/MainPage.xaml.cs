@@ -56,9 +56,7 @@ namespace Blackhole
         /// </summary>
         static bool files_erasing = false;
 
-        static int num_erase_tasks_running = 0;
-
-        static UInt64 bytes_erased = 0;
+        static int num_erase_tasks_running = 0;        
 
         public MainPage()
         {
@@ -66,10 +64,47 @@ namespace Blackhole
             m_page = this;
             FilesObvCollection = this.Resources["FilesObvCollection"] as ObFileList;
 
+            txtFileCounter.Text = "0";
+            txtFileBytes.Text = "0";
+            txtSession.Text = "0";
+
             ApplicationView.PreferredLaunchViewSize = new Size(1200, 1000);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-                        
+            
             launch_wpf();  // MUST run with the "Package" as the Startup Project if this is enabled
+
+            load_basic_settings();
+        }
+
+        private void load_basic_settings()
+        {
+            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            // load a setting that is local to the device
+
+            var files_erased = localSettings.Values["files_erased"];
+            if (files_erased != null)
+                Core.files_erased = (ulong)files_erased;
+
+            var total_bytes_erased = localSettings.Values["total_bytes_erased"];
+            if (total_bytes_erased != null)
+                Core.total_bytes_erased = (ulong)total_bytes_erased;
+
+            var total_sessions = localSettings.Values["total_sessions"];
+            if (total_sessions != null)
+                Core.total_sessions = (ulong)total_sessions;
+            
+            txtFileCounter.Text = Core.files_erased.ToString();
+            txtTotalFileBytes.Text = Core.total_bytes_erased.ToString();
+            txtSession.Text = Core.total_sessions.ToString();
+
+            // load a composite setting
+            //Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["FontInfo"];
+            //if (composite != null)
+            //{
+            //    String fontName = composite["Font"] as string;
+            //    int fontSize = (int)composite["FontSize"];
+            //}
         }
 
         /// <summary>
@@ -80,9 +115,9 @@ namespace Blackhole
             if (ApiInformation.IsApiContractPresent("Windows.ApplicationModel.FullTrustAppContract", 1, 0))
             {
                 await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
-
+                
                 App.AppServiceConnected += ConnectionEstablished;
-                //App.Connection.RequestReceived += AppServiceConnection_RequestReceived;
+                
             }
         }
 
@@ -141,14 +176,20 @@ namespace Blackhole
                         await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                         {
                             txtFileName.Text = file_reply;
-                            bytes_erased += written_bytes;
-                            txtFileBytes.Text = bytes_erased + " bytes";
+                            Core.total_bytes_erased += written_bytes;
+                            txtFileBytes.Text = String.Format("{0:n0}", Core.total_bytes_erased); //bytes_erased.ToString("{0:n0}");
                         });
 
                         break;
 
                     case "Erased":
-                        
+
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                        {
+                            Core.files_erased += 1;
+                            txtFileCounter.Text = Core.files_erased.ToString();
+                        });                        
+
                         break;
 
                     case "Complete":

@@ -107,6 +107,8 @@ namespace Blackhole
 
             Debug.WriteLine("Shutting down WPF...");
 
+            Core.SaveBasicSettings();
+
 
             deferral.Complete();
         }
