@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Blackhole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Tiny Bits of Joy, LLC")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Blackhole")]
-[assembly: AssemblyCopyright("Copyright 2022 © Tiny Bits of Joy, LLC")]
+[assembly: AssemblyCopyright("Copyright 2022 © Jonathan Buehler")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
