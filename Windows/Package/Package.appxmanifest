@@ -8,13 +8,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="4f9215fa-d2e7-4b49-9119-301f72e48403"
-    Publisher="CN=Jon"
+    Name="Blackhole-4f9215fa"
+    Publisher="CN=Blackhole2020, O=Tiny Bits of Joy, C=US"
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Package</DisplayName>
-    <PublisherDisplayName>Jon</PublisherDisplayName>
+    <DisplayName>Blackhole2020</DisplayName>
+    <PublisherDisplayName>Jonathan Buehler</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -32,8 +32,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Package"
-        Description="Package"
+        DisplayName="Blackhole 2020"
+        Description="Blackhole securely erases your files!"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">
@@ -41,20 +41,13 @@
         <uap:SplashScreen Image="Images\SplashScreen.png" />
       </uap:VisualElements>
       <Extensions>
+        <uap:Extension Category="windows.appService">
+            <uap:AppService Name="BlackholeWPF" />
+           </uap:Extension>
          <desktop:Extension
            xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
            Category="windows.fullTrustProcess"
-           Executable="Blackhole_WPF/Blackhole_WPF.exe" />
-           <!--<uap:Extension Category="windows.appExecutionAlias"
-                    Executable="Blackhole_WPF/Blackhole_WPF.exe"
-                    EntryPoint="Windows.FullTrustApplication">
-              <uap:AppExecutionAlias>
-                <desktop:ExecutionAlias Alias="Blackhole_WPF.exe" />
-              </uap:AppExecutionAlias>
-            </uap:Extension>-->
-           <!--<uap:Extension Category="windows.appService">
-            <uap:AppService Name="SampleInteropService" />
-           </uap:Extension>-->
+           Executable="Blackhole_WPF\Blackhole_WPF.exe" />        
         </Extensions>
     </Application>
   </Applications>

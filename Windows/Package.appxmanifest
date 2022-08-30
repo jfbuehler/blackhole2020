@@ -9,14 +9,14 @@
 
   <Identity
     Name="77f4c00e-b5a8-4e4e-bfff-c14ae0b83dba"
-    Publisher="CN=Jon"
+    Publisher="CN=Blackhole2020, O=Tiny Bits of Joy, C=US"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="77f4c00e-b5a8-4e4e-bfff-c14ae0b83dba" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Blackhole</DisplayName>
-    <PublisherDisplayName>Jon</PublisherDisplayName>
+    <DisplayName>Blackhole2020</DisplayName>
+    <PublisherDisplayName>Jonathan Buehler</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
