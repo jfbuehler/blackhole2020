@@ -35,7 +35,7 @@
         </StackPanel>
         <Grid>
             <Grid.RowDefinitions>
-                <!--<RowDefinition />  Condense views for now, so remove top row --> 
+                <!--<RowDefinition />  Condense views for now, so remove top row -->
                 <RowDefinition />
             </Grid.RowDefinitions>
 
@@ -51,11 +51,16 @@
             <Border BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" CornerRadius="5" Margin="10" Padding="5"
                     HorizontalAlignment="Left" VerticalAlignment="Top">
                 <StackPanel IsTapEnabled="False" Canvas.ZIndex="10">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="FontSize" Value="18"/>
+                        </Style>
+                    </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
-
+                        
                         <TextBox Text="Files: "
                                  CornerRadius="5" TextAlignment="Left" 
-                                 Foreground="white" Width="250"
+                                 Foreground="white" Width="300"
                                 FontFamily="Consolas" IsReadOnly="True" HorizontalAlignment="Left"/>
                         <TextBlock x:Name="txtFileCounter" Margin="-100,0,10,0" Text="100" Foreground="White"
                                    VerticalAlignment="Center" TextAlignment="Right"/>
@@ -63,170 +68,95 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
-                        <TextBox Text="Bytes: " 
-                                 CornerRadius="5" TextAlignment="Left" Width="250"
+                        <TextBox Text="Session Bytes: " 
+                                 CornerRadius="5" TextAlignment="Left" Width="300"
                                  Foreground="white" FontFamily="Consolas" IsReadOnly="True" />
-                        <TextBlock x:Name="txtFileBytes" Margin="-100,0,10,0" Text="100" Foreground="White"
+                        <TextBlock x:Name="txtSessionFileBytes" Margin="-170,0,10,0" Text="100,000,000.000" Foreground="White"
                                    VerticalAlignment="Center" TextAlignment="Right"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
                         <TextBox Text="Total Bytes: " 
-                                 CornerRadius="5" TextAlignment="Left" Width="250"
+                                 CornerRadius="5" TextAlignment="Left" Width="300"
                                  Foreground="white" FontFamily="Consolas" IsReadOnly="True" />
                         <TextBlock x:Name="txtTotalFileBytes" Margin="-100,0,10,0" Text="100" Foreground="White"
                                    VerticalAlignment="Center" TextAlignment="Right"/>
                     </StackPanel>
-                    
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
                         <TextBox Text="Sessions: " 
-                                 CornerRadius="5" TextAlignment="Left" Width="250"
+                                 CornerRadius="5" TextAlignment="Left" Width="300"
                                  Foreground="white" FontFamily="Consolas" IsReadOnly="True" />
                         <TextBlock x:Name="txtSession" Margin="-100,0,10,0" Text="100" Foreground="White"
                                    VerticalAlignment="Center" TextAlignment="Right"/>
                     </StackPanel>
 
-                    
+
                 </StackPanel>
             </Border>
-
-
-            <!--<TextBox x:Name="txtFileBytes" Text="999 bytes" CornerRadius="5" TextAlignment="Center" Padding="0,15,0,0" Margin="0,0,150,0"
-                     BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" Foreground="white" Width="250"
-                     FontFamily="Consolas" IsReadOnly="True" HorizontalAlignment="Right"/>-->
-
-            <!--<ListView Grid.Row="1" x:Name="listFiles" ItemsSource="{Binding Source={StaticResource FilesObvCollection}}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}" Foreground="Wheat" Margin="0,0,0,0" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>-->
 
             <Canvas Grid.Row="2" x:Name="cnvFiles" Width="500" Height="500" Margin="0,0,0,0">
 
             </Canvas>
-
-            <!--<Canvas Grid.Row="2" x:Name="test_canvas">-->
-
-            <!--<local:File Width="500" Height="500" Canvas.Top="40" Canvas.Left="795"/>-->
-
-            <!--<muxc:AnimatedVisualPlayer Width="250" Height="200" Canvas.Top="540" Canvas.Left="795">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="250" Height="200" Canvas.Top="340" Canvas.Left="795">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="250" Height="200" Canvas.Top="450" Canvas.Left="822">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="250" Height="200" Canvas.Top="500" Canvas.Left="800">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="300" Height="200" Canvas.Top="500" Canvas.Left="800">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="300" Height="200" Canvas.Top="400" Canvas.Left="800">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="300" Height="200" Canvas.Top="300" Canvas.Left="800">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-
-
-                <muxc:AnimatedVisualPlayer Width="150" Height="200" Canvas.Top="300" Canvas.Left="800">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="150" Height="200" Canvas.Top="315" Canvas.Left="805">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="150" Height="200" Canvas.Top="330" Canvas.Left="800">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="150" Height="200" Canvas.Top="350" Canvas.Left="805">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="150" Height="200" Canvas.Top="370" Canvas.Left="800">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>
-                <muxc:AnimatedVisualPlayer Width="150" Height="200" Canvas.Top="390" Canvas.Left="805">
-                    -->
-            <!--LottieVisualSource with JSON UriSource-->
-            <!--
-                    <lottie:LottieVisualSource UriSource="ms-appx:///File_Disintegration_toLeft.json" />
-                </muxc:AnimatedVisualPlayer>-->
-            <!--</Canvas>-->
         </Grid>
-        <!--<StackPanel>
-            <TextBox Width="200"></TextBox>
-        </StackPanel>-->
         <StackPanel x:Name="stkTest" >
-            <!--AnimatedVisualPlayer with AutoPlay-->
-
-            <TextBlock x:Name="txtFileName" Text="Test file file file" TextAlignment="Center" />
-
+            <TextBlock x:Name="txtFileName" Text="Test file file file" TextAlignment="Center"  FontSize="20" />
         </StackPanel>
+        
 
-        <Grid Width="500">
+        <Grid >
+
+            <Border BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" CornerRadius="5" Margin="10" Padding="5"
+                    HorizontalAlignment="Center" VerticalAlignment="Top">
+                <StackPanel IsTapEnabled="False" Canvas.ZIndex="10">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock" >
+                            <Setter Property="FontSize" Value="18"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
+
+                        <TextBox Text="File list " x:Name="txtFileList"
+                             CornerRadius="5" TextAlignment="Left" 
+                             Foreground="white" Width="500" Height="100"
+                             FontFamily="Consolas" FontSize="12"
+                             AcceptsReturn="True" TextWrapping="Wrap"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             IsReadOnly="True" HorizontalAlignment="Left"/>
+                        <!--<TextBlock x:Name="txt" Margin="-100,0,10,0" Text="100" Foreground="White"
+                                   VerticalAlignment="Center" TextAlignment="Right"/>-->
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--<muxc:AnimatedVisualPlayer x:Name="coffee1" Width="150" Margin="0,0,0,0" HorizontalAlignment="Left" AutoPlay="False">
+                <lottie:LottieVisualSource UriSource="ms-appx:///coffee.json"/>
+            </muxc:AnimatedVisualPlayer>
+
+            <muxc:AnimatedVisualPlayer x:Name="coffee2" Width="150" Margin="0,0,0,0" HorizontalAlignment="Right" AutoPlay="False">
+                <lottie:LottieVisualSource UriSource="ms-appx:///coffee.json"/>
+            </muxc:AnimatedVisualPlayer>-->
 
             <!-- try to make an opacity gradient -->
 
-
-            <ListBox x:Name="lbFileList"  ItemsSource="{Binding Source={StaticResource FilesObvCollection}}">
+            <!--<ListBox x:Name="lbFileList"  ItemsSource="{Binding Source={StaticResource FilesObvCollection}}">
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <!-- This is how we will display each received status message in the listbox-->
+                            --><!-- This is how we will display each received status message in the listbox--><!--
                             <TextBlock Name="txtFileName" VerticalAlignment="Bottom">
-                                <!--<TextBlock.Text>
+                                --><!--<TextBlock.Text>
                                     --><!-- the converter allows custom formatting --><!--
                                     <MultiBinding Converter="{StaticResource convertStatus}">
                                         <Binding Path="ReceivedTime"/>
                                         <Binding Path="MsgSequenceNum"/>
                                     </MultiBinding>
-                                </TextBlock.Text>-->
+                                </TextBlock.Text>--><!--
                             </TextBlock>
                         </StackPanel>
-                        <!-- trigger section lets us change display based on the contents of the Status Message during run time -->
+                        --><!-- trigger section lets us change display based on the contents of the Status Message during run time -->
                         <!--<DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding Path=StatusError}" Value="0">
                                 <Setter TargetName="imgStatus" Property="Source" Value="graphics/icons/ui/status_good.png"/>
@@ -234,10 +164,10 @@
                             <DataTrigger Binding="{Binding Path=StatusError}" Value="1">
                                 <Setter TargetName="imgStatus" Property="Source" Value="graphics/icons/ui/status_error.png"/>
                             </DataTrigger>
-                        </DataTemplate.Triggers>-->
+                        </DataTemplate.Triggers>--><!--
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
+            </ListBox>-->
 
             <Rectangle Width="500" Margin="0,0,0,0">
                 <Rectangle.Fill>

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 //using Windows.System.Threading;
@@ -50,6 +51,12 @@ namespace Blackhole
         {
             get { return (int)GetValue(LeftProperty); }
             set { SetValue(LeftProperty, value); }
+        }
+
+        public void Play()
+        {
+            // no need to await, we want the animation to go on playing
+            animation_visual_player.PlayAsync(0, 100, false);
         }
 
         // better idea...don't need this anymore
@@ -102,7 +109,7 @@ namespace Blackhole
         public static readonly DependencyProperty LeftProperty =
             DependencyProperty.Register("Left", typeof(int), typeof(Int32), new PropertyMetadata(0));
 
-        public void SetDirection(int x, int y, int width, int height)
+        public async Task SetDirection(int x, int y, int width, int height)
         {
             string json = "ms-appx:///";
             var dir = FileDisintegrationDirection.TopLeft;
@@ -143,7 +150,7 @@ namespace Blackhole
             }
 
             json += ".json";
-            lottie_disintegrate.SetSourceAsync(new Uri(json));
+            await lottie_disintegrate.SetSourceAsync(new Uri(json));
 
             //Debug.WriteLine("SetDirection - " + dir + " x=" + x + " y=" + y);
 
@@ -175,14 +182,15 @@ namespace Blackhole
         private async void handle_is_animated_visual_loaded(DependencyObject sender, DependencyProperty prop)
         {
             var is_loaded = (bool)sender.GetValue(prop);
-            //Debug.WriteLine("is visual loaded = " + is_loaded);
+            //Debug.WriteLine("is visual loaded = " + is_loaded);            
 
             // TODO -- can put animation delay here in background thread that invokes the UI to call play
             if (is_loaded)
             {
                 animation_time_secs = animation_visual_player.Duration.TotalSeconds;
+                
                 //Debug.WriteLine("Animating...time=" + animation_time_secs);
-                await animation_visual_player.PlayAsync(0, 1, false);               
+                //await animation_visual_player.PlayAsync(0, 1, false);               
             }            
         }
 

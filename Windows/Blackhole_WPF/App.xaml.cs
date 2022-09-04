@@ -21,10 +21,30 @@ namespace Blackhole_WPF
     {
         static AppServiceConnection connection;
 
+        /// <summary>
+        ///  Enable to see verbose output
+        /// </summary>
+        bool debug_enabled = true;
+
+        // Allocate erasure patterns only once for efficiency
+        static int write_size = 1024 * 4;
+        static byte[] byte_pattern = new byte[write_size];
+        static byte[] pattern = { 0xc0, 0xff, 0xee };
+
         public App() : base()
         {
             // if unit testing and starting up as debug project, you need to disable the service calls
             InitializeAppServiceConnection();
+
+            // initialize pattern once 
+            // per Stackoverflow this is the most efficient method, it lets the JIT compiler optimize as it sees fit
+            // rather than try to use any fancier later version operators (like lambdas)
+            for (int i = 0; i < write_size; i++)
+            {
+                byte_pattern[i] = pattern[i % pattern.Length];
+                //var debug = String.Format("#byte[{0}] = {1:X}", i, byte_pattern[i]);
+                //Debug.WriteLine(debug);
+            }
 
             //test_debugging();
         }
@@ -32,35 +52,54 @@ namespace Blackhole_WPF
         private void test_debugging()
         {
             //string path = "E:\\Program Files (x86)";
-            //string path = "E:\\Program Files (x86)\\Adobe\\Acrobat Reader DC\\Reader\\AcroApp\\ENU";
-            string path = "J:\\Python27\\Lib";
+            string path = "E:\\Users\\Jon\\Downloads\\acrobat9";
+            //string path = "J:\\Python27\\include";
 
-            //eraser_gun(path);
+            Debug.WriteLine("eraser_gun on path=" + path);
+            eraser_gun(path, null);
 
             Application.Current.Shutdown();
         }
 
-        private async void eraser_gun(string path, AppServiceRequestReceivedEventArgs args)
-        {          
+        private async Task eraser_gun(string path, AppServiceRequestReceivedEventArgs args)
+        {
+            ValueSet request_response = new ValueSet();
+            request_response.Add("Status", "");
+            request_response.Add("Detail", "");
+            request_response.Add("File", "");
+
             try
             {
                 // check if folder, or if it's a single dropped file
                 if (File.Exists(path))
                 {
-                    secure_file_erase(path, args);
-
+                    if (debug_enabled)
+                    {
+                        request_response["Status"] = "file.exists";
+                        Debug.WriteLine("file.exists");
+                        if (connection != null) await connection.SendMessageAsync(request_response);
+                    }                    
+                    await secure_file_erase(path, args);
                 }
                 else
                 {
-                    // this function appears resilient to folders with access exceptions
+                    if (debug_enabled)
+                    {
+                        request_response["Status"] = "pre list_files";
+                        Debug.WriteLine("pre list_files");
+                        if (connection != null) await connection.SendMessageAsync(request_response);
+                    }
+
                     var files = list_files(path);
+                    request_response["Status"] = "post list_files -- found " + files.Count + " files";
+                    if (connection != null) await connection.SendMessageAsync(request_response);
 
                     foreach (string file in files)
                     {
                         try
                         {
                             Debug.WriteLine("erasing => " + file);
-                            secure_file_erase(file, args);
+                            await secure_file_erase(file, args);
                         }
                         catch (UnauthorizedAccessException ae)
                         {
@@ -68,43 +107,60 @@ namespace Blackhole_WPF
                             Debug.WriteLine("access violation on this file! => " + ae.ToString());
                             MessageBox.Show("access violation on this file! => " + ae.ToString());
                         }
+                        catch (Exception ee)
+                        {
+                            request_response["Status"] = "Warning";
+                            request_response["Detail"] = ee.ToString();
+                            request_response["File"] = file;
+                            if (connection != null) await connection.SendMessageAsync(request_response);
+                        }
                     }
 
                     // when all files are done being deleted, we can go back and erase the folder trees
+                    Debug.WriteLine("Directory.Delete");
                     Directory.Delete(path, true); 
-                }
-
-                ValueSet request = new ValueSet();
-                request.Add("Status", "Complete");
-                var reply = await connection.SendMessageAsync(request);
+                }                
+                
+                request_response["Status"] = "Complete";
+                if (connection != null) await connection.SendMessageAsync(request_response);
+                
             }
             catch (Exception e)
             {
                 MessageBox.Show("Unexpected exception on the outer loop, on path=" + path + "  exception=> " + e.ToString());
+
+                // Send a message back so the UWP app can respond accordingly
+                request_response["Status"] = "Exception";
+                request_response["Detail"] = e.ToString();
+                if (connection != null) await connection.SendMessageAsync(request_response);
             }            
         }
 
-        private async void secure_file_erase(string file_path, AppServiceRequestReceivedEventArgs args)
+        private async Task secure_file_erase(string file_path, AppServiceRequestReceivedEventArgs args)
         {
             try
             {
                 // TODO -- could upgrade this to use pseudo-randomized arrays, but not necessary
                 // slightly larger pattern increase speed (by decreasing excessive disk write calls)
                 // can play with this on different file sizes as needed
-                byte[] byte_pattern = { 0xc0, 0xff, 0xee, 0xc0, 0xff, 0xee, 0xc0, 0xff, 0xee, 0xc0, 0xff, 0xee, 0xc0, 0xff, 0xee, 0xc0, 0xff, 0xee, 0xc0, 0xff, 0xee };
                 UInt64 byte_offset = 0;
 
                 using (FileStream file = File.OpenWrite(file_path))
                 {                    
-                    //Debug.WriteLine("Writing to file size -- " + file_basic_props.Size + " using pattern size = " + byte_pattern.Length);
+                    Debug.WriteLine("Writing to file size -- " + file.Length + " using pattern size = " + byte_pattern.Length);
+
                     while (byte_offset < (UInt64)file.Length)
                     {
-                        // per the API method "Write", this call advances the pointer for us so DONT pass the offset to offset                        
-                        file.Write(byte_pattern, 0, byte_pattern.Length);
+                        int length_to_write = byte_pattern.Length;
 
-                        UInt64 byte_mod = byte_offset % (UInt64)(byte_pattern.Length * 10000); // ~210kb
-                        //if (byte_mod == byte_pattern.Length)
-                        //    Debug.WriteLine("Writing file [" + file.Name + "] offset -- " + byte_offset + " byte_mod = " + byte_mod); // careful, this slows the method down a lot to have on
+                        // Check for remainder case
+                        if (byte_offset + (UInt64)byte_pattern.Length >= (UInt64)file.Length)
+                        {
+                            length_to_write = (int)((UInt64)file.Length - byte_offset);
+                        }
+
+                        // per the API method "Write", this call advances the pointer for us so DONT pass the offset to offset                        
+                        file.Write(byte_pattern, 0, length_to_write);                        
 
                         byte_offset += (UInt64)byte_pattern.Length;
 
@@ -112,8 +168,11 @@ namespace Blackhole_WPF
                         request.Add("File", file.Name);
                         request.Add("Status", "Writing");
                         request.Add("Written", (UInt64)byte_pattern.Length);
-                        
-                        var reply = await connection.SendMessageAsync(request);
+
+                        if (connection != null)
+                        {
+                            var reply = await connection.SendMessageAsync(request);
+                        }
                     }
                     //Debug.WriteLine("Writing done, offset = " + byte_offset);
 
@@ -126,9 +185,13 @@ namespace Blackhole_WPF
 
                 {
                     ValueSet request = new ValueSet();
-                    request.Add("File", "");
+                    request.Add("File", file_path);
                     request.Add("Status", "Erased");
-                    var reply = await connection.SendMessageAsync(request);
+                    Debug.WriteLine("file_path=" + file_path + " Erased");
+                    if (connection != null)
+                    {
+                        var reply = await connection.SendMessageAsync(request);
+                    }
                 }
             }
             catch (Exception e)
@@ -137,18 +200,33 @@ namespace Blackhole_WPF
             }
         }
 
+        static int list_files_recursion_count = 0;
+
         // Recursively search files in every subdirectory ignoring access errors
-        static List<string> list_files(string path)
+        List<string> list_files(string path)
         {
             List<string> files = new List<string>();
+            list_files_recursion_count++;
+
+            Debug.WriteLine("list_files leve=" + list_files_recursion_count);
 
             // add the files in the current directory
             try
             {
                 string[] entries = Directory.GetFiles(path);
+                Debug.WriteLine("Dir.GetFiles #1");
 
                 foreach (string entry in entries)
+                {
                     files.Add(System.IO.Path.Combine(path, entry));
+                    // forcibly remove any and all read-only flags
+                    File.SetAttributes(entry, FileAttributes.Normal);
+                }
+                // and the directory
+                var di = new DirectoryInfo(path);
+                di.Attributes &= ~FileAttributes.ReadOnly;
+
+                Debug.WriteLine("foreach GetFiles #1");
             }
             catch
             {
@@ -159,6 +237,7 @@ namespace Blackhole_WPF
             try
             {
                 string[] entries = Directory.GetDirectories(path);
+                Debug.WriteLine("Dir.GetDirectories #1");
 
                 foreach (string entry in entries)
                 {
@@ -167,13 +246,18 @@ namespace Blackhole_WPF
 
                     foreach (string current_file in files_in_subdir)
                         files.Add(current_file);
+
+                    Debug.WriteLine("foreach current_path=" + current_path);
                 }
+
+                Debug.WriteLine("foreach entry in entries ");
             }
             catch
             {
                 // an exception in directory.getdirectories is not recoverable: the directory is not accessible
             }
 
+            list_files_recursion_count--;
             return files;
 
             // a few future ideas, if we choose to go further
@@ -221,17 +305,20 @@ namespace Blackhole_WPF
                 string path = key.Replace(@"\", @"\\"); ;                
 
                 ValueSet request = new ValueSet();
-                request.Add("Status", "Starting");
+                request.Add("Status", "Starting Erasure");
                 var response = await args.Request.SendResponseAsync(request);
 
-                eraser_gun(path, args);
-                
-                
+                Task.Run(() => { eraser_gun(path, args); });
+                messageDeferral.Complete();
+            }
+            else
+            {
+                messageDeferral.Complete();
             }
 
             // Complete the deferral so that the platform knows that we're done responding to the app service call.
             // Note for error handling: this must be called even if SendResponseAsync() throws an exception.
-            messageDeferral.Complete();
+            //messageDeferral.Complete();
         }
 
         /// <summary>

@@ -51,6 +51,25 @@ namespace Blackhole
                 handler(src, new PropertyChangedEventArgs(ExtractPropertyName(propertyExpression)));
             }
         }
+
+        public static string FormatFileSize(ulong bytes)
+        {
+            ulong unit = 1024;
+            if (bytes < unit) { return $"{bytes} B"; }
+
+            var exp = (int)(Math.Log(bytes) / Math.Log(unit));
+            return $"{bytes / Math.Pow(unit, exp):F2} {("KMGTPE")[exp - 1]}B";
+        }
+
+        //public enum SizeUnits
+        //{
+        //    Byte, KB, MB, GB, TB, PB, EB, ZB, YB
+        //}
+
+        //public static string ToSize(this Int64 value, SizeUnits unit)
+        //{
+        //    return (value / (double)Math.Pow(1024, (Int64)unit)).ToString("0.00");
+        //}
     }
 
     public static class ArrayExtensions
