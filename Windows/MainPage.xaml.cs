@@ -202,7 +202,7 @@ namespace Blackhole
                         Core.total_bytes_erased += written_bytes;
                         total_session_file_bytes += written_bytes;
 
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
                             txtFileName.Text = file_reply;
                             txtSessionFileBytes.Text = String.Format("{0:n0}", total_session_file_bytes);
@@ -215,12 +215,12 @@ namespace Blackhole
 
                         file_reply = args.Request.Message["File"] as string;
 
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
                             Core.files_erased += 1;
                             txtFileCounter.Text = Core.files_erased.ToString();
 
-                            txtFileList.Text = file_reply + Environment.NewLine + txtFileList.Text;
+                            //txtFileList.Text = file_reply + Environment.NewLine + txtFileList.Text;
                         });                        
 
                         break;
@@ -597,50 +597,53 @@ namespace Blackhole
             }
             
             file_animation_thread_running = true;
-
-            ThreadPool.QueueUserWorkItem(
-               async (workItem) =>
+            Task.Run(async () =>
                {
                    // animation loop
                    while (files_erasing)
                    {
-                       await animate_files(num_files);
-                       Thread.Sleep((int)(file_animation_time_secs * 1000));
+                       // It's vital to invoke this method using the helper method
+                       // because the animation requires an async await on the Lottie JSON load (SetDirection)
+                       // it's basically a re-render at runtime, but from the background
+                       Debug.WriteLine("animate_files starting await");
+                       await Dispatcher.RunTaskAsync(async () =>
+                       {
+                           foreach (File file_json in cnvFiles.Children)
+                           {
+                               //Debug.WriteLine("Animating... file=");
+                               var random = new Random();
+
+                               var radius = random.Next(200, 250);
+                               var offset = 50;  // the file animation isn't perfectly centered so we need to re-center manually
+
+                               var angle = random.NextDouble() * Math.PI * 2;
+                               var x = Math.Cos(angle) * radius + radius - offset;
+                               var y = Math.Sin(angle) * radius + radius - offset;
+
+                               var width = random.Next(100, 300);
+                               var height = width * 1.3;
+                               file_json.Width = width;
+                               file_json.Height = height;
+
+                               Canvas.SetLeft(file_json, x);
+                               Canvas.SetTop(file_json, y);
+                               await file_json.SetDirection((int)x + offset, (int)y + offset, (int)cnvFiles.Width, (int)cnvFiles.Height);
+
+                               file_json.Play();
+                           }
+                           Debug.WriteLine("animate_files completing await");
+                           
+                       });
+                       Thread.Sleep((int)(file_animation_time_secs * 1000));  
                    }
 
-                   // done animating erasure
-                   await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                   await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                    {
                        txtFileName.Text = "IT'S GONE NOW";
                        file_animation_thread_running = false;
                    });
                });
-        }
-
-        private async Task animate_files(int num_files)
-        {
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-            {
-                foreach (File file_json in cnvFiles.Children) 
-                {
-                    //Debug.WriteLine("Animating... file=");
-                    var random = new Random();
-
-                    var radius = random.Next(200, 250);
-                    var offset = 50;  // the file animation isn't perfectly centered so we need to re-center manually
-
-                    var angle = random.NextDouble() * Math.PI * 2;
-                    var x = Math.Cos(angle) * radius + radius - offset;
-                    var y = Math.Sin(angle) * radius + radius - offset;
-
-                    Canvas.SetLeft(file_json, x);
-                    Canvas.SetTop(file_json, y);
-                    await file_json.SetDirection((int)x + offset, (int)y + offset, (int)cnvFiles.Width, (int)cnvFiles.Height);
-
-                    file_json.Play();
-                }
-            });
-        }
+        }     
 
         /// <summary>
         /// A place to keep the custom file erasing animation logic

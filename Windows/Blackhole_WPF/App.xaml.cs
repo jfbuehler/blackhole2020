@@ -31,6 +31,8 @@ namespace Blackhole_WPF
         static byte[] byte_pattern = new byte[write_size];
         static byte[] pattern = { 0xc0, 0xff, 0xee };
 
+        static int threads_erasing = 0;
+
         public App() : base()
         {
             // if unit testing and starting up as debug project, you need to disable the service calls
@@ -101,12 +103,12 @@ namespace Blackhole_WPF
                             Debug.WriteLine("erasing => " + file);
                             await secure_file_erase(file, args);
                         }
-                        catch (UnauthorizedAccessException ae)
-                        {
-                            // to be expected on many files
-                            Debug.WriteLine("access violation on this file! => " + ae.ToString());
-                            MessageBox.Show("access violation on this file! => " + ae.ToString());
-                        }
+                        //catch (UnauthorizedAccessException ae)
+                        //{
+                        //    // to be expected on many files
+                        //    Debug.WriteLine("access violation on this file! => " + ae.ToString());
+                        //    MessageBox.Show("access violation on this file! => " + ae.ToString());
+                        //}
                         catch (Exception ee)
                         {
                             request_response["Status"] = "Warning";
@@ -176,7 +178,11 @@ namespace Blackhole_WPF
                     }
                     //Debug.WriteLine("Writing done, offset = " + byte_offset);
 
-                    //file.Close(); // per API, don't need this, rather just let the stream be disposed
+                    // While API docs suggest this isn't necessary, extensive testing suggests IT IS
+                    // files seem to not dispose properly or fast enough when allowing the scope brace of the using modifier to cleanup
+                    // maybe there are more poorly documented edge cases going on here that are hard to understand
+                    // for now this definitely improves and reduces random memory exceptions
+                    file.Close(); 
                 }
                 
                 // Mangle the creation time to further obscure this file
@@ -196,7 +202,12 @@ namespace Blackhole_WPF
             }
             catch (Exception e)
             {
+                ValueSet request_response = new ValueSet();
+
                 Debug.WriteLine("argh we died -- " + e.ToString());
+                request_response["Status"] = "Exception";
+                request_response["Detail"] = e.ToString();
+                if (connection != null) await connection.SendMessageAsync(request_response);
             }
         }
 
@@ -295,24 +306,47 @@ namespace Blackhole_WPF
             // Get a deferral because we use an awaitable API below to respond to the message
             // and we don't want this call to get canceled while we are waiting.
             var messageDeferral = args.GetDeferral();
+            ValueSet request_response = new ValueSet();
+            request_response.Add("Status", "");
+            request_response.Add("Detail", "");
 
-            // retrive the reg key name from the ValueSet in the request
-            string key = args.Request.Message["folder_path"] as string;
-            int index = key.IndexOf('\\');
-            if (index > 0)
-            {
-                // add escapes to the path before we try to use it
-                string path = key.Replace(@"\", @"\\"); ;                
+            try
+            {                
+                // retrive the reg key name from the ValueSet in the request
+                string key = args.Request.Message["folder_path"] as string;
+                int index = key.IndexOf('\\');
+                if (index > 0)
+                {
+                    // add escapes to the path before we try to use it
+                    string path = key.Replace(@"\", @"\\"); ;
 
-                ValueSet request = new ValueSet();
-                request.Add("Status", "Starting Erasure");
-                var response = await args.Request.SendResponseAsync(request);
+                    ValueSet request = new ValueSet();
+                    request.Add("Status", "Starting Erasure");
+                    var response = await args.Request.SendResponseAsync(request);
 
-                Task.Run(() => { eraser_gun(path, args); });
-                messageDeferral.Complete();
+                    threads_erasing += 1;
+                    if (threads_erasing == 1)
+                    {
+                        await eraser_gun(path, args);
+                    }
+                    else
+                    {
+                        request_response["Status"] = "Thread Already Active";
+                    }
+                    
+                    //Task.Run(() => { eraser_gun(path, args); });
+                }                 
             }
-            else
+            catch (Exception e)
+            {                
+                Debug.WriteLine("EXCEPTION -- " + e.ToString());
+                request_response["Status"] = "Exception";
+                request_response["Detail"] = "Died in Connection_RequestReceived error=" + e.ToString();
+                if (connection != null) await connection.SendMessageAsync(request_response);
+            }
+            finally
             {
+                threads_erasing -= 1;
                 messageDeferral.Complete();
             }
 
