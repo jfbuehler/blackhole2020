@@ -49,7 +49,7 @@ namespace Blackhole
         /// <summary>
         /// Easier to just hard code this based on the JSON animation time
         /// </summary>
-        static double file_animation_time_secs = 6.16 + 1;
+        static double file_animation_time_secs = 6.16;
 
         /// <summary>
         /// Keep track of whether or not files are being erased actively
@@ -69,6 +69,8 @@ namespace Blackhole
             txtFileCounter.Text = "0";
             txtSessionFileBytes.Text = "0";
             txtSession.Text = "0";
+            txtProgress.Text = "0%";
+            pbProgress.Value = 0;
 
             ApplicationView.PreferredLaunchViewSize = new Size(1200, 1000);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
@@ -85,7 +87,7 @@ namespace Blackhole
         /// </summary>
         private void load_file_animations()
         {            
-            const int files_to_animate = 20; 
+            const int files_to_animate = 25; 
 
             for (int i = 0; i < files_to_animate; i++)
             {
@@ -197,6 +199,7 @@ namespace Blackhole
 
                         string file_reply = args.Request.Message["File"] as string;
                         ulong written_bytes = (ulong)args.Request.Message["Written"];
+                        int percent_complete = (int)args.Request.Message["Progress"];
                         //Debug.WriteLine("WPF sent us a message Status=" + status + " with file=" + file_reply + " and written_bytes=" + written_bytes);            
 
                         Core.total_bytes_erased += written_bytes;
@@ -207,6 +210,8 @@ namespace Blackhole
                             txtFileName.Text = file_reply;
                             txtSessionFileBytes.Text = String.Format("{0:n0}", total_session_file_bytes);
                             txtTotalFileBytes.Text = Extensions.FormatFileSize(Core.total_bytes_erased);
+                            pbProgress.Value = percent_complete;
+                            txtProgress.Text = percent_complete + "%";
                         });
 
                         break;
@@ -634,7 +639,9 @@ namespace Blackhole
                            Debug.WriteLine("animate_files completing await");
                            
                        });
-                       Thread.Sleep((int)(file_animation_time_secs * 1000));  
+                       Debug.WriteLine("Thread.sleep  now=" + DateTime.Now);
+                       Thread.Sleep((int)(file_animation_time_secs * 1000));
+                       Debug.WriteLine("Thread.sleep wake=" + DateTime.Now);
                    }
 
                    await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>

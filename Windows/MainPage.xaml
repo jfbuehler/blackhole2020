@@ -101,6 +101,10 @@
         </Grid>
         <StackPanel x:Name="stkTest" >
             <TextBlock x:Name="txtFileName" Text="Test file file file" TextAlignment="Center"  FontSize="20" />
+            <Grid>
+                <ProgressBar x:Name="pbProgress" Height="20" Value="50" Maximum="100" Margin="100,20,100,20" Foreground="DarkViolet"/>
+                <TextBlock x:Name="txtProgress" Foreground="White" Text="100%" VerticalAlignment="Center" TextAlignment="Center"/>
+            </Grid>
         </StackPanel>
         
 
@@ -116,7 +120,7 @@
                     </StackPanel.Resources>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
 
-                        <TextBox Text="File list " x:Name="txtFileList"
+                        <TextBox Text="" x:Name="txtFileList"
                              CornerRadius="5" TextAlignment="Left" 
                              Foreground="white" Width="500" Height="100"
                              FontFamily="Consolas" FontSize="12"
@@ -169,14 +173,14 @@
                 </ListBox.ItemTemplate>
             </ListBox>-->
 
-            <Rectangle Width="500" Margin="0,0,0,0">
+            <!--<Rectangle Width="500" Margin="0,0,0,0">
                 <Rectangle.Fill>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#00000000" Offset="0"/>
                         <GradientStop Color="Black" Offset="1"/>
                     </LinearGradientBrush>
                 </Rectangle.Fill>
-            </Rectangle>
+            </Rectangle>-->
         </Grid>
 
     </StackPanel>

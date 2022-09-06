@@ -165,11 +165,14 @@ namespace Blackhole_WPF
                         file.Write(byte_pattern, 0, length_to_write);                        
 
                         byte_offset += (UInt64)byte_pattern.Length;
+                        var progress = (double)byte_offset / file.Length;
+                        var percent = (int)(progress * 100); // truncuate off the decimals to get percent
 
                         ValueSet request = new ValueSet();
                         request.Add("File", file.Name);
                         request.Add("Status", "Writing");
                         request.Add("Written", (UInt64)byte_pattern.Length);
+                        request.Add("Progress", percent);
 
                         if (connection != null)
                         {
