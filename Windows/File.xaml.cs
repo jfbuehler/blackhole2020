@@ -145,7 +145,7 @@ namespace Blackhole
             json += ".json";
             lottie_disintegrate.SetSourceAsync(new Uri(json));
 
-            Debug.WriteLine("SetDirection - " + dir + " x=" + x + " y=" + y);
+            //Debug.WriteLine("SetDirection - " + dir + " x=" + x + " y=" + y);
 
             //CurrentJson = new Uri("ms-appx:///File_Disintegration_TopRight.json");
             //this.RaisePropertyChanged(() => CurrentJson, PropertyChanged);

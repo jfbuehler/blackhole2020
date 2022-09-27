@@ -8,7 +8,7 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:lottie="using:Microsoft.Toolkit.Uwp.UI.Lottie"
     mc:Ignorable="d"
-    Background="Black" Width="1200" Height="1000" Drop="Page_Drop" AllowDrop="True" DragOver="Page_DragOver">
+    Background="Black" Width="1200" Height="1000" Drop="Page_Drop" AllowDrop="True" DragOver="Page_DragOver" >
     <Page.Resources>
         <local:ObFileList x:Key="FilesObvCollection"/>
 
@@ -35,24 +35,65 @@
         </StackPanel>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
+                <!--<RowDefinition />  Condense views for now, so remove top row --> 
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <muxc:AnimatedVisualPlayer x:Name="stars" Grid.Row="2" >
+            <muxc:AnimatedVisualPlayer x:Name="stars" Grid.Row="2" Canvas.ZIndex="-1">
                 <lottie:LottieVisualSource UriSource="ms-appx:///StarField.json"/>
             </muxc:AnimatedVisualPlayer>
-            <muxc:AnimatedVisualPlayer x:Name="BlackHole" Grid.Row="2" Width="1000">
+            <muxc:AnimatedVisualPlayer x:Name="BlackHole" Grid.Row="2" Width="1000" Canvas.ZIndex="-1">
                 <lottie:LottieVisualSource UriSource="ms-appx:///Black_Hole_Rotation.json"/>
             </muxc:AnimatedVisualPlayer>
 
-            <TextBox Text="File Counter ------" CornerRadius="5" TextAlignment="Center" Padding="0,15,0,0" Margin="150,0,0,0"
-                     BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" Foreground="white" Width="250"
-                     FontFamily="Consolas" IsReadOnly="True" x:Name="txtFileCounter" HorizontalAlignment="Left"/>
+            <Image x:Name="imgFile" />
 
-            <TextBox Text="Securely Erased" CornerRadius="5" TextAlignment="Center" Padding="0,15,0,0" Margin="0,0,150,0"
+            <Border BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" CornerRadius="5" Margin="10" Padding="5"
+                    HorizontalAlignment="Left" VerticalAlignment="Top">
+                <StackPanel IsTapEnabled="False" Canvas.ZIndex="10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
+
+                        <TextBox Text="Files: "
+                                 CornerRadius="5" TextAlignment="Left" 
+                                 Foreground="white" Width="250"
+                                FontFamily="Consolas" IsReadOnly="True" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="txtFileCounter" Margin="-100,0,10,0" Text="100" Foreground="White"
+                                   VerticalAlignment="Center" TextAlignment="Right"/>
+
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
+                        <TextBox Text="Bytes: " 
+                                 CornerRadius="5" TextAlignment="Left" Width="250"
+                                 Foreground="white" FontFamily="Consolas" IsReadOnly="True" />
+                        <TextBlock x:Name="txtFileBytes" Margin="-100,0,10,0" Text="100" Foreground="White"
+                                   VerticalAlignment="Center" TextAlignment="Right"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
+                        <TextBox Text="Total Bytes: " 
+                                 CornerRadius="5" TextAlignment="Left" Width="250"
+                                 Foreground="white" FontFamily="Consolas" IsReadOnly="True" />
+                        <TextBlock x:Name="txtTotalFileBytes" Margin="-100,0,10,0" Text="100" Foreground="White"
+                                   VerticalAlignment="Center" TextAlignment="Right"/>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,5">
+                        <TextBox Text="Sessions: " 
+                                 CornerRadius="5" TextAlignment="Left" Width="250"
+                                 Foreground="white" FontFamily="Consolas" IsReadOnly="True" />
+                        <TextBlock x:Name="txtSession" Margin="-100,0,10,0" Text="100" Foreground="White"
+                                   VerticalAlignment="Center" TextAlignment="Right"/>
+                    </StackPanel>
+
+                    
+                </StackPanel>
+            </Border>
+
+
+            <!--<TextBox x:Name="txtFileBytes" Text="999 bytes" CornerRadius="5" TextAlignment="Center" Padding="0,15,0,0" Margin="0,0,150,0"
                      BorderBrush="DarkViolet" BorderThickness="3" Background="Purple" Foreground="white" Width="250"
-                     FontFamily="Consolas" IsReadOnly="True" x:Name="txtFilesErased" HorizontalAlignment="Right"/>
+                     FontFamily="Consolas" IsReadOnly="True" HorizontalAlignment="Right"/>-->
 
             <!--<ListView Grid.Row="1" x:Name="listFiles" ItemsSource="{Binding Source={StaticResource FilesObvCollection}}">
                 <ListView.ItemTemplate>
@@ -159,6 +200,8 @@
         </StackPanel>-->
         <StackPanel x:Name="stkTest" >
             <!--AnimatedVisualPlayer with AutoPlay-->
+
+            <TextBlock x:Name="txtFileName" Text="Test file file file" TextAlignment="Center" />
 
         </StackPanel>
 

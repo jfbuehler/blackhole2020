@@ -26,6 +26,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Core.Preview;
 
 // these did not work
 //using System.Security.AccessControl;
@@ -53,7 +56,7 @@ namespace Blackhole
         /// </summary>
         static bool files_erasing = false;
 
-        static int num_erase_tasks_running = 0;
+        static int num_erase_tasks_running = 0;        
 
         public MainPage()
         {
@@ -61,11 +64,47 @@ namespace Blackhole
             m_page = this;
             FilesObvCollection = this.Resources["FilesObvCollection"] as ObFileList;
 
+            txtFileCounter.Text = "0";
+            txtFileBytes.Text = "0";
+            txtSession.Text = "0";
+
             ApplicationView.PreferredLaunchViewSize = new Size(1200, 1000);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            
+            launch_wpf();  // MUST run with the "Package" as the Startup Project if this is enabled
 
-            // Project In Work -- has some issues where the package crashes still...
-            //launch_wpf();  // Must run with the Package as the Startup Project if this is enabled
+            load_basic_settings();
+        }
+
+        private void load_basic_settings()
+        {
+            ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            // load a setting that is local to the device
+
+            var files_erased = localSettings.Values["files_erased"];
+            if (files_erased != null)
+                Core.files_erased = (ulong)files_erased;
+
+            var total_bytes_erased = localSettings.Values["total_bytes_erased"];
+            if (total_bytes_erased != null)
+                Core.total_bytes_erased = (ulong)total_bytes_erased;
+
+            var total_sessions = localSettings.Values["total_sessions"];
+            if (total_sessions != null)
+                Core.total_sessions = (ulong)total_sessions;
+            
+            txtFileCounter.Text = Core.files_erased.ToString();
+            txtTotalFileBytes.Text = Core.total_bytes_erased.ToString();
+            txtSession.Text = Core.total_sessions.ToString();
+
+            // load a composite setting
+            //Windows.Storage.ApplicationDataCompositeValue composite = (ApplicationDataCompositeValue)localSettings.Values["FontInfo"];
+            //if (composite != null)
+            //{
+            //    String fontName = composite["Font"] as string;
+            //    int fontSize = (int)composite["FontSize"];
+            //}
         }
 
         /// <summary>
@@ -76,6 +115,96 @@ namespace Blackhole
             if (ApiInformation.IsApiContractPresent("Windows.ApplicationModel.FullTrustAppContract", 1, 0))
             {
                 await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
+                
+                App.AppServiceConnected += ConnectionEstablished;
+                
+            }
+        }
+
+        private void ConnectionEstablished(object sender, AppServiceTriggerDetails td)
+        {
+            App.Connection.RequestReceived += AppServiceConnection_RequestReceived;
+        }
+
+
+        // another theory about how we can run ffmpeg on the cmd line
+        // good for next time!
+        public static void GetThumbnail(string video, string thumbnail)
+        {
+            var cmd = "ffmpeg  -itsoffset -1  -i " + '"' + video + '"' + " -vcodec mjpeg -vframes 1 -an -f rawvideo -s 320x240 " + '"' + thumbnail + '"';
+
+            var startInfo = new ProcessStartInfo
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                Arguments = "/C " + cmd
+            };
+
+            var process = new Process
+            {
+                StartInfo = startInfo
+            };
+
+            process.Start();
+            process.WaitForExit(5000);
+
+            //return LoadImage(thumbnail);
+        }
+
+        //static Bitmap LoadImage(string path)
+        //{
+        //    var ms = new MemoryStream(File.ReadAllBytes(path));
+        //    return (Bitmap)Image.FromStream(ms);
+        //}
+
+        // How to handle 2-way traffic back from WPF, if desired
+        private async void AppServiceConnection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
+        {
+            try
+            {                
+                string status = args.Request.Message["Status"] as string;
+
+                // TODO -- upgrade to enum soon
+                switch (status)
+                {
+                    case "Writing":
+
+                        string file_reply = args.Request.Message["File"] as string;
+                        ulong written_bytes = (ulong)args.Request.Message["Written"];
+                        //Debug.WriteLine("WPF sent us a message Status=" + status + " with file=" + file_reply + " and written_bytes=" + written_bytes);            
+
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                        {
+                            txtFileName.Text = file_reply;
+                            Core.total_bytes_erased += written_bytes;
+                            txtFileBytes.Text = String.Format("{0:n0}", Core.total_bytes_erased); //bytes_erased.ToString("{0:n0}");
+                        });
+
+                        break;
+
+                    case "Erased":
+
+                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                        {
+                            Core.files_erased += 1;
+                            txtFileCounter.Text = Core.files_erased.ToString();
+                        });                        
+
+                        break;
+
+                    case "Complete":
+                        files_erasing = false;
+                        num_erase_tasks_running -= 1;
+                        break;
+                }
+
+                ValueSet response = new ValueSet();
+                response.Add("Status", "ACK");
+                await args.Request.SendResponseAsync(response);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("argh we died -- " + e.ToString());
             }
         }
 
@@ -103,7 +232,7 @@ namespace Blackhole
                 Debug.WriteLine("num_erase_tasks_running = " + num_erase_tasks_running);
 
                 // TODO -- support when a user drops new files/folders on top of an already running deletion task...
-                files_erasing = false;
+                //files_erasing = false;
 
                 if (e.DataView.Contains(StandardDataFormats.StorageItems))
                 {
@@ -115,30 +244,109 @@ namespace Blackhole
                     var items = await e.DataView.GetStorageItemsAsync();
                     if (items.Count > 0)
                     {
+                        
                         // when the user drops, it can be 1 of 3 cases
                         // 1) a single file
                         // 2) a single folder
                         // 3) a combo of the two, files and folders
 
-                        foreach (var item in items )
+                        foreach (var item in items)
                         {
                             // check if its a folder
                             var folder = item as StorageFolder;
                             if (folder == null)
                             {
-                                // it's a file
+                                //
+                                // -- SINGLE FILE AREA --
+                                //
                                 StorageFile file = item as StorageFile;
                                 Debug.WriteLine("It's a file => " + file.Path);
+
+                                //bool isWpfErasing = true;
+
+                                // Make a request to the WPF Service to start erasure
+                                ValueSet request = new ValueSet();
+                                request.Add("folder_path", file.Path);
+                                AppServiceResponse response = await App.Connection.SendMessageAsync(request);
+
+                                // TODO -- perhaps receive the response and reflect UI ?
+                                //files_erasing = true;
+                                // probably want to move this here once things are up and running
+
+                                // -------------------------
+                                // try #1 did this
+                                //while (isWpfErasing)
+                                //{
+
+
+                                //    string file_reply = response.Message["File"] as string;
+                                //    string status = response.Message["Status"] as string;
+                                //    long written_bytes = (long)response.Message["Written"];
+                                //    Debug.WriteLine("WPF replied with file=" + file_reply + " and written_bytes=" + written_bytes);
+
+                                //    if (status == "Erased")
+                                //        isWpfErasing = false;
+                                //        // could also just write "break" here too, arguably
+                                //}
+
+                                // -------------------------
+
+                                // but we want to move into another handler loop instead
+
+
+                                //foreach (string key in response.Message.Keys)
+                                //{
+                                //    Debug.WriteLine(key + " = " + response.Message[key] + "\r\n");
+                                //}
+
 
                                 //
                                 // try to erase it
                                 //
-                                await Task.Run(() => erase_file(file.Path));
+                                //await Task.Run(() => erase_file(file.Path));
+
+                                //var thumbnail_name = "video_thumbnail.jpg";
+
+                                //ffMpeg.ConvertMedia("input.mov", "output.mp4", Format.mp4);
+                                //ffMpeg.GetVideoThumbnail(file.Path, thumbnail_name);
+
+                                //ShellFile shellFile = ShellFile.FromFilePath(file.Path);
+                                //Bitmap bm = shellFile.Thumbnail.Bitmap;
+
+                                //var thumbnail = await StorageFile.GetFileFromPathAsync(thumbnail_name);
+
+                                //var path = Path.Combine(Environment.CurrentDirectory, "video_thumbnail.jpg");
+                                //var uri = new Uri(path);
+                                //var bitmap = Image(uri);
+
+                                // Ensure the stream is disposed once the image is loaded
+                                //using (IRandomAccessStream fileStream = await thumbnail.OpenAsync(Windows.Storage.FileAccessMode.Read))
+                                //{
+                                //    // Set the image source to the selected bitmap
+                                //    BitmapImage bitmapImage = new BitmapImage();
+                                //    // Decode pixel sizes are optional
+                                //    // It's generally a good optimisation to decode to match the size you'll display
+                                //    //bitmapImage.DecodePixelHeight = decodePixelHeight;
+                                //    //bitmapImage.DecodePixelWidth = decodePixelWidth;
+
+                                //    await bitmapImage.SetSourceAsync(fileStream);
+                                //    imgFile.Source = bitmapImage;
+
+                                //    Debug.WriteLine("Streaming image file -- " + bitmapImage.PixelWidth + "x" + bitmapImage.PixelHeight);
+                                //}
+
+
                             }
                             else
                             {
                                 // dropped folder
                                 Debug.WriteLine("It's a folder => " + folder.Path);
+
+                                ValueSet request = new ValueSet();
+                                request.Add("folder_path", folder.Path);
+                                AppServiceResponse response = await App.Connection.SendMessageAsync(request);
+
+                                Debug.WriteLine("WPF replied with msg = " + response.Message.ToString());
 
                                 // option 1)
                                 // jfb -- unfortunately, using the StorageFile methods to query the system is insanely slow
@@ -171,12 +379,6 @@ namespace Blackhole
                                 // https://github.com/microsoft/WindowsAppSDK/issues/8
 
                                 // option 4) -- basic workaround supports relatively flat folder structure (just so something works!)
-                                var files = await folder.GetFilesAsync();
-
-                                foreach (var file in files)
-                                {
-                                    await Task.Run(() => erase_file(file.Path));
-                                }
 
                                 // not yet -- the folder might have subfolders we didn't get to (and aren't handling yet)
                                 //await folder.DeleteAsync();
@@ -187,11 +389,11 @@ namespace Blackhole
                                 //}
                                 //
                             }
-                        }
+                        }                   
                     }
 
-                    files_erasing = false;
-                    e.Handled = true;
+                    //files_erasing = false;
+                    //e.Handled = true;
                     
                     //
                     // This is how we would use a WPF process to interact with the file system
@@ -211,10 +413,10 @@ namespace Blackhole
             }
             catch (Exception ee)
             {
-                Debug.WriteLine("argh we done died -- " + ee.ToString());
+                Debug.WriteLine("argh we died -- " + ee.ToString());
             }
 
-            num_erase_tasks_running -= 1;
+            //num_erase_tasks_running -= 1;
 
             e.Handled = true;
         }
@@ -295,16 +497,21 @@ namespace Blackhole
                 // this is the key to writing in UWP -- we need to ask for the StorageFile from the system to clear the Readonly flags
                 var file = await StorageFile.GetFileFromPathAsync(file_path);
 
+                txtFileName.Text = file.Name;
+
                 BasicProperties file_basic_props = await file.GetBasicPropertiesAsync();
 
                 using (var stream = await file.OpenStreamForWriteAsync())
                 {
-                    Debug.WriteLine("Writing to file size -- " + file_basic_props.Size);
+                    Debug.WriteLine("Writing to file size -- " + file_basic_props.Size + " using pattern size = " + byte_pattern.Length);
                     while (byte_offset < (int)file_basic_props.Size)
                     {
                         // per the API method "Write", this call advances the pointer for us so DONT pass the offset to offset                        
                         stream.Write(byte_pattern, 0, byte_pattern.Length);
-                        //Debug.WriteLine("Writing file offset -- " + byte_offset); // careful, this slows the method down a lot to have on
+
+                        int byte_mod = byte_offset % (byte_pattern.Length * 10000); // ~210kb
+                        if (byte_mod == byte_pattern.Length)
+                            Debug.WriteLine("Writing file [" + file.Name + "] offset -- " + byte_offset + " byte_mod = " + byte_mod); // careful, this slows the method down a lot to have on
 
                         byte_offset += byte_pattern.Length;
                     }
@@ -337,12 +544,12 @@ namespace Blackhole
                    // animation loop
                    while (files_erasing)
                    {
-                       Debug.WriteLine("Starting an animation loop///");
+                       //Debug.WriteLine("Starting an animation loop///");
                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                        {
                            animate_files(num_files);
                        });
-                       Debug.WriteLine("Completed an animation loop///");
+                       //Debug.WriteLine("Completed an animation loop///");
 
                        Thread.Sleep((int)(file_animation_time_secs * 1000));
                    }
@@ -378,6 +585,9 @@ namespace Blackhole
             else if (num_files < 1e9)
                 files_to_animate = 30;
 
+            // TODO -- upgrade this animation loop sequence
+            files_to_animate = 18;
+
             for (int i = 0; i < files_to_animate; i++)
             {
                 File file_json = new File();
@@ -404,7 +614,9 @@ namespace Blackhole
                 cnvFiles.Children.Add(file_json);
             }
         }
-            
+
+        #region extra code        
+
         /// <summary>
         /// An attempt at a file query method using the Storage API, but it fails to deliver enough performance
         /// Keep around for analysis
@@ -510,5 +722,7 @@ namespace Blackhole
             }
 #endif
         }
+
+        #endregion
     }
 }
