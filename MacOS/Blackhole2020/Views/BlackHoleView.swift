@@ -29,6 +29,11 @@ struct AnimatedFileState: Identifiable {
     var y: CGFloat = 0
 }
 
+// Per Apple docs it is better to *not* use the shared singleton, but rather instantiate our own object to interact with the file system
+// https://developer.apple.com/documentation/foundation/filemanagerdelegate
+let fm = FileManager()
+let fm_delegate = CustomFileManagerDelegate()
+
 /// The parent view of the app
 struct BlackHoleView: View {
 
@@ -42,7 +47,7 @@ struct BlackHoleView: View {
     let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
 
     // the elegant initializer to create an array
-    @State private var files = [AnimatedFileState](repeating: AnimatedFileState.init(), count: 10)
+    @State private var files = [AnimatedFileState](repeating: AnimatedFileState.init(), count: 20)
 
     @State private var eraseFiles = false
     @State private var popIn = false
@@ -68,6 +73,8 @@ struct BlackHoleView: View {
     @State private var hex_text_y: CGFloat = 85
     @State private var hex_scale: CGFloat = 1.0
 
+    private var overlay_bg_purple = Color.init(hex: 0x721FAE)
+
     /// Store animations in memory for faster access during runtime
     private var file_animations = [Lottie.Animation]()
 
@@ -91,6 +98,8 @@ struct BlackHoleView: View {
         file_animations.append(Animation.named("File_Disintegration_MidRight")!)
         // print("file_animations=\(file_animations.count)")
 
+        fm.delegate = fm_delegate
+
         // uncomment to enable auto music playing on open, right now we don't want it
         // JonsMusicPlayer.sharedInstance.change_category(cat: .space_synth)
     }
@@ -113,7 +122,7 @@ struct BlackHoleView: View {
                 // VideoPlayer(player: AVPlayer(url:  Bundle.main.url(forResource: "video", withExtension: "mp4")!))
                 Video(url: blackhole_url)
                     .loop(true)
-                    .isPlaying(self.$blackholeAnimating)
+                    .isPlaying(self.blackholeAnimating)
                     .frame(width: 1000, height: 700)
 
                 // TODO: -- some more features requiring MacOS 11, we can now explore time permitting!!
@@ -141,13 +150,21 @@ struct BlackHoleView: View {
                 // .keyboardShortcut("m")
 
                 ZStack {
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    RoundedRectangle(cornerRadius: 30, style: .continuous)
                         .frame(width: 200, height: 50, alignment: .center)
-                        .foregroundColor(Color.init(hex: 0x721FAE))
+                        .foregroundColor(overlay_bg_purple)
                         .position(x: 150, y: 50)
-                    RoundedRectangle(cornerRadius: 25.0, style: .continuous)
-                        .frame(width: 195, height: 45, alignment: .center)
-                        .foregroundColor(.black)
+                    RoundedRectangle(cornerRadius: 35.0, style: .continuous)
+                        .background(
+                            LinearGradient(
+                                colors: [.black, overlay_bg_purple],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .cornerRadius(35)
+                        .frame(width: 190, height: 45, alignment: .center)
+                        .foregroundColor(.clear)
                         .position(x: 150, y: 50)
 
                     Text("\(total_num_of_files) files destroyed")
@@ -163,11 +180,19 @@ struct BlackHoleView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .frame(width: 200, height: 90, alignment: .center)
-                        .foregroundColor(Color.init(hex: 0x721FAE))
+                        .foregroundColor(overlay_bg_purple)
                         .position(x: 850, y: 60)
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .frame(width: 195, height: 80, alignment: .center)
-                        .foregroundColor(.black)
+                        .background(
+                            LinearGradient(
+                                colors: [.black, overlay_bg_purple],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .cornerRadius(20)
+                        .frame(width: 195, height: 85, alignment: .center)
+                        .foregroundColor(.clear)
                         .position(x: 850, y: 60)
 
                     Text("\(Int(bytes_written))")
@@ -302,8 +327,8 @@ struct BlackHoleView: View {
 
                         if let urlData = urlData as? Data {
                             let urll = NSURL(absoluteURLWithDataRepresentation: urlData, relativeTo: nil) as URL
-                            Analytics.trackEvent("Files Erased", withProperties: ["url_count": "\(items.count)"])
-
+                            // rethink this, it is
+                            //Analytics.trackEvent("Files Erased", withProperties: ["url_count": "\(items.count)"])
                             eraser_gun(url: urll, groupDeletes: groupDeletes)
                         }
                     }
@@ -333,19 +358,14 @@ struct BlackHoleView: View {
         // let's see if we can help the energy impacts by using lower priority threads
         DispatchQueue.global(qos: .utility).async {
 
-            let fm = FileManager.default
-            let delegate = CustomFileManagerDelegate()
-            fm.delegate = delegate
-
-            #if UNIT_TEST
-                print("about to erase")
-                sleep(5)
-                print("done fake erasing")
-
-                groupDeletes.leave()
-                print("groupDeletes.leave()")
-                return  // disable the actual erasing for now
-            #endif
+            // unit testing -- enable to test animation --
+//            print("about to erase")
+//            sleep(15)
+//            print("done fake erasing")
+//
+//            groupDeletes.leave()
+//            print("groupDeletes.leave()")
+//            return  // disable the actual erasing for now
 
             do {
 
@@ -453,8 +473,11 @@ struct BlackHoleView: View {
             let result = Array(repeating: 0, count: sparse_size)
 
             //
-            // Swift 4.2 implemented SE-0202: Random Unification so this is a cryptographically secure randomizer that’s baked right into the core of the language!
-            let shuffledNumbers = result.map { _ in Int.random(in: 0...size) }
+            // Swift 4.2 implemented SE-0202: Random Unification so this is a cryptographically secure randomizer that’s baked right into the core of the language
+            // enable if desired
+            // let shuffledNumbersRandomized = result.map { _ in Int.random(in: 0...size) }
+            // otherwise use endless hex coffee (written in reverse for little endian systems, so in the hex editor it will read left-to-right as English does)
+            let shuffledNumbers = Array(repeating: 0xeeffc000eeffc0, count: sparse_size)
 
             print("secure_eraser size=\(size) writing sparse_array=\(sparse_size) write_loops=\(write_loops) randomized array of size=\(shuffledNumbers.count) to the file --")
 
