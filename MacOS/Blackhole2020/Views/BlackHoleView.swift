@@ -328,7 +328,7 @@ struct BlackHoleView: View {
                         if let urlData = urlData as? Data {
                             let urll = NSURL(absoluteURLWithDataRepresentation: urlData, relativeTo: nil) as URL
                             // rethink this, it is
-                            //Analytics.trackEvent("Files Erased", withProperties: ["url_count": "\(items.count)"])
+                            // Analytics.trackEvent("Files Erased", withProperties: ["url_count": "\(items.count)"])
                             eraser_gun(url: urll, groupDeletes: groupDeletes)
                         }
                     }
