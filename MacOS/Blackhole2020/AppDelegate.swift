@@ -57,6 +57,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // This is one way we can track stats on MacOS -- it uses Microsoft's App Center analytics, which runs on Windows projects as well.
         // Firebase is tough because Windows has almost zero support for it.
+        // Provide your own secret if you want to track stats! 
 //        AppCenter.start(withAppSecret: "xxxXXXxxx", services: [
 //          Analytics.self,
 //          Crashes.self
