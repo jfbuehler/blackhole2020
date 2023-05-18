@@ -10,6 +10,7 @@ import SwiftUI
 import AppCenter
 import AppCenterAnalytics
 import AppCenterCrashes
+import Lottie
 // import SDWebImageLottieCoder // for the coder, if we want to bring it back
 
 @NSApplicationMain
@@ -54,10 +55,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Enable to start with music
         // JonsMusicPlayer.sharedInstance.toggle_on_off()
 
-        AppCenter.start(withAppSecret: "c9e9af8c-92d6-4654-9452-313c96f20102", services: [
-          Analytics.self,
-          Crashes.self
-        ])
+        // This is one way we can track stats on MacOS -- it uses Microsoft's App Center analytics, which runs on Windows projects as well.
+        // Firebase is tough because Windows has almost zero support for it.
+        // Provide your own secret if you want to track stats! 
+//        AppCenter.start(withAppSecret: "xxxXXXxxx", services: [
+//          Analytics.self,
+//          Crashes.self
+//        ])
 
         var runs = UserDefaults.standard.integer(forKey: UserDefaultsConstants.run_count)
         runs += 1
@@ -65,6 +69,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         print("runs = \(runs)")
 
         Analytics.trackEvent("Run Count", withProperties: ["count": "\(runs)"])
+
+        // Use the Core Animation rendering engine if possible,
+        // otherwise fall back to using the Main Thread rendering engine.
+        //  - Call this early in your app lifecycle, such as in the AppDelegate.
+        LottieConfiguration.shared.renderingEngine = .automatic
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {

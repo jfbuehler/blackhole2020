@@ -6,3 +6,6 @@ Pods/Pods.xcodeproj/xcuserdata/
 design
 Blackhole2020/rel/
 certs/
+Pods
+Podfile.lock
+releases
