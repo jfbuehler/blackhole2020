@@ -54,9 +54,8 @@ namespace Blackhole_WPF
         private void test_debugging()
         {
             //string path = "E:\\Program Files (x86)";
-            string path = "E:\\Users\\Jon\\Downloads\\acrobat9";
-            //string path = "J:\\Python27\\include";
-
+            //string path = "E:\\Users\\Jon\\Downloads\\quickbooks";
+            string path = "J:\\Python27\\include";
             Debug.WriteLine("eraser_gun on path=" + path);
             eraser_gun(path, null);
 
@@ -68,6 +67,7 @@ namespace Blackhole_WPF
             ValueSet request_response = new ValueSet();
             request_response.Add("Status", "");
             request_response.Add("Detail", "");
+            request_response.Add("Message", "");
             request_response.Add("File", "");
 
             try
@@ -134,6 +134,7 @@ namespace Blackhole_WPF
                 // Send a message back so the UWP app can respond accordingly
                 request_response["Status"] = "Exception";
                 request_response["Detail"] = e.ToString();
+                request_response["Message"] = e.Message; 
                 if (connection != null) await connection.SendMessageAsync(request_response);
             }            
         }
@@ -147,6 +148,12 @@ namespace Blackhole_WPF
                 // can play with this on different file sizes as needed
                 UInt64 byte_offset = 0;
 
+                // strip read-only flags if possible
+                var fi = new FileInfo(file_path);
+                fi.Attributes &= ~FileAttributes.ReadOnly;
+
+                // TODO -- maybe this using mechanism is actually buggy... I'm seeing a lot of memory exceptions still, with no clear reason
+                // so next up lets try dropping it in favor of a simpler file open logic
                 using (FileStream file = File.OpenWrite(file_path))
                 {                    
                     Debug.WriteLine("Writing to file size -- " + file.Length + " using pattern size = " + byte_pattern.Length);
@@ -164,7 +171,7 @@ namespace Blackhole_WPF
                         // per the API method "Write", this call advances the pointer for us so DONT pass the offset to offset                        
                         file.Write(byte_pattern, 0, length_to_write);                        
 
-                        byte_offset += (UInt64)byte_pattern.Length;
+                        byte_offset += (UInt64)length_to_write;
                         var progress = (double)byte_offset / file.Length;
                         var percent = (int)(progress * 100); // truncuate off the decimals to get percent
 
@@ -199,7 +206,8 @@ namespace Blackhole_WPF
                     Debug.WriteLine("file_path=" + file_path + " Erased");
                     if (connection != null)
                     {
-                        var reply = await connection.SendMessageAsync(request);
+                        //var reply = await connection.SendMessageAsync(request);
+                        connection.SendMessageAsync(request);  // try not waiting for this to see if we speed up
                     }
                 }
             }
@@ -210,6 +218,7 @@ namespace Blackhole_WPF
                 Debug.WriteLine("argh we died -- " + e.ToString());
                 request_response["Status"] = "Exception";
                 request_response["Detail"] = e.ToString();
+                request_response["Message"] = e.Message;
                 if (connection != null) await connection.SendMessageAsync(request_response);
             }
         }
@@ -298,6 +307,7 @@ namespace Blackhole_WPF
             {
                 // Successful connection between UWP and WPF
                 //MessageBox.Show("WPF side status = " + status.ToString());
+                Debug.WriteLine("WPF helper started! status = \" + status.ToString()");
             }
         }
 

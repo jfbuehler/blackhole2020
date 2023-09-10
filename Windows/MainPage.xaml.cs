@@ -80,6 +80,8 @@ namespace Blackhole
             load_basic_settings();
             load_file_animations();
 
+            //jsonBlackHole.Stop();
+            jsonBlackHole.PlaybackRate = 0.3; // startup condition, play slowly
         }
 
         /// <summary>
@@ -225,7 +227,7 @@ namespace Blackhole
                             Core.files_erased += 1;
                             txtFileCounter.Text = Core.files_erased.ToString();
 
-                            //txtFileList.Text = file_reply + Environment.NewLine + txtFileList.Text;
+                            txtFileList.Text = file_reply + Environment.NewLine + txtFileList.Text;
                         });                        
 
                         break;
@@ -246,6 +248,12 @@ namespace Blackhole
                         num_erase_tasks_running -= 1;
 
                         detail = args.Request.Message["Detail"] as string;
+                        string message = "****** EXCEPTION ****** " + (args.Request.Message["Message"] as string) + " ******";
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                        {
+                            txtFileList.Text = message + Environment.NewLine + txtFileList.Text;
+                        });
+
                         Debug.WriteLine("EXCEPTION from WPF -- detail=" + detail);
                         break;
 
@@ -275,6 +283,8 @@ namespace Blackhole
 
             try
             {
+                //jsonBlackHole.PlayAsync(0, 100, true);
+                jsonBlackHole.PlaybackRate = 1.0;
                 Debug.WriteLine("num_erase_tasks_running = " + num_erase_tasks_running);
 
                 // TODO -- fix. Its broken
@@ -300,6 +310,12 @@ namespace Blackhole
                         // 2) a single folder
                         // 3) a combo of the two, files and folders
 
+                        // For now the workaround to this is just dropping single files, or single folders
+                        // Eventually we can fix this...
+                        // TODO -- this for loop needs work, dropping multiple items seems to introduce a bunch of bugs
+                        // namely, not all of the files dropped get erased
+                        // if i mix in folders / files, it seems to cause lots of exceptions
+                        // could be a compound issue, so likely need to fix the memory exceptions first (seems to be with folders with a lot of small files?)
                         foreach (var item in items)
                         {                            
                             // check if its a folder
@@ -648,6 +664,8 @@ namespace Blackhole
                    {
                        txtFileName.Text = "IT'S GONE NOW";
                        file_animation_thread_running = false;
+                       //jsonBlackHole.Stop();
+                       jsonBlackHole.PlaybackRate = 0.3;
                    });
                });
         }     

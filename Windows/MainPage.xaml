@@ -42,7 +42,7 @@
             <muxc:AnimatedVisualPlayer x:Name="stars" Grid.Row="2" Canvas.ZIndex="-1">
                 <lottie:LottieVisualSource UriSource="ms-appx:///StarField.json"/>
             </muxc:AnimatedVisualPlayer>
-            <muxc:AnimatedVisualPlayer x:Name="BlackHole" Grid.Row="2" Width="1000" Canvas.ZIndex="-1">
+            <muxc:AnimatedVisualPlayer x:Name="jsonBlackHole" Grid.Row="2" Width="1000" Canvas.ZIndex="-1">
                 <lottie:LottieVisualSource UriSource="ms-appx:///Black_Hole_Rotation.json"/>
             </muxc:AnimatedVisualPlayer>
 
@@ -122,7 +122,7 @@
 
                         <TextBox Text="" x:Name="txtFileList"
                              CornerRadius="5" TextAlignment="Left" 
-                             Foreground="white" Width="500" Height="100"
+                             Foreground="white" Width="1100" Height="150"
                              FontFamily="Consolas" FontSize="12"
                              AcceptsReturn="True" TextWrapping="Wrap"
                              ScrollViewer.VerticalScrollBarVisibility="Auto"
