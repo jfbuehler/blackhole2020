@@ -14,7 +14,7 @@
     >
 
     <Grid>
-        <muxc:AnimatedVisualPlayer AutoPlay="True" x:Name="animation_visual_player">
+        <muxc:AnimatedVisualPlayer AutoPlay="False" x:Name="animation_visual_player">
             <lottie:LottieVisualSource x:Name="lottie_disintegrate" UriSource="ms-appx:///File_Disintegration_MidRight.json"/>
         </muxc:AnimatedVisualPlayer>
     </Grid>

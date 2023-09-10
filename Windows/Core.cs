@@ -17,7 +17,7 @@ public class Core
 
         localSettings.Values["files_erased"] = Core.files_erased;
         localSettings.Values["total_bytes_erased"] = Core.total_bytes_erased;
-        localSettings.Values["total_sessions"] = Core.total_sessions;
+        localSettings.Values["total_sessions"] = Core.total_sessions + 1;
 
         Debug.WriteLine("Saving settings ... files_erased=" + files_erased + " total_bytes_erased=" + total_bytes_erased + " total_sessions=" + total_sessions);
 

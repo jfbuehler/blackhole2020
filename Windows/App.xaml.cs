@@ -38,8 +38,6 @@ namespace Blackhole
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-
-       
         }
 
         /// <summary>
@@ -106,9 +104,7 @@ namespace Blackhole
             //TODO: Save application state and stop any background activity
 
             Debug.WriteLine("Shutting down WPF...");
-
             Core.SaveBasicSettings();
-
 
             deferral.Complete();
         }
@@ -131,6 +127,7 @@ namespace Blackhole
 
                     Connection = details.AppServiceConnection;
                     AppServiceConnected?.Invoke(this, args.TaskInstance.TriggerDetails as AppServiceTriggerDetails);
+                    Debug.WriteLine("Connection to WPF Established in OnBackgroundActivated()");
                 }
             }
         }
@@ -140,10 +137,16 @@ namespace Blackhole
         /// </summary>
         private void OnTaskCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
+            Debug.WriteLine("WPF background task sent Cancel! Connection=NULL, reason=" + reason.ToString());
             AppServiceDeferral?.Complete();
             AppServiceDeferral = null;
             Connection = null;
             AppServiceDisconnected?.Invoke(this, null);
+
+            // Unsure we want this behavior, but we can restart the task if needed
+            // restart the background task
+            //if (isClosing == false)
+                //FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
         }
     }
 }

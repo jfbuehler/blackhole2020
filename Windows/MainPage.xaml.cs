@@ -49,24 +49,28 @@ namespace Blackhole
         /// <summary>
         /// Easier to just hard code this based on the JSON animation time
         /// </summary>
-        static double file_animation_time_secs = 6.16 + 1;
+        static double file_animation_time_secs = 6.16;
 
         /// <summary>
         /// Keep track of whether or not files are being erased actively
         /// </summary>
         static bool files_erasing = false;
+        static bool file_animation_thread_running = false;
 
+        static ulong total_session_file_bytes = 0;
         static int num_erase_tasks_running = 0;        
 
         public MainPage()
         {
             this.InitializeComponent();
             m_page = this;
-            FilesObvCollection = this.Resources["FilesObvCollection"] as ObFileList;
+            //FilesObvCollection = this.Resources["FilesObvCollection"] as ObFileList;
 
             txtFileCounter.Text = "0";
-            txtFileBytes.Text = "0";
+            txtSessionFileBytes.Text = "0";
             txtSession.Text = "0";
+            txtProgress.Text = "0%";
+            pbProgress.Value = 0;
 
             ApplicationView.PreferredLaunchViewSize = new Size(1200, 1000);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
@@ -74,6 +78,32 @@ namespace Blackhole
             launch_wpf();  // MUST run with the "Package" as the Startup Project if this is enabled
 
             load_basic_settings();
+            load_file_animations();
+
+            //jsonBlackHole.Stop();
+            jsonBlackHole.PlaybackRate = 0.3; // startup condition, play slowly
+        }
+
+        /// <summary>
+        /// Load JSON animations into memory at startup
+        /// </summary>
+        private void load_file_animations()
+        {            
+            const int files_to_animate = 25; 
+
+            for (int i = 0; i < files_to_animate; i++)
+            {
+                // TODO: -- rename File object, bad name (too many changes tho to do it now)
+                File file_json = new File();
+                file_json.parent_container = cnvFiles;
+                int x = 0, y = 0, offset = 0;
+                Canvas.SetLeft(file_json, x);
+                Canvas.SetTop(file_json, y);
+                file_json.Width = 150;
+                file_json.Height = 200;
+                file_json.SetDirection((int)x + offset, (int)y + offset, (int)cnvFiles.Width, (int)cnvFiles.Height);
+                cnvFiles.Children.Add(file_json);
+            }
         }
 
         private void load_basic_settings()
@@ -93,9 +123,10 @@ namespace Blackhole
             var total_sessions = localSettings.Values["total_sessions"];
             if (total_sessions != null)
                 Core.total_sessions = (ulong)total_sessions;
-            
-            txtFileCounter.Text = Core.files_erased.ToString();
-            txtTotalFileBytes.Text = Core.total_bytes_erased.ToString();
+
+            //txtTotalFileBytes.Text = String.Format("{0:n0}", Core.total_bytes_erased);
+            txtTotalFileBytes.Text = Extensions.FormatFileSize(Core.total_bytes_erased);
+            txtFileCounter.Text = Core.files_erased.ToString();            
             txtSession.Text = Core.total_sessions.ToString();
 
             // load a composite setting
@@ -114,10 +145,9 @@ namespace Blackhole
         {
             if (ApiInformation.IsApiContractPresent("Windows.ApplicationModel.FullTrustAppContract", 1, 0))
             {
-                await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
-                
+                // ensure events are hooked before waiting to launch the background process or else they may not get setup in time to be triggered
                 App.AppServiceConnected += ConnectionEstablished;
-                
+                await FullTrustProcessLauncher.LaunchFullTrustProcessForCurrentAppAsync();
             }
         }
 
@@ -171,23 +201,33 @@ namespace Blackhole
 
                         string file_reply = args.Request.Message["File"] as string;
                         ulong written_bytes = (ulong)args.Request.Message["Written"];
+                        int percent_complete = (int)args.Request.Message["Progress"];
                         //Debug.WriteLine("WPF sent us a message Status=" + status + " with file=" + file_reply + " and written_bytes=" + written_bytes);            
 
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                        Core.total_bytes_erased += written_bytes;
+                        total_session_file_bytes += written_bytes;
+
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
                             txtFileName.Text = file_reply;
-                            Core.total_bytes_erased += written_bytes;
-                            txtFileBytes.Text = String.Format("{0:n0}", Core.total_bytes_erased); //bytes_erased.ToString("{0:n0}");
+                            txtSessionFileBytes.Text = String.Format("{0:n0}", total_session_file_bytes);
+                            txtTotalFileBytes.Text = Extensions.FormatFileSize(Core.total_bytes_erased);
+                            pbProgress.Value = percent_complete;
+                            txtProgress.Text = percent_complete + "%";
                         });
 
                         break;
 
                     case "Erased":
 
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                        file_reply = args.Request.Message["File"] as string;
+
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
                         {
                             Core.files_erased += 1;
                             txtFileCounter.Text = Core.files_erased.ToString();
+
+                            txtFileList.Text = file_reply + Environment.NewLine + txtFileList.Text;
                         });                        
 
                         break;
@@ -195,12 +235,32 @@ namespace Blackhole
                     case "Complete":
                         files_erasing = false;
                         num_erase_tasks_running -= 1;
+                        Debug.WriteLine("Erasing completed -- stop file animation");
+                        break;
+
+                    case "Warning":
+                        string detail = args.Request.Message["Detail"] as string;
+                        Debug.WriteLine("WARNING from WPF -- detail=" + detail);
+                        break;
+
+                    case "Exception":
+                        files_erasing = false;
+                        num_erase_tasks_running -= 1;
+
+                        detail = args.Request.Message["Detail"] as string;
+                        string message = "****** EXCEPTION ****** " + (args.Request.Message["Message"] as string) + " ******";
+                        await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                        {
+                            txtFileList.Text = message + Environment.NewLine + txtFileList.Text;
+                        });
+
+                        Debug.WriteLine("EXCEPTION from WPF -- detail=" + detail);
+                        break;
+
+                    default:
+                        Debug.WriteLine("Generic Status -- msg=" + status);
                         break;
                 }
-
-                ValueSet response = new ValueSet();
-                response.Add("Status", "ACK");
-                await args.Request.SendResponseAsync(response);
             }
             catch (Exception e)
             {
@@ -223,22 +283,22 @@ namespace Blackhole
 
             try
             {
-                if (num_erase_tasks_running > 0)
-                {
-                    return; // need to handle terminating the running operation first
-                }
-
-                num_erase_tasks_running += 1;
+                //jsonBlackHole.PlayAsync(0, 100, true);
+                jsonBlackHole.PlaybackRate = 1.0;
                 Debug.WriteLine("num_erase_tasks_running = " + num_erase_tasks_running);
+
+                // TODO -- fix. Its broken
+                //if (num_erase_tasks_running > 0)
+                //{
+                //    return; // need to handle terminating the running operation first
+                //}                                
 
                 // TODO -- support when a user drops new files/folders on top of an already running deletion task...
                 //files_erasing = false;
 
                 if (e.DataView.Contains(StandardDataFormats.StorageItems))
                 {
-                    // consider this meaning we're deleting now
                     files_erasing = true;
-                    
                     start_file_animation(1); // we don't know the file count yet, so pass (1)
 
                     var items = await e.DataView.GetStorageItemsAsync();
@@ -250,8 +310,14 @@ namespace Blackhole
                         // 2) a single folder
                         // 3) a combo of the two, files and folders
 
+                        // For now the workaround to this is just dropping single files, or single folders
+                        // Eventually we can fix this...
+                        // TODO -- this for loop needs work, dropping multiple items seems to introduce a bunch of bugs
+                        // namely, not all of the files dropped get erased
+                        // if i mix in folders / files, it seems to cause lots of exceptions
+                        // could be a compound issue, so likely need to fix the memory exceptions first (seems to be with folders with a lot of small files?)
                         foreach (var item in items)
-                        {
+                        {                            
                             // check if its a folder
                             var folder = item as StorageFolder;
                             if (folder == null)
@@ -268,6 +334,10 @@ namespace Blackhole
                                 ValueSet request = new ValueSet();
                                 request.Add("folder_path", file.Path);
                                 AppServiceResponse response = await App.Connection.SendMessageAsync(request);
+                                Debug.WriteLine("WPF replied with msg = " + response.Message["Status"]);
+
+                                files_erasing = true;
+                                num_erase_tasks_running += 1;
 
                                 // TODO -- perhaps receive the response and reflect UI ?
                                 //files_erasing = true;
@@ -345,8 +415,10 @@ namespace Blackhole
                                 ValueSet request = new ValueSet();
                                 request.Add("folder_path", folder.Path);
                                 AppServiceResponse response = await App.Connection.SendMessageAsync(request);
+                                files_erasing = true;
+                                num_erase_tasks_running += 1;
 
-                                Debug.WriteLine("WPF replied with msg = " + response.Message.ToString());
+                                Debug.WriteLine("WPF replied with msg = " + response.Message["Status"]);
 
                                 // option 1)
                                 // jfb -- unfortunately, using the StorageFile methods to query the system is insanely slow
@@ -538,33 +610,73 @@ namespace Blackhole
         private void start_file_animation(int num_files)
         {
             // spin up the animation thread
-            ThreadPool.QueueUserWorkItem(
-               async (workItem) =>
+
+            if (file_animation_thread_running)
+            {
+                Debug.WriteLine("File animation thread already running -- skipping call");
+                return;
+            }
+            
+            file_animation_thread_running = true;
+            Task.Run(async () =>
                {
                    // animation loop
                    while (files_erasing)
                    {
-                       //Debug.WriteLine("Starting an animation loop///");
-                       await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                       // It's vital to invoke this method using the helper method
+                       // because the animation requires an async await on the Lottie JSON load (SetDirection)
+                       // it's basically a re-render at runtime, but from the background
+                       Debug.WriteLine("animate_files starting await");
+                       await Dispatcher.RunTaskAsync(async () =>
                        {
-                           animate_files(num_files);
-                       });
-                       //Debug.WriteLine("Completed an animation loop///");
+                           foreach (File file_json in cnvFiles.Children)
+                           {
+                               //Debug.WriteLine("Animating... file=");
+                               var random = new Random();
 
+                               var radius = random.Next(200, 250);
+                               var offset = 50;  // the file animation isn't perfectly centered so we need to re-center manually
+
+                               var angle = random.NextDouble() * Math.PI * 2;
+                               var x = Math.Cos(angle) * radius + radius - offset;
+                               var y = Math.Sin(angle) * radius + radius - offset;
+
+                               var width = random.Next(100, 300);
+                               var height = width * 1.3;
+                               file_json.Width = width;
+                               file_json.Height = height;
+
+                               Canvas.SetLeft(file_json, x);
+                               Canvas.SetTop(file_json, y);
+                               await file_json.SetDirection((int)x + offset, (int)y + offset, (int)cnvFiles.Width, (int)cnvFiles.Height);
+
+                               file_json.Play();
+                           }
+                           Debug.WriteLine("animate_files completing await");
+                           
+                       });
+                       Debug.WriteLine("Thread.sleep  now=" + DateTime.Now);
                        Thread.Sleep((int)(file_animation_time_secs * 1000));
+                       Debug.WriteLine("Thread.sleep wake=" + DateTime.Now);
                    }
+
+                   await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                   {
+                       txtFileName.Text = "IT'S GONE NOW";
+                       file_animation_thread_running = false;
+                       //jsonBlackHole.Stop();
+                       jsonBlackHole.PlaybackRate = 0.3;
+                   });
                });
-        }
+        }     
 
         /// <summary>
         /// A place to keep the custom file erasing animation logic
         /// </summary>
-        private void animate_files(int num_files)
+        private async void animate_files_old(int num_files)
         {
-            int files_to_animate = 1;
-
-            // clear the existing destination
-            cnvFiles.Children.Clear();
+            int files_to_animate = 1;      
+            
 
             // determine how many files to animate based on the input num_files
             if (num_files < 50)
@@ -584,35 +696,7 @@ namespace Blackhole
 
             else if (num_files < 1e9)
                 files_to_animate = 30;
-
-            // TODO -- upgrade this animation loop sequence
-            files_to_animate = 18;
-
-            for (int i = 0; i < files_to_animate; i++)
-            {
-                File file_json = new File();
-                file_json.parent_container = cnvFiles;
-
-                // generate random position around the radius of the black hole
-                var random = new Random();
-
-                var radius = random.Next(200, 250);
-                var offset = 50;  // the file animation isn't perfectly centered so we need to re-center manually
-
-                var angle = random.NextDouble() * Math.PI * 2;
-                var x = Math.Cos(angle) * radius + radius - offset;
-                var y = Math.Sin(angle) * radius + radius - offset;
-                //Debug.WriteLine("generating x/y = " + x + " " + y);
-
-                Canvas.SetLeft(file_json, x);
-                Canvas.SetTop(file_json, y);
-                file_json.Width = 150;
-                file_json.Height = 200;
-
-                file_json.SetDirection((int)x + offset, (int)y + offset, (int)cnvFiles.Width, (int)cnvFiles.Height);
-
-                cnvFiles.Children.Add(file_json);
-            }
+            
         }
 
         #region extra code        
